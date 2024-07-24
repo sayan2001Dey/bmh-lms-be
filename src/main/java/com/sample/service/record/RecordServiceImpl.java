@@ -1,8 +1,12 @@
 package com.sample.service.record;
 
+import com.sample.model.Mortgaged;
+import com.sample.model.PartlySold;
 import com.sample.model.Record;
 
 
+import com.sample.repository.MortgagedRepository;
+import com.sample.repository.PartlySoldRepository;
 import com.sample.repository.RecordRepository;
 
 import org.hibernate.annotations.OptimisticLock;
@@ -19,10 +23,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import javax.persistence.LockModeType;
 
@@ -33,16 +35,83 @@ public class RecordServiceImpl implements RecordService {
     private RecordRepository recordRepository;
 
     @Autowired
+    private PartlySoldRepository partlySoldRepository;
+
+    @Autowired
+    private MortgagedRepository mortgagedRepository;
+
+    @Autowired
     private Environment env;
 
     @Override
     public Record saveRecord(Record record) {
+        LocalDateTime ldt = LocalDateTime.now();
+
         record.setDocumentFile(new ArrayList<>());
         record.setScanCopyFile(new ArrayList<>());
         record.setConversionFile(new ArrayList<>());
         record.setAreaMapFile(new ArrayList<>());
         record.setMutationFile(new ArrayList<>());
         record.setHcdocumentFile(new ArrayList<>());
+
+
+        long slno=0;
+        if(recordRepository.count() != 0){
+            slno=recordRepository.count();
+        }
+        String insertedBy = "working";
+        record.setRecId("REC" +  slno);
+        record.setModified_type("INSERTED");
+        record.setInserted_on(ldt);
+        record.setInserted_by(insertedBy);
+        record.setUpdated_by("NA");
+        record.setUpdated_on(ldt);
+        record.setDeleted_by("NA");
+        record.setDeleted_on(ldt);
+
+        Set<PartlySold> partly=new HashSet<PartlySold>();
+        partly.addAll(record.getPartlySoldData());
+        int count = 0;
+        for(PartlySold partlySold : partly ){
+             long partIdSuffix=0;
+             if(recordRepository.count()!=0){
+                 partIdSuffix  = partlySoldRepository.count()+ count;
+                 count++;
+             }
+
+            partlySold.setPartId("COURSE-" + partIdSuffix);
+            partlySold.setRecId(record.getRecId());
+            partlySold.setModified_type("INSERTED");
+            partlySold.setInserted_by(insertedBy);
+            partlySold.setInserted_on(ldt);
+            partlySold.setUpdated_by("NA");
+            partlySold.setUpdated_on(ldt);
+            partlySold.setDeleted_by("NA");
+            partlySold.setDeleted_on(ldt);
+        }
+        record.setPartlySoldData(partly);
+
+        Set<Mortgaged> mortgageds=new HashSet<Mortgaged>();
+        mortgageds.addAll(record.getMortgagedData());
+        count=0;
+        for (Mortgaged mort:mortgageds){
+            long mortId=0;
+            if(recordRepository.count() != 0 ) {
+                mortId=mortgagedRepository.count()+count;
+                count++;
+            }
+            mort.setMortId("MORTGAGED"+mortId);
+            mort.setRecId(record.getRecId());
+            mort.setModified_type("INSERTED");
+            mort.setInserted_by(insertedBy);
+            mort.setInserted_on(ldt);
+            mort.setUpdated_by("NA");
+            mort.setUpdated_on(ldt);
+            mort.setDeleted_by("NA");
+            mort.setDeleted_on(ldt);
+
+        }
+        record.setMortgagedData(mortgageds);
         return recordRepository.save(record);
     }
 

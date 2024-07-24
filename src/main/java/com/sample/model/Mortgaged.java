@@ -2,16 +2,7 @@ package com.sample.model;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,12 +11,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name="mortgaged")
-public class Mortgaged {
+public class Mortgaged extends CommonProperties{
 	
 	@Id
 	@Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
+
+	@Column(name="mort_id")
+	private String mortId;
+
+
+	@Column(name="rec_id")
+	private String recId;
 	
 	@Column(name="mort_party")
 	private String party;
@@ -36,8 +34,8 @@ public class Mortgaged {
 	@Column(name="doc")
 	@ElementCollection
 	private List<String> docFile;
-	
-	@ManyToOne()
+
+	@ManyToOne(cascade= CascadeType.ALL)
 	@JoinColumn(name = "record_id")
 	private Record record;
 }

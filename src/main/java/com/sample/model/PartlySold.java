@@ -1,14 +1,7 @@
 package com.sample.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,11 +9,17 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name="partly_sold")
-public class PartlySold {
+public class PartlySold extends CommonProperties {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
+    @Column(name = "part_id")
+    private String partId;
+
+    @Column(name="rec_id")
+    private String recId;
+
     @Column(name="sale_party")
     private String sale;
     
@@ -32,8 +31,8 @@ public class PartlySold {
 	
     @Column(name="deed_link")
 	private String deedLink;
-    
-    @ManyToOne()
+
+    @ManyToOne(cascade= CascadeType.ALL)
     @JoinColumn(name = "record_id")
     private Record record;
 }
