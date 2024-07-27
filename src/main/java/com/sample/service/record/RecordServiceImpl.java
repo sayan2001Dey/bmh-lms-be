@@ -3,18 +3,11 @@ package com.sample.service.record;
 import com.sample.model.Mortgaged;
 import com.sample.model.PartlySold;
 import com.sample.model.Record;
-
-
 import com.sample.repository.MortgagedRepository;
 import com.sample.repository.PartlySoldRepository;
 import com.sample.repository.RecordRepository;
-
-import org.hibernate.annotations.OptimisticLock;
-import org.hibernate.annotations.OptimisticLocking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.data.jpa.repository.Lock;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import javax.persistence.LockModeType;
+
 
 @Service
 public class RecordServiceImpl implements RecordService {
@@ -47,20 +41,17 @@ public class RecordServiceImpl implements RecordService {
     public Record saveRecord(Record record) {
         LocalDateTime ldt = LocalDateTime.now();
 
-        record.setDocumentFile(new ArrayList<>());
-        record.setScanCopyFile(new ArrayList<>());
-        record.setConversionFile(new ArrayList<>());
-        record.setAreaMapFile(new ArrayList<>());
-        record.setMutationFile(new ArrayList<>());
-        record.setHcdocumentFile(new ArrayList<>());
+        // Ensure collections are initialized
+        record.setDocumentFile(record.getDocumentFile() != null ? record.getDocumentFile() : new ArrayList<>());
+        record.setScanCopyFile(record.getScanCopyFile() != null ? record.getScanCopyFile() : new ArrayList<>());
+        record.setConversionFile(record.getConversionFile() != null ? record.getConversionFile() : new ArrayList<>());
+        record.setAreaMapFile(record.getAreaMapFile() != null ? record.getAreaMapFile() : new ArrayList<>());
+        record.setMutationFile(record.getMutationFile() != null ? record.getMutationFile() : new ArrayList<>());
+        record.setHcdocumentFile(record.getHcdocumentFile() != null ? record.getHcdocumentFile() : new ArrayList<>());
 
-
-        long slno=0;
-        if(recordRepository.count() != 0){
-            slno=recordRepository.count();
-        }
+        long slno = recordRepository.count();
         String insertedBy = "working";
-        record.setRecId("REC" +  slno);
+        record.setRecId("REC" + slno);
         record.setModified_type("INSERTED");
         record.setInserted_on(ldt);
         record.setInserted_by(insertedBy);
@@ -69,17 +60,13 @@ public class RecordServiceImpl implements RecordService {
         record.setDeleted_by("NA");
         record.setDeleted_on(ldt);
 
-        Set<PartlySold> partly=new HashSet<PartlySold>();
-        partly.addAll(record.getPartlySoldData());
+        Set<PartlySold> partly = new HashSet<>(record.getPartlySoldData() != null ? record.getPartlySoldData() : new HashSet<>());
         int count = 0;
-        for(PartlySold partlySold : partly ){
-             long partIdSuffix=0;
-             if(recordRepository.count()!=0){
-                 partIdSuffix  = partlySoldRepository.count()+ count;
-                 count++;
-             }
+        for (PartlySold partlySold : partly) {
+            long partIdSuffix = recordRepository.count() + count;
+            count++;
 
-            partlySold.setPartId("COURSE-" + partIdSuffix);
+            partlySold.setPartId("PART-" + partIdSuffix);
             partlySold.setRecId(record.getRecId());
             partlySold.setModified_type("INSERTED");
             partlySold.setInserted_by(insertedBy);
@@ -91,16 +78,13 @@ public class RecordServiceImpl implements RecordService {
         }
         record.setPartlySoldData(partly);
 
-        Set<Mortgaged> mortgageds=new HashSet<Mortgaged>();
-        mortgageds.addAll(record.getMortgagedData());
-        count=0;
-        for (Mortgaged mort:mortgageds){
-            long mortId=0;
-            if(recordRepository.count() != 0 ) {
-                mortId=mortgagedRepository.count()+count;
-                count++;
-            }
-            mort.setMortId("MORTGAGED"+mortId);
+        Set<Mortgaged> mortgageds = new HashSet<>(record.getMortgagedData() != null ? record.getMortgagedData() : new HashSet<>());
+        count = 0;
+        for (Mortgaged mort : mortgageds) {
+            long mortId = recordRepository.count() + count;
+            count++;
+
+            mort.setMortId("MORTGAGED" + mortId);
             mort.setRecId(record.getRecId());
             mort.setModified_type("INSERTED");
             mort.setInserted_by(insertedBy);
@@ -109,33 +93,40 @@ public class RecordServiceImpl implements RecordService {
             mort.setUpdated_on(ldt);
             mort.setDeleted_by("NA");
             mort.setDeleted_on(ldt);
-
         }
         record.setMortgagedData(mortgageds);
+
         return recordRepository.save(record);
     }
 
+
     @Override
-    public Record getRecordById(Long id) {
-        Optional<Record> optionalRecord = recordRepository.findById(id);
+    public Record getRecordById(String id) {
+        Optional<Record> optionalRecord = recordRepository.findByRecId(id);
         return optionalRecord.orElse(null);
     }
 
     @Override
     public List<Record> getAllRecords() {
-        return recordRepository.findAll();
+        List<Record>recordList=recordRepository.findAll();
+        for(Record record : recordList){
+            record.setMortgagedData(mortgagedRepository.findAllActive(record.getRecId()));
+            record.setPartlySoldData(partlySoldRepository.findAllActive(record.getRecId()));
+        }
+        return recordList;
     }
 
     @Override
     @Transactional
-    public Record updateRecord(Record updatedRecord, Long id) {
-        Optional<Record> optionalOldRecord = recordRepository.findById(id);
+    public Record updateRecord(Record updatedRecord, String id) {
+        LocalDateTime ldt = LocalDateTime.now();
+        Optional<Record> optionalOldRecord = recordRepository.findByRecId(id);
         
         if (optionalOldRecord.isPresent()) {
             Record oldRecord = optionalOldRecord.get();
             
             // Copy fields from oldRecord to updatedRecord
-            updatedRecord.setId(id); // Ensure the ID is set correctly
+            updatedRecord.setRecId(id); // Ensure the ID is set correctly
             
             // Copy collections if needed (assuming these are lists of filenames)
             updatedRecord.setScanCopyFile(new ArrayList<>(oldRecord.getScanCopyFile()));
@@ -144,7 +135,7 @@ public class RecordServiceImpl implements RecordService {
             updatedRecord.setAreaMapFile(new ArrayList<>(oldRecord.getAreaMapFile()));
             updatedRecord.setMutationFile(new ArrayList<>(oldRecord.getMutationFile()));
             updatedRecord.setHcdocumentFile(new ArrayList<>(oldRecord.getHcdocumentFile()));
-            
+
             return recordRepository.save(updatedRecord); // Update the existing record
         }
         
@@ -154,13 +145,24 @@ public class RecordServiceImpl implements RecordService {
     
 
     @Override
-    public void deleteRecord(Long id) {
-        recordRepository.deleteById(id);
+    public boolean deleteRecord(String id, String username) {
+        LocalDateTime ldt = LocalDateTime.now();
+        Optional<Record> optionalRecord = recordRepository.findByRecId(id);
+        if(optionalRecord.isPresent()) {
+            Record record = optionalRecord.get();
+            record.setDeleted_by(username);
+            record.setDeleted_on(ldt);
+            record.setModified_type("DELETED");
+            recordRepository.save(record);
+            return true;
+        } else {
+            return false;
+        }
     }
     
 
     @Override
-    public ResponseEntity<String> saveAttachment(String fieldName, Long id, byte[] blobData, String originalFileName, String ext) {
+    public ResponseEntity<String> saveAttachment(String fieldName, String id, byte[] blobData, String originalFileName, String ext) {
     	String uploadDir = env.getProperty("upload.dir"); // Assuming a property named upload.dir is defined
 
         if (uploadDir == null || uploadDir.isEmpty()) {
@@ -168,7 +170,7 @@ public class RecordServiceImpl implements RecordService {
                     .body("Upload directory not configured! Please set 'upload.dir' property.");
         }
 
-        Record record = recordRepository.findById(id).orElse(null);
+        Record record = recordRepository.findByRecId(id).orElse(null);
         if (record == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Entry not found.");
@@ -234,9 +236,9 @@ public class RecordServiceImpl implements RecordService {
     @Override
     @Transactional
 //    @Lock(LockModeType.PESSIMISTIC_READ)
-    public boolean deleteFile(Long id, String fieldName, String fileName) {
+    public boolean deleteFile(String id, String fieldName, String fileName) {
         // Update record in database to remove the filename from the appropriate list
-        	Record record = recordRepository.findById(id).orElse(null);
+        	Record record = recordRepository.findByRecId(id).orElse(null);
 
             boolean removed = false;
             if(record == null) return false;

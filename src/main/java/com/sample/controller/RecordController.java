@@ -34,7 +34,7 @@ public class RecordController {
 
     // Get a single Record by ID
     @GetMapping("{id}")
-    public ResponseEntity<Record> getRecordById(@PathVariable Long id) {
+    public ResponseEntity<Record> getRecordById(@PathVariable String id) {
         Record record = recordService.getRecordById(id);
         if (record != null) {
             return new ResponseEntity<>(record, HttpStatus.OK);
@@ -45,7 +45,7 @@ public class RecordController {
 
     // Update an existing Record
     @PatchMapping("{id}")
-    public ResponseEntity<Record> updateRecord(@PathVariable Long id, @RequestBody Record record) {
+    public ResponseEntity<Record> updateRecord(@PathVariable String id, @RequestBody Record record) {
     	Record updatedRecord = recordService.updateRecord(record, id);
 
     	if(updatedRecord != null) {
@@ -57,11 +57,9 @@ public class RecordController {
 
     // Delete a Record
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteRecord(@PathVariable Long id) {
-        Record record = recordService.getRecordById(id);
-        if (record != null) {
-            recordService.deleteRecord(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Void> deleteRecord(@PathVariable String id) {
+        if (recordService.deleteRecord(id, "NA")) {
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

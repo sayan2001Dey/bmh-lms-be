@@ -21,6 +21,8 @@ public class Mortgaged extends CommonProperties{
 	@Column(name="mort_id")
 	private String mortId;
 
+	@Column(columnDefinition="varchar(50) default 'NA'")
+	private String slno;
 
 	@Column(name="rec_id")
 	private String recId;

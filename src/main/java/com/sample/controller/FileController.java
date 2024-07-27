@@ -19,7 +19,7 @@ public class FileController {
     @PostMapping("/{fieldName}")
     public ResponseEntity<String> uploadFile(@RequestBody byte[] fileBytes,
     									     @PathVariable String fieldName,
-                                             @RequestParam(value = "id") Long id,
+                                             @RequestParam(value = "id") String id,
                                              @RequestParam(value = "file") String originalFileName,
                                              @RequestParam(value = "ext") String extension) {
         return recordService.saveAttachment(fieldName, id, fileBytes, originalFileName, extension);
@@ -46,7 +46,7 @@ public class FileController {
    
     @DeleteMapping("/{fieldName}")
     public ResponseEntity<Void> deleteFile(@PathVariable String fieldName,
-    		 @RequestParam(value = "id") Long id,
+    		 @RequestParam(value = "id") String id,
              @RequestParam(value = "filename") String fileName) {
         try {
             // Assuming recordService.deleteFile returns true if deletion is successful

@@ -11,17 +11,17 @@ public interface RecordService {
 
     Record saveRecord(Record record);
 
-    Record getRecordById(Long id);
+    Record getRecordById(String id);
 
     List<Record> getAllRecords();
 
-    Record updateRecord(Record record, Long id);
+    Record updateRecord(Record record, String id);
 
-    void deleteRecord(Long id);
+    boolean deleteRecord(String id, String username);
     
-     ResponseEntity<String> saveAttachment(String fieldName, Long id, byte[] blobData,String originalFileName, String ext);
+    ResponseEntity<String> saveAttachment(String fieldName, String id, byte[] blobData,String originalFileName, String ext);
     
     byte[] getFileBytes(String fieldName, String fileName);
     
-	boolean deleteFile(Long id, String fieldName, String fileName);
+	boolean deleteFile(String id, String fieldName, String fileName);
 }

@@ -20,6 +20,9 @@ public class PartlySold extends CommonProperties {
     @Column(name="rec_id")
     private String recId;
 
+    @Column(columnDefinition="varchar(50) default 'NA'")
+    private String slno;
+
     @Column(name="sale_party")
     private String sale;
     
