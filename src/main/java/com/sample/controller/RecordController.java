@@ -29,17 +29,17 @@ public class RecordController {
 
     // Get all Records
     @GetMapping()
-    public ResponseEntity<List<Record>> getAllRecords() {
-        List<Record> records = recordService.getAllRecords();
+    public ResponseEntity<List<RecordRes>> getAllRecords() {
+        List<RecordRes> records = recordService.getAllRecords();
         return new ResponseEntity<>(records, HttpStatus.OK);
     }
 
     // Get a single Record by ID
     @GetMapping("{id}")
-    public ResponseEntity<Record> getRecordById(@PathVariable String id) {
-        Record record = recordService.getRecordById(id);
-        if (record != null) {
-            return new ResponseEntity<>(record, HttpStatus.OK);
+    public ResponseEntity<RecordRes> getRecordById(@PathVariable String id) {
+        RecordRes recordRes = recordService.getRecordById(id);
+        if (recordRes != null) {
+            return new ResponseEntity<>(recordRes, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

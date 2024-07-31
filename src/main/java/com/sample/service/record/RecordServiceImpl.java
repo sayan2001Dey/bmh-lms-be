@@ -1,6 +1,7 @@
 package com.sample.service.record;
 
 import com.sample.dto.record.RecordReq;
+import com.sample.dto.record.RecordRes;
 import com.sample.model.Mortgaged;
 import com.sample.model.PartlySold;
 import com.sample.model.Record;
@@ -62,11 +63,38 @@ public class RecordServiceImpl implements RecordService {
             mortgagedRepository.saveAll(mortgagedData);
         }
 
+        Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
         if(recordReq.getPartlySold().equalsIgnoreCase("true")) {
-            Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
-            partlySoldRepository.saveAll(partlySoldData);
+            for(PartlySold partlySold : partlySoldData) {
+                partlySold.setRecId(record.getRecId());
+                partlySold.setPartId(commonUtils.generateUID("PartlySold", "PART"));
+                partlySold.setModified_type("INSERTED");
+                partlySold.setInserted_on(ldt);
+                partlySold.setInserted_by(username);
+                partlySold.setUpdated_by("NA");
+                partlySold.setUpdated_on(null);
+                partlySold.setDeleted_by("NA");
+                partlySold.setDeleted_on(null);
+            }
         }
 
+        Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
+        if(recordReq.getPartlySold().equalsIgnoreCase("true")) {
+            for(Mortgaged mortgaged : mortgagedData) {
+                mortgaged.setRecId(record.getRecId());
+                mortgaged.setMortId(commonUtils.generateUID("Mortgaged", "MORT"));
+                mortgaged.setModified_type("INSERTED");
+                mortgaged.setInserted_on(ldt);
+                mortgaged.setInserted_by(username);
+                mortgaged.setUpdated_by("NA");
+                mortgaged.setUpdated_on(null);
+                mortgaged.setDeleted_by("NA");
+                mortgaged.setDeleted_on(null);
+            }
+        }
+
+        partlySoldRepository.saveAll(partlySoldData);
+        mortgagedRepository.saveAll(mortgagedData);
         recordRepository.save(record);
     }
 
@@ -107,27 +135,70 @@ public class RecordServiceImpl implements RecordService {
         return dest;
     }
 
+    private RecordRes basicDataToResDTO(RecordRes dest, Record src) {
+        if(dest == null)
+            dest = new RecordRes();
+        dest.setGroupName(src.getGroupName());
+        dest.setState(src.getState());
+        dest.setCity(src.getCity());
+        dest.setMouza(src.getMouza());
+        dest.setBlock(src.getBlock());
+        dest.setJLno(src.getJLno());
+        dest.setBuyerOwner(src.getBuyerOwner());
+        dest.setSellers(src.getSellers());
+        dest.setDeedName(src.getDeedName());
+        dest.setDeedNo(src.getDeedNo());
+        dest.setDeedDate(src.getDeedDate());
+        dest.setOldRsDag(src.getOldRsDag());
+        dest.setNewLrDag(src.getNewLrDag());
+        dest.setOldKhatian(src.getOldKhatian());
+        dest.setNewKhatian(src.getNewKhatian());
+        dest.setCurrKhatian(src.getCurrKhatian());
+        dest.setTotalQty(src.getTotalQty());
+        dest.setPurQty(src.getPurQty());
+        dest.setMutedQty(src.getMutedQty());
+        dest.setUnMutedQty(src.getUnMutedQty());
+        dest.setLandStatus(src.getLandStatus());
+        dest.setConversionLandStus(src.getConversionLandStus());
+        dest.setDeedLoc(src.getDeedLoc());
+        dest.setPhotoLoc(src.getPhotoLoc());
+        dest.setGovtRec(src.getGovtRec());
+        dest.setKhazanaStatus(src.getKhazanaStatus());
+        dest.setDueDate(src.getDueDate());
+        dest.setLegalMatters(src.getLegalMatters());
+        dest.setLedueDate(src.getLedueDate());
+        dest.setHistoryChain(src.getHistoryChain());
+        dest.setRecId(src.getRecId());
+
+        return dest;
+    }
+
+    private RecordRes recordResMaker(Record record, String recId) {
+        RecordRes res = basicDataToResDTO(null, record);
+        res.setMortgagedData(mortgagedRepository.findAllActive(recId));
+        res.setPartlySoldData(partlySoldRepository.findAllActive(recId));
+        //TODO: file and stuff
+        return res;
+    }
+
     @Override
-    public Record getRecordById(String id) {
-//        Optional<Record> optionalRecord = recordRepository.findByRecId(id);
-//        if (optionalRecord.isPresent()) {
-//            Record record = optionalRecord.get();
-//            record.setMortgagedData(mortgagedRepository.findAllActive(id));
-//            record.setPartlySoldData(partlySoldRepository.findAllActive(id));
-//            return record;
-//        }
+    public RecordRes getRecordById(String id) {
+        Optional<Record> optionalRecord = recordRepository.findByRecId(id);
+        if (optionalRecord.isPresent()) {
+            Record record = optionalRecord.get();
+            return recordResMaker(record, id);
+        }
         return null;
     }
 
     @Override
-    public List<Record> getAllRecords() {
-//        List<Record>recordList=recordRepository.findAllActive();
-//        for(Record record : recordList){
-//            record.setMortgagedData(mortgagedRepository.findAllActive(record.getRecId()));
-//            record.setPartlySoldData(partlySoldRepository.findAllActive(record.getRecId()));
-//        }
-//        return recordList;
-        return null;
+    public List<RecordRes> getAllRecords() {
+        List<Record> recordList = recordRepository.findAllActive();
+        List<RecordRes> recordResList = new ArrayList<>();
+        for(Record record : recordList){
+            recordResList.add(recordResMaker(record, record.getRecId()));
+        }
+        return recordResList;
     }
 
     @Override
