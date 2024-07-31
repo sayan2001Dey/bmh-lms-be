@@ -17,4 +17,7 @@ public class MutationFile extends CommonProperties{
 
     @Column
     private String fileName;
+
+    @Column(name="rec_id")
+    private String recId;
 }

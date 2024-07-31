@@ -17,4 +17,7 @@ public class DocumentFile extends CommonProperties{
 
     @Column
     private String fileName;
+
+    @Column(name="rec_id")
+    private String recId;
 }
