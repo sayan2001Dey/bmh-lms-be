@@ -44,7 +44,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     @Transactional
-    public void saveRecord(RecordReq recordReq, String username) {
+    public String saveRecord(RecordReq recordReq, String username) {
         LocalDateTime ldt = LocalDateTime.now();
 
         Record record = basicDataFromReqDTO(null, recordReq);
@@ -95,7 +95,7 @@ public class RecordServiceImpl implements RecordService {
 
         partlySoldRepository.saveAll(partlySoldData);
         mortgagedRepository.saveAll(mortgagedData);
-        recordRepository.save(record);
+        return recordRepository.save(record).getRecId();
     }
 
     private Record basicDataFromReqDTO(Record dest, RecordReq src) {

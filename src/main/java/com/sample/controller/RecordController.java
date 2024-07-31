@@ -23,8 +23,7 @@ public class RecordController {
     // Save Record
     @PostMapping()
     public ResponseEntity<String> saveRecord(@RequestBody RecordReq recordReq) {
-        recordService.saveRecord(recordReq, "NA");
-        return new ResponseEntity<>("🔥", HttpStatus.OK);
+        return new ResponseEntity<>(recordService.saveRecord(recordReq, "NA"), HttpStatus.OK);
     }    
 
     // Get all Records
