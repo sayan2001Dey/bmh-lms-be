@@ -8,13 +8,13 @@ import com.sample.repository.MortgagedRepository;
 import com.sample.repository.PartlySoldRepository;
 import com.sample.repository.RecordRepository;
 import com.sample.service.utils.CommonUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,12 +42,11 @@ public class RecordServiceImpl implements RecordService {
     private CommonUtils commonUtils;
 
     @Override
+    @Transactional
     public void saveRecord(RecordReq recordReq, String username) {
         LocalDateTime ldt = LocalDateTime.now();
 
-        Record record = new Record();
-
-        BeanUtils.copyProperties(record, recordReq);
+        Record record = basicDataFromReqDTO(null, recordReq);
 
         record.setRecId(commonUtils.generateUID("Record", "REC"));
         record.setModified_type("INSERTED");
@@ -58,9 +57,55 @@ public class RecordServiceImpl implements RecordService {
         record.setDeleted_by("NA");
         record.setDeleted_on(null);
 
+        if(recordReq.getMortgaged().equalsIgnoreCase("true")) {
+            Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
+            mortgagedRepository.saveAll(mortgagedData);
+        }
+
+        if(recordReq.getPartlySold().equalsIgnoreCase("true")) {
+            Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
+            partlySoldRepository.saveAll(partlySoldData);
+        }
+
         recordRepository.save(record);
     }
 
+    private Record basicDataFromReqDTO(Record dest, RecordReq src) {
+        if(dest == null)
+            dest = new Record();
+        dest.setGroupName(src.getGroupName());
+        dest.setState(src.getState());
+        dest.setCity(src.getCity());
+        dest.setMouza(src.getMouza());
+        dest.setBlock(src.getBlock());
+        dest.setJLno(src.getJLno());
+        dest.setBuyerOwner(src.getBuyerOwner());
+        dest.setSellers(src.getSellers());
+        dest.setDeedName(src.getDeedName());
+        dest.setDeedNo(src.getDeedNo());
+        dest.setDeedDate(src.getDeedDate());
+        dest.setOldRsDag(src.getOldRsDag());
+        dest.setNewLrDag(src.getNewLrDag());
+        dest.setOldKhatian(src.getOldKhatian());
+        dest.setNewKhatian(src.getNewKhatian());
+        dest.setCurrKhatian(src.getCurrKhatian());
+        dest.setTotalQty(src.getTotalQty());
+        dest.setPurQty(src.getPurQty());
+        dest.setMutedQty(src.getMutedQty());
+        dest.setUnMutedQty(src.getUnMutedQty());
+        dest.setLandStatus(src.getLandStatus());
+        dest.setConversionLandStus(src.getConversionLandStus());
+        dest.setDeedLoc(src.getDeedLoc());
+        dest.setPhotoLoc(src.getPhotoLoc());
+        dest.setGovtRec(src.getGovtRec());
+        dest.setKhazanaStatus(src.getKhazanaStatus());
+        dest.setDueDate(src.getDueDate());
+        dest.setLegalMatters(src.getLegalMatters());
+        dest.setLedueDate(src.getLedueDate());
+        dest.setHistoryChain(src.getHistoryChain());
+
+        return dest;
+    }
 
     @Override
     public Record getRecordById(String id) {
