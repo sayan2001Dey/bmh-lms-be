@@ -2,9 +2,11 @@ package com.sample.service.record;
 
 import com.sample.dto.record.RecordReq;
 import com.sample.dto.record.RecordRes;
+import com.sample.model.FileUpload;
 import com.sample.model.Mortgaged;
 import com.sample.model.PartlySold;
 import com.sample.model.Record;
+import com.sample.repository.FileUploadRepository;
 import com.sample.repository.MortgagedRepository;
 import com.sample.repository.PartlySoldRepository;
 import com.sample.repository.RecordRepository;
@@ -35,6 +37,9 @@ public class RecordServiceImpl implements RecordService {
 
     @Autowired
     private MortgagedRepository mortgagedRepository;
+
+    @Autowired
+    private FileUploadRepository fileUploadRepository;
 
     @Autowired
     private Environment env;
@@ -168,6 +173,7 @@ public class RecordServiceImpl implements RecordService {
         dest.setLegalMatters(src.getLegalMatters());
         dest.setLedueDate(src.getLedueDate());
         dest.setHistoryChain(src.getHistoryChain());
+
         dest.setRecId(src.getRecId());
 
         return dest;
@@ -204,9 +210,9 @@ public class RecordServiceImpl implements RecordService {
     @Override
     @Transactional
     public Record updateRecord(Record updatedRecord, String id, String username) {
-//        LocalDateTime ldt = LocalDateTime.now();
-//
-//        // Fetch the existing record
+          LocalDateTime ldt = LocalDateTime.now();
+
+         // Fetch the existing record
 //        Record existingRecord = recordRepository.findByRecId(id)
 //                .orElseThrow(() -> new EntityNotFoundException("Record with id " + id + " not found"));
 //
@@ -544,50 +550,45 @@ public class RecordServiceImpl implements RecordService {
         }
 
         Record record = recordRepository.findByRecId(id).orElse(null);
-      //  Mortgaged mort = mortgagedRepository.findActiveByMortId(id);
-        if (record == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Entry not found.");
+        Optional<Mortgaged> mort = mortgagedRepository.findActiveByMortId(id);
+        if (record != null || mort.isPresent()) {
+            String fileName = originalFileName + "-" + UUID.randomUUID().toString().substring(0, 5) + id + '.' + ext;
+
+            FileUpload fileUpload = new FileUpload();
+
+            fileUpload.setRecId(id);
+            fileUpload.setFieldName(fieldName);
+            fileUpload.setFileName(fileName);
+
+
+            switch (fieldName) {
+                case "scanCopyFile":
+                case "mutationFile":
+                case "conversionFile":
+                case "documentFile":
+                case "areaMapFile":
+                case "hcdocumentFile":
+                case "mortDocFile":
+                    fileUploadRepository.save(fileUpload);
+                    break;
+                default:
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body("Unsupported field name: " + fieldName);
+            }
+
+            try {
+                Files.write(Paths.get(uploadDir, fieldName, fileName), blobData);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Failed to upload file: " + e.getMessage());
+            }
+            recordRepository.save(record);
+            return ResponseEntity.ok("File uploaded successfully: " + fileName);
         }
 
-        String fileName = originalFileName +"-"+ UUID.randomUUID().toString().substring(0,5) + id +'.' + ext;
-
-//        switch (fieldName) {
-//            case "scanCopyFile":
-//                record.getScanCopyFile().add(fileName);
-//                break;
-//            case "mutationFile":
-//                record.getMutationFile().add(fileName);
-//                break;
-//            case "conversionFile":
-//                record.getConversionFile().add(fileName);
-//                break;
-//            case "documentFile":
-//                record.getDocumentFile().add(fileName);
-//                break;
-//            case "areaMapFile":
-//                record.getAreaMapFile().add(fileName);
-//                break;
-//            case "hcdocumentFile":
-//                record.getHcdocumentFile().add(fileName);
-//                break;
-////            case "docFile":
-////                mort.getDocFile().add(fileName);
-////                break;
-//            default:
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                        .body("Unsupported field name: " + fieldName);
-//        }
-
-        try{
-            Files.write(Paths.get(uploadDir, fieldName, fileName), blobData);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to upload file: " + e.getMessage());
-        }
-        recordRepository.save(record);
-        return ResponseEntity.ok("File uploaded successfully: " + fileName);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("Entry not found.");
     }
 
 
@@ -598,7 +599,7 @@ public class RecordServiceImpl implements RecordService {
         if (uploadDir == null || uploadDir.isEmpty()) {
             throw new IllegalStateException("Upload directory not configured! Please set 'upload.dir' property.");
         }
-
+        //TODO: check if deleted in db
         Path filePath = Paths.get(uploadDir, fieldName, fileName);
 
         try {
@@ -619,6 +620,7 @@ public class RecordServiceImpl implements RecordService {
         Mortgaged mort = mortgagedRepository.findActiveByMortId(id).orElse(null);
         boolean removed = false;
         if(record == null) return false;
+        //TODO: remake
 //        switch (fieldName) {
 //            case "scanCopyFile":
 //                removed = record.getScanCopyFile().remove(fileName);

@@ -8,16 +8,19 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "scanCopyFile")
-public class ScanCopyFile extends CommonProperties{
+@Table(name = "fileUploads")
+public class FileUpload extends CommonProperties{
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column
+    private String fieldName;
+
+    @Column
     private String fileName;
 
-    @Column(name="rec_id")
+    @Column
     private String recId;
 }
