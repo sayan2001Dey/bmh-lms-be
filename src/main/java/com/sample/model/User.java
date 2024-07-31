@@ -2,8 +2,6 @@ package com.sample.model;
 
 import lombok.Getter;
 
-
-
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -29,6 +27,4 @@ public class User {
     @Setter
     @Column(columnDefinition = "varchar(255)", nullable = false)
     private String password;
-    
-    
 } 

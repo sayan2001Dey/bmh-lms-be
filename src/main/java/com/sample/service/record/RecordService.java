@@ -9,13 +9,13 @@ import org.springframework.http.ResponseEntity;
 
 public interface RecordService {
 
-    Record saveRecord(Record record);
+    Record saveRecord(Record record, String username);
 
     Record getRecordById(String id);
 
     List<Record> getAllRecords();
 
-    Record updateRecord(Record record, String id);
+    Record updateRecord(Record record, String id, String username);
 
     boolean deleteRecord(String id, String username);
     

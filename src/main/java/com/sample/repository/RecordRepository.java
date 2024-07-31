@@ -11,6 +11,9 @@ import com.sample.model.Record;
 public interface RecordRepository extends JpaRepository<Record, Long> {
 //	 List<Record> findByUser(User user);
 
+    @Query(value="SELECT * FROM record WHERE modified_type='INSERTED'", nativeQuery = true)
+    List<Record> findAllActive();
+
     @Query(value="SELECT * FROM record WHERE rec_id=? AND modified_type='INSERTED'", nativeQuery = true)
     Optional<Record> findByRecId(String id);
 

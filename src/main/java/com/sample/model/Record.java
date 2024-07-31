@@ -56,10 +56,6 @@ public class Record extends CommonProperties {
     
     @Column(name = "deed_date", length = 50)
     private String deedDate;
-    
-    @Column(name = "scan_copy", length = 255) 
-    @ElementCollection
-    private List<String> scanCopyFile;
  
     @Column(name = "old_rs_dag", length = 50)
     private String oldRsDag;
@@ -76,7 +72,6 @@ public class Record extends CommonProperties {
     @Column(name = "curr_khatian", length = 50)
     private String currKhatian;
 
-
     @Column(name = "total_qty", length = 20)
     private String totalQty;
 
@@ -89,20 +84,11 @@ public class Record extends CommonProperties {
     @Column(name = "unmuted_qty", length = 20)
     private String unMutedQty;
 
-    @Column(name = "mutation_file", length = 255)
-    @ElementCollection
-    private List<String> mutationFile;
-
     @Column(name = "land_status", length = 50)
     private String landStatus;
     
     @Column(name = "converted_unconverted")
     private String conversionLandStus;
-    
-    @Column(name = "conversion_file", length = 255)
-    @ElementCollection
-    private List<String> conversionFile;
-    
     
     @Column(name = "deed_loc", length = 255)
     private String deedLoc;
@@ -118,16 +104,7 @@ public class Record extends CommonProperties {
     
     @Column(name = "due_date", length = 50)
     private String dueDate;
-    
-    @Column(name = "document_file", length = 255)
-    @ElementCollection
-    private List<String> documentFile;
-    
-    
-    @Column(name = "area_map_file", length = 255)
-    @ElementCollection
-    private List<String> areaMapFile;
-    
+
     @Column(name = "legal_matters", length = 255)
     private String legalMatters;
     
@@ -137,24 +114,10 @@ public class Record extends CommonProperties {
     @Column(name = "history_chain", length = 255)
     private String historyChain;
     
-    @Column(name = "hc_document_file", length = 255)
-    @ElementCollection
-    private List<String> hcdocumentFile;
-    
     @Column(name = "mortgaged", length = 50)
     private String mortgaged;
     
     @Column(name = "partly_sold", length = 50)
     private String partlySold;
-
-    @OneToMany(fetch = FetchType.LAZY,mappedBy="record",cascade = CascadeType.ALL)
-    private Set<Mortgaged> mortgagedData;
-
-    @OneToMany(fetch = FetchType.LAZY,mappedBy="record",cascade = CascadeType.ALL)
-    private Set<PartlySold> partlySoldData;
-    
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
 }
 

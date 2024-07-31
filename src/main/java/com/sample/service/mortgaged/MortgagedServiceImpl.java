@@ -32,7 +32,7 @@ public class MortgagedServiceImpl implements MortgagedService {
 
 	@Override
 	public Mortgaged saveMortgaged(Mortgaged mort) {
-		mort.setDocFile(new ArrayList<>());
+//		mort.setDocFile(new ArrayList<>());
 		return mortgagedRepository.save(mort);
 	}
 
@@ -58,7 +58,7 @@ public class MortgagedServiceImpl implements MortgagedService {
 	        // Copy updated fields to existing entity
 	        existingMortgage.setParty(updatedMortgage.getParty());
 	        existingMortgage.setMortDate(updatedMortgage.getMortDate());
-	        existingMortgage.setDocFile(new ArrayList<>(updatedMortgage.getDocFile()));
+//	        existingMortgage.setDocFile(new ArrayList<>(updatedMortgage.getDocFile()));
 
 	        
 	        return mortgagedRepository.save(existingMortgage);
@@ -92,7 +92,7 @@ public class MortgagedServiceImpl implements MortgagedService {
 	        String fileName = originalFileName +"-"+ UUID.randomUUID().toString().substring(0,5) + id +'.' + ext;
 
 	        if ("docFile".equals(fieldName)) {
-	            mort.getDocFile().add(fileName);
+//	            mort.getDocFile().add(fileName);
 	        } else {
 	            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                    .body("Unsupported field name: " + fieldName);
@@ -137,7 +137,7 @@ public class MortgagedServiceImpl implements MortgagedService {
 	            boolean removed = false;
 	            
 	            if ("docFile".equals(fieldName)) {
-	                removed = mort.getDocFile().remove(fileName);
+//	                removed = mort.getDocFile().remove(fileName);
 	            }
 
 	            if (removed) {

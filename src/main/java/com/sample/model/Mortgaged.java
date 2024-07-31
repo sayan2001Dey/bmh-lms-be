@@ -33,11 +33,8 @@ public class Mortgaged extends CommonProperties{
 	@Column(name="mort_Date")
 	private String mortDate;
     
-	@Column(name="doc")
-	@ElementCollection
-	private List<String> docFile;
+//	@Column(name="doc")
+//	@ElementCollection
+//	private List<String> docFile;
 
-	@ManyToOne(cascade= CascadeType.ALL)
-	@JoinColumn(name = "record_id")
-	private Record record;
 }
