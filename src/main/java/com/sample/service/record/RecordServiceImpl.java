@@ -1,5 +1,6 @@
 package com.sample.service.record;
 
+import com.sample.dto.record.RecordReq;
 import com.sample.model.Mortgaged;
 import com.sample.model.PartlySold;
 import com.sample.model.Record;
@@ -7,6 +8,7 @@ import com.sample.repository.MortgagedRepository;
 import com.sample.repository.PartlySoldRepository;
 import com.sample.repository.RecordRepository;
 import com.sample.service.utils.CommonUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -36,20 +38,18 @@ public class RecordServiceImpl implements RecordService {
     @Autowired
     private Environment env;
 
+    @Autowired
+    private CommonUtils commonUtils;
+
     @Override
-    public Record saveRecord(Record record, String username) {
+    public void saveRecord(RecordReq recordReq, String username) {
         LocalDateTime ldt = LocalDateTime.now();
-        record.setId(null);
 
-        // Ensure collections are initialized
-//        record.setDocumentFile(record.getDocumentFile() != null ? record.getDocumentFile() : new ArrayList<>());
-//        record.setScanCopyFile(record.getScanCopyFile() != null ? record.getScanCopyFile() : new ArrayList<>());
-//        record.setConversionFile(record.getConversionFile() != null ? record.getConversionFile() : new ArrayList<>());
-//        record.setAreaMapFile(record.getAreaMapFile() != null ? record.getAreaMapFile() : new ArrayList<>());
-//        record.setMutationFile(record.getMutationFile() != null ? record.getMutationFile() : new ArrayList<>());
-//        record.setHcdocumentFile(record.getHcdocumentFile() != null ? record.getHcdocumentFile() : new ArrayList<>());
+        Record record = new Record();
 
-        record.setRecId(CommonUtils.generateUID("Record", "REC"));
+        BeanUtils.copyProperties(record, recordReq);
+
+        record.setRecId(commonUtils.generateUID("Record", "REC"));
         record.setModified_type("INSERTED");
         record.setInserted_on(ldt);
         record.setInserted_by(username);
@@ -58,43 +58,7 @@ public class RecordServiceImpl implements RecordService {
         record.setDeleted_by("NA");
         record.setDeleted_on(null);
 
-//        Set<PartlySold> partly = new HashSet<>(record.getPartlySoldData() != null ? record.getPartlySoldData() : new HashSet<>());
-//        int count = 0;
-//        for (PartlySold partlySold : partly) {
-//            long partIdSuffix = recordRepository.count() + count;
-//            count++;
-//
-//            partlySold.setPartId("PART-" + partIdSuffix);
-//            partlySold.setRecId(record.getRecId());
-//            partlySold.setModified_type("INSERTED");
-//            partlySold.setInserted_by(insertedBy);
-//            partlySold.setInserted_on(ldt);
-//            partlySold.setUpdated_by("NA");
-//            partlySold.setUpdated_on(ldt);
-//            partlySold.setDeleted_by("NA");
-//            partlySold.setDeleted_on(ldt);
-//        }
-//        record.setPartlySoldData(partly);
-//
-//        Set<Mortgaged> mortgageds = new HashSet<>(record.getMortgagedData() != null ? record.getMortgagedData() : new HashSet<>());
-//        count = 0;
-//        for (Mortgaged mort : mortgageds) {
-//            long mortId = recordRepository.count() + count;
-//            count++;
-//            mort.setMortId("MORTGAGED" + mortId);
-//            mort.setRecId(record.getRecId());
-//            mort.setModified_type("INSERTED");
-//            mort.setInserted_by(insertedBy);
-//            mort.setInserted_on(ldt);
-//            mort.setUpdated_by("NA");
-//            mort.setUpdated_on(ldt);
-//            mort.setDeleted_by("NA");
-//            mort.setDeleted_on(ldt);
-//        }
-//        record.setMortgagedData(mortgageds);
-//
-//        return recordRepository.save(record);
-        return null;
+        recordRepository.save(record);
     }
 
 

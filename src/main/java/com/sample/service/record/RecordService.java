@@ -1,7 +1,7 @@
 package com.sample.service.record;
 
+import com.sample.dto.record.RecordReq;
 import com.sample.model.Record;
-
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface RecordService {
 
-    Record saveRecord(Record record, String username);
+    void saveRecord(RecordReq recordReq, String username);
 
     Record getRecordById(String id);
 

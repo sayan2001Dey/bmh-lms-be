@@ -1,4 +1,6 @@
 package com.sample.controller;
+import com.sample.dto.record.RecordReq;
+import com.sample.dto.record.RecordRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +22,9 @@ public class RecordController {
     
     // Save Record
     @PostMapping()
-    public Record saveRecord(@RequestBody Record record) {
-        
-        return recordService.saveRecord(record, "NA");
+    public ResponseEntity<String> saveRecord(@RequestBody RecordReq recordReq) {
+        recordService.saveRecord(recordReq, "NA");
+        return new ResponseEntity<>("🔥", HttpStatus.OK);
     }    
 
     // Get all Records
