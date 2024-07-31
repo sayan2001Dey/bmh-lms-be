@@ -13,15 +13,6 @@ import lombok.ToString;
 @MappedSuperclass
 @Getter @Setter @ToString @EqualsAndHashCode
 public abstract class CommonProperties {
-
-	@Column(columnDefinition="varchar(10) default '0'")
-	private String company_id;
-	
-	@Column(columnDefinition="varchar(10) default '0'")
-	private String fin_year;
-	
-	@Column(columnDefinition="varchar(50) default 'NA'")
-	private String username;
 	
 	@Column(columnDefinition="varchar(10) default 'INSERTED'")
 	private String modified_type;
