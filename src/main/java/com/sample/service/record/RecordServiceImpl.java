@@ -599,6 +599,8 @@ public class RecordServiceImpl implements RecordService {
         if (uploadDir == null || uploadDir.isEmpty()) {
             throw new IllegalStateException("Upload directory not configured! Please set 'upload.dir' property.");
         }
+
+        fileUploadRepository.findFilesByFileName(fileName);
         //TODO: check if deleted in db
         Path filePath = Paths.get(uploadDir, fieldName, fileName);
 
