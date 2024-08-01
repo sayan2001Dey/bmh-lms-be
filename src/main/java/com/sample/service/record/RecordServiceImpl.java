@@ -1,5 +1,6 @@
 package com.sample.service.record;
 
+import com.sample.dto.record.MortgagedRes;
 import com.sample.dto.record.RecordReq;
 import com.sample.dto.record.RecordRes;
 import com.sample.model.FileUpload;
@@ -181,15 +182,49 @@ public class RecordServiceImpl implements RecordService {
 
     private RecordRes recordResMaker(Record record, String recId) {
         RecordRes res = basicDataToResDTO(null, record);
-        res.setMortgagedData(mortgagedRepository.findAllActive(recId));
+
+        Set<Mortgaged> mortSet = mortgagedRepository.findAllActive(recId);
+        Set<MortgagedRes> mortResSet = new HashSet<>();
+
+        mortSet.forEach((mort)->{
+            MortgagedRes mortRes = new MortgagedRes();
+            mortRes.setMortId(mort.getMortId());
+            mortRes.setMortDate(mort.getMortDate());
+            mortRes.setParty(mort.getParty());
+            mortRes.setMortDocFile(fileUploadListToNameList(
+                    fileUploadRepository.findAllFilesByMortId(mort.getMortId())
+            ));
+        });
+
+        res.setMortgagedData(mortResSet);
         res.setPartlySoldData(partlySoldRepository.findAllActive(recId));
-//        res.setConversionFile();
-//        res.setAreaMapFile();
-//        res.setDocumentFile();
-//        res.setHcdocumentFile();
-//        res.setScanCopyFile();
-//        res.setMutationFile();
-    //TODO AAAAAAAAAAAAAA
+        res.setConversionFile(fileUploadListToNameList(
+                fileUploadRepository.findFilesByIdNFieldName(recId, "conversionFile")
+        ));
+        res.setAreaMapFile(fileUploadListToNameList(
+                fileUploadRepository.findFilesByIdNFieldName(recId, "areaMapFile")
+        ));
+        res.setDocumentFile(fileUploadListToNameList(
+                fileUploadRepository.findFilesByIdNFieldName(recId, "documentFile")
+        ));
+        res.setHcdocumentFile(fileUploadListToNameList(
+                fileUploadRepository.findFilesByIdNFieldName(recId, "hcdocumentFile")
+        ));
+        res.setScanCopyFile(fileUploadListToNameList(
+                fileUploadRepository.findFilesByIdNFieldName(recId, "scanCopyFile")
+        ));
+        res.setMutationFile(fileUploadListToNameList(
+                fileUploadRepository.findFilesByIdNFieldName(recId, "mutationFile")
+        ));
+
+        return res;
+    }
+
+    private List<String> fileUploadListToNameList(List<FileUpload> files) {
+        List<String> res = new ArrayList<>();
+        files.forEach((fileUpload) -> {
+            res.add(fileUpload.getFileName());
+        });
         return res;
     }
 

@@ -13,5 +13,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MortgagedRes extends Mortgaged {
-    List<String> docFile;
+    private List<String> mortDocFile;
 }

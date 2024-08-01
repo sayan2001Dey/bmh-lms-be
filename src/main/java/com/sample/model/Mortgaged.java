@@ -29,4 +29,5 @@ public class Mortgaged extends CommonProperties{
 	
 	@Column(name="mort_Date")
 	private String mortDate;
+
 }

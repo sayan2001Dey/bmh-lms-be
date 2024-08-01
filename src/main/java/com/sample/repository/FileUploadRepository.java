@@ -16,4 +16,7 @@ public interface FileUploadRepository extends JpaRepository<FileUpload, Long> {
 
     @Query(value = "SELECT * FROM file_uploads  WHERE rec_id=? AND field_name=? AND modified_type='INSERTED'", nativeQuery = true)
     List<FileUpload> findFilesByIdNFieldName(String id, String fieldName);
+
+    @Query(value = "SELECT * FROM file_uploads  WHERE inside_id=? AND field_name='mortDocFile' AND modified_type='INSERTED'", nativeQuery = true)
+    List<FileUpload> findAllFilesByMortId(String mortId);
 }
