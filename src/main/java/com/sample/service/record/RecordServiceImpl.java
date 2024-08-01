@@ -250,7 +250,8 @@ public class RecordServiceImpl implements RecordService {
 
         recordRepository.save(existingRecord);
         recordRepository.save(record);
-        return null;
+        //TODO: lp return new record obj
+        return new RecordRes();
     }
 
 
