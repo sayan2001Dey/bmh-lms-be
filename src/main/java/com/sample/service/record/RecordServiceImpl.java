@@ -160,7 +160,7 @@ public class RecordServiceImpl implements RecordService {
         //TODO: do same as partly sold hp
         boolean mortgagedDataAvailable = false;
         Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
-        if (recordReq.getPartlySold().equalsIgnoreCase("true")) {
+        if (recordReq.getPartlySold().equalsIgnoreCase("true") && mortgagedData!=null) {
             for (Mortgaged mortgaged : mortgagedData) {
                 mortgaged.setRecId(record.getRecId());
                 mortgaged.setMortId(commonUtils.generateUID("Mortgaged", "MORT"));
@@ -178,8 +178,8 @@ public class RecordServiceImpl implements RecordService {
 
         boolean partlySoldDataAvailable = false;
         Set<PartlySold> finalPartlySoldData = new HashSet<>();
-        if (recordReq.getPartlySold().equalsIgnoreCase("true")) {
-            Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
+        Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
+        if (recordReq.getPartlySold().equalsIgnoreCase("true") && partlySoldData!=null) {
             Set<PartlySold> oldPartlySoldData = partlySoldRepository.findAllActive(recId);
             // needs optimization my puny brain ain't helping
             Set<PartlySold> temp = new HashSet<>();
