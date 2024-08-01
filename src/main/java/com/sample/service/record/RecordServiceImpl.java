@@ -63,14 +63,14 @@ public class RecordServiceImpl implements RecordService {
         record.setDeleted_by("NA");
         record.setDeleted_on(null);
 
-        if(recordReq.getMortgaged().equalsIgnoreCase("true")) {
+        if (recordReq.getMortgaged().equalsIgnoreCase("true")) {
             Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
             mortgagedRepository.saveAll(mortgagedData);
         }
 
         Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
-        if(recordReq.getPartlySold().equalsIgnoreCase("true")) {
-            for(PartlySold partlySold : partlySoldData) {
+        if (recordReq.getPartlySold().equalsIgnoreCase("true")) {
+            for (PartlySold partlySold : partlySoldData) {
                 partlySold.setRecId(record.getRecId());
                 partlySold.setPartId(commonUtils.generateUID("PartlySold", "PART"));
                 partlySold.setModified_type("INSERTED");
@@ -84,8 +84,8 @@ public class RecordServiceImpl implements RecordService {
         }
 
         Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
-        if(recordReq.getPartlySold().equalsIgnoreCase("true")) {
-            for(Mortgaged mortgaged : mortgagedData) {
+        if (recordReq.getPartlySold().equalsIgnoreCase("true")) {
+            for (Mortgaged mortgaged : mortgagedData) {
                 mortgaged.setRecId(record.getRecId());
                 mortgaged.setMortId(commonUtils.generateUID("Mortgaged", "MORT"));
                 mortgaged.setModified_type("INSERTED");
@@ -104,7 +104,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     private Record basicDataFromReqDTO(Record dest, RecordReq src) {
-        if(dest == null)
+        if (dest == null)
             dest = new Record();
         dest.setGroupName(src.getGroupName());
         dest.setState(src.getState());
@@ -141,7 +141,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     private RecordRes basicDataToResDTO(RecordRes dest, Record src) {
-        if(dest == null)
+        if (dest == null)
             dest = new RecordRes();
         dest.setGroupName(src.getGroupName());
         dest.setState(src.getState());
@@ -201,7 +201,7 @@ public class RecordServiceImpl implements RecordService {
     public List<RecordRes> getAllRecords() {
         List<Record> recordList = recordRepository.findAllActive();
         List<RecordRes> recordResList = new ArrayList<>();
-        for(Record record : recordList){
+        for (Record record : recordList) {
             recordResList.add(recordResMaker(record, record.getRecId()));
         }
         return recordResList;
@@ -210,9 +210,9 @@ public class RecordServiceImpl implements RecordService {
     @Override
     @Transactional
     public Record updateRecord(Record updatedRecord, String id, String username) {
-          LocalDateTime ldt = LocalDateTime.now();
+        LocalDateTime ldt = LocalDateTime.now();
 
-         // Fetch the existing record
+        // Fetch the existing record
 //        Record existingRecord = recordRepository.findByRecId(id)
 //                .orElseThrow(() -> new EntityNotFoundException("Record with id " + id + " not found"));
 //
@@ -338,7 +338,6 @@ public class RecordServiceImpl implements RecordService {
 //        return recordRepository.save(existingRecord);
         return null;
     }
-
 
 
 //    @Override
@@ -522,12 +521,11 @@ public class RecordServiceImpl implements RecordService {
 //    }
 
 
-
     @Override
     public boolean deleteRecord(String id, String username) {
         LocalDateTime ldt = LocalDateTime.now();
         Optional<Record> optionalRecord = recordRepository.findByRecId(id);
-        if(optionalRecord.isPresent()) {
+        if (optionalRecord.isPresent()) {
             Record record = optionalRecord.get();
             record.setDeleted_by(username);
             record.setDeleted_on(ldt);
@@ -539,9 +537,30 @@ public class RecordServiceImpl implements RecordService {
         }
     }
 
+    @Override
+    public byte[] getFileBytes(String fieldName, String fileName) {
+        String uploadDir = env.getProperty("upload.dir"); // Assuming a property named upload.dir is defined
+
+        if (uploadDir == null || uploadDir.isEmpty()) {
+            throw new IllegalStateException("Upload directory not configured! Please set 'upload.dir' property.");
+        }
+
+        FileUpload fileUpload = fileUploadRepository.findFilesByFileName(fileName).orElse(null);
+        if (fileUpload == null)
+            return null;
+
+        Path filePath = Paths.get(uploadDir, fieldName, fileName);
+
+        try {
+            return Files.readAllBytes(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read file: " + fileName, e);
+        }
+    }
 
     @Override
-    public ResponseEntity<String> saveAttachment(String fieldName, String id, byte[] blobData, String originalFileName, String ext) {
+    public ResponseEntity<String> saveAttachment(String fieldName, String id, byte[] blobData, String originalFileName, String ext, String username) {
+        LocalDateTime ldt = LocalDateTime.now();
         String uploadDir = env.getProperty("upload.dir"); // Assuming a property named upload.dir is defined
 
         if (uploadDir == null || uploadDir.isEmpty()) {
@@ -559,8 +578,9 @@ public class RecordServiceImpl implements RecordService {
             fileUpload.setRecId(id);
             fileUpload.setFieldName(fieldName);
             fileUpload.setFileName(fileName);
-
-
+            fileUpload.setModified_type("INSERTED");
+            fileUpload.setInserted_on(ldt);
+            fileUpload.setInserted_by(username);
             switch (fieldName) {
                 case "scanCopyFile":
                 case "mutationFile":
@@ -583,7 +603,7 @@ public class RecordServiceImpl implements RecordService {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body("Failed to upload file: " + e.getMessage());
             }
-            recordRepository.save(record);
+            fileUploadRepository.save(fileUpload);
             return ResponseEntity.ok("File uploaded successfully: " + fileName);
         }
 
@@ -591,71 +611,19 @@ public class RecordServiceImpl implements RecordService {
                 .body("Entry not found.");
     }
 
-
-    @Override
-    public byte[] getFileBytes(String fieldName, String fileName) {
-        String uploadDir = env.getProperty("upload.dir"); // Assuming a property named upload.dir is defined
-
-        if (uploadDir == null || uploadDir.isEmpty()) {
-            throw new IllegalStateException("Upload directory not configured! Please set 'upload.dir' property.");
-        }
-
-        fileUploadRepository.findFilesByFileName(fileName);
-        //TODO: check if deleted in db
-        Path filePath = Paths.get(uploadDir, fieldName, fileName);
-
-        try {
-            return Files.readAllBytes(filePath);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read file: " + fileName, e);
-        }
-    }
-
-
-
     @Override
     @Transactional
-//    @Lock(LockModeType.PESSIMISTIC_READ)
-    public boolean deleteFile(String id, String fieldName, String fileName) {
-        // Update record in database to remove the filename from the appropriate list
-        Record record = recordRepository.findByRecId(id).orElse(null);
-        Mortgaged mort = mortgagedRepository.findActiveByMortId(id).orElse(null);
-        boolean removed = false;
-        if(record == null) return false;
-        //TODO: remake
-//        switch (fieldName) {
-//            case "scanCopyFile":
-//                removed = record.getScanCopyFile().remove(fileName);
-//                break;
-//            case "mutationFile":
-//                removed = record.getMutationFile().remove(fileName);
-//                break;
-//            case "conversionFile":
-//                removed = record.getConversionFile().remove(fileName);
-//                break;
-//            case "documentFile":
-//                removed = record.getDocumentFile().remove(fileName);
-//                break;
-//            case "areaMapFile":
-//                removed = record.getAreaMapFile().remove(fileName);
-//                break;
-//            case "hcdocumentFile":
-//                removed = record.getHcdocumentFile().remove(fileName);
-//                break;
-////            case "docFile":
-////                removed = mort.getDocFile().remove(fileName);
-////                break;
-//        }
+    public boolean deleteFile(String id, String fieldName, String fileName, String username) {
+        LocalDateTime ldt = LocalDateTime.now();
 
-        // Save the record only if a file was removed
-        if (removed) {
-            recordRepository.save(record);
-        }
+        FileUpload fileUpload = fileUploadRepository.findFilesByFileName(fileName).orElse(null);
+        if(fileUpload == null)
+            return false;
+        fileUpload.setModified_type("DELETED");
+        fileUpload.setDeleted_by(username);
+        fileUpload.setDeleted_on(ldt);
+        fileUploadRepository.saveAndFlush(fileUpload);
 
-        // Return true indicating successful deletion from database
-        return removed;
+        return true;
     }
 }
-    
-    
-

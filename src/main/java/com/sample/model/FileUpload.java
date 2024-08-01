@@ -4,12 +4,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "fileUploads")
-public class FileUpload extends CommonProperties{
+public class FileUpload {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,4 +24,20 @@ public class FileUpload extends CommonProperties{
 
     @Column
     private String recId;
+
+    @Column
+    private String modified_type;
+
+    @Column
+    private LocalDateTime inserted_on;
+
+    @Column
+    private String inserted_by;
+
+    @Column
+    private LocalDateTime deleted_on;
+
+    @Column
+    private String deleted_by;
+
 }

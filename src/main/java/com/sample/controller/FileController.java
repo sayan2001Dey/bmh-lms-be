@@ -22,7 +22,7 @@ public class FileController {
                                              @RequestParam(value = "id") String id,
                                              @RequestParam(value = "file") String originalFileName,
                                              @RequestParam(value = "ext") String extension) {
-        return recordService.saveAttachment(fieldName, id, fileBytes, originalFileName, extension);
+        return recordService.saveAttachment(fieldName, id, fileBytes, originalFileName, extension, "NA");
     }
     
     
@@ -50,10 +50,10 @@ public class FileController {
              @RequestParam(value = "filename") String fileName) {
         try {
             // Assuming recordService.deleteFile returns true if deletion is successful
-            boolean deletionSuccessful = recordService.deleteFile(id, fieldName, fileName);
+            boolean deletionSuccessful = recordService.deleteFile(id, fieldName, fileName, "NA");
             
             if (deletionSuccessful) {
-                return ResponseEntity.noContent().build(); // 204 No Content
+                return ResponseEntity.accepted().build(); // 204 No Content
             } else {
                 return ResponseEntity.notFound().build(); // 404 Not Found
             }
