@@ -178,7 +178,7 @@ public class RecordServiceImpl implements RecordService {
 
         boolean partlySoldDataAvailable = false;
         Set<PartlySold> finalPartlySoldData = new HashSet<>();
-        if (recordReq.getPartlySold().equalsIgnoreCase("true") || recordReq.getPartlySold().isEmpty()) {
+        if (recordReq.getPartlySold().equalsIgnoreCase("true")) {
             Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
             Set<PartlySold> oldPartlySoldData = partlySoldRepository.findAllActive(recId);
             // needs optimization my puny brain ain't helping
@@ -186,7 +186,7 @@ public class RecordServiceImpl implements RecordService {
 
             //new add
             for (PartlySold partlySold : partlySoldData) {
-                if(partlySold.getPartId()==null) {
+                if(partlySold.getPartId()==null || partlySold.getPartId().isEmpty()) {
                     partlySold.setRecId(record.getRecId());
                     partlySold.setPartId(commonUtils.generateUID("PartlySold", "PART"));
                     partlySold.setModified_type("INSERTED");
