@@ -46,8 +46,8 @@ public class RecordController {
 
     // Update an existing Record
     @PatchMapping("{id}")
-    public ResponseEntity<Record> updateRecord(@PathVariable String id, @RequestBody Record record) {
-    	Record updatedRecord = recordService.updateRecord(record, id, "NA");
+    public ResponseEntity<RecordRes> updateRecord(@PathVariable String id, @RequestBody RecordReq recordReq) {
+    	RecordRes updatedRecord = recordService.updateRecord(recordReq, id, "NA");
 
     	if(updatedRecord != null) {
             return new ResponseEntity<>(updatedRecord, HttpStatus.OK);

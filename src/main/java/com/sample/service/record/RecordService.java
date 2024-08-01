@@ -2,7 +2,6 @@ package com.sample.service.record;
 
 import com.sample.dto.record.RecordReq;
 import com.sample.dto.record.RecordRes;
-import com.sample.model.Record;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public interface RecordService {
 
     List<RecordRes> getAllRecords();
 
-    Record updateRecord(Record record, String id, String username);
+    RecordRes updateRecord(RecordReq recordReq, String recId, String username);
 
     boolean deleteRecord(String id, String username);
 
