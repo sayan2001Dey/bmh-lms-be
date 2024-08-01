@@ -366,44 +366,51 @@ public class RecordServiceImpl implements RecordService {
         return true;
     }
 
-    private Record basicDataFromReqDTO(Record dest, RecordReq src) {
-        if(dest == null)
-            dest = new Record();
+    private Record basicDataFromReqDTO(Record old, RecordReq src) {
+        Record res = new Record();
 
-        dest.setId(null);
-        dest.setModified_type("INSERTED");
-        dest.setGroupName(src.getGroupName());
-        dest.setState(src.getState());
-        dest.setCity(src.getCity());
-        dest.setMouza(src.getMouza());
-        dest.setBlock(src.getBlock());
-        dest.setJLno(src.getJLno());
-        dest.setBuyerOwner(src.getBuyerOwner());
-        dest.setSellers(src.getSellers());
-        dest.setDeedName(src.getDeedName());
-        dest.setDeedNo(src.getDeedNo());
-        dest.setDeedDate(src.getDeedDate());
-        dest.setOldRsDag(src.getOldRsDag());
-        dest.setNewLrDag(src.getNewLrDag());
-        dest.setOldKhatian(src.getOldKhatian());
-        dest.setNewKhatian(src.getNewKhatian());
-        dest.setCurrKhatian(src.getCurrKhatian());
-        dest.setTotalQty(src.getTotalQty());
-        dest.setPurQty(src.getPurQty());
-        dest.setMutedQty(src.getMutedQty());
-        dest.setUnMutedQty(src.getUnMutedQty());
-        dest.setLandStatus(src.getLandStatus());
-        dest.setConversionLandStus(src.getConversionLandStus());
-        dest.setDeedLoc(src.getDeedLoc());
-        dest.setPhotoLoc(src.getPhotoLoc());
-        dest.setGovtRec(src.getGovtRec());
-        dest.setKhazanaStatus(src.getKhazanaStatus());
-        dest.setDueDate(src.getDueDate());
-        dest.setLegalMatters(src.getLegalMatters());
-        dest.setLedueDate(src.getLedueDate());
-        dest.setHistoryChain(src.getHistoryChain());
+        res.setModified_type("INSERTED");
+        res.setGroupName(src.getGroupName());
+        res.setState(src.getState());
+        res.setCity(src.getCity());
+        res.setMouza(src.getMouza());
+        res.setBlock(src.getBlock());
+        res.setJLno(src.getJLno());
+        res.setBuyerOwner(src.getBuyerOwner());
+        res.setSellers(src.getSellers());
+        res.setDeedName(src.getDeedName());
+        res.setDeedNo(src.getDeedNo());
+        res.setDeedDate(src.getDeedDate());
+        res.setOldRsDag(src.getOldRsDag());
+        res.setNewLrDag(src.getNewLrDag());
+        res.setOldKhatian(src.getOldKhatian());
+        res.setNewKhatian(src.getNewKhatian());
+        res.setCurrKhatian(src.getCurrKhatian());
+        res.setTotalQty(src.getTotalQty());
+        res.setPurQty(src.getPurQty());
+        res.setMutedQty(src.getMutedQty());
+        res.setUnMutedQty(src.getUnMutedQty());
+        res.setLandStatus(src.getLandStatus());
+        res.setConversionLandStus(src.getConversionLandStus());
+        res.setDeedLoc(src.getDeedLoc());
+        res.setPhotoLoc(src.getPhotoLoc());
+        res.setGovtRec(src.getGovtRec());
+        res.setKhazanaStatus(src.getKhazanaStatus());
+        res.setDueDate(src.getDueDate());
+        res.setLegalMatters(src.getLegalMatters());
+        res.setLedueDate(src.getLedueDate());
+        res.setHistoryChain(src.getHistoryChain());
 
-        return dest;
+        if(old!=null) {
+            res.setInserted_by(old.getInserted_by());
+            res.setInserted_on(old.getInserted_on());
+            res.setUpdated_by(old.getUpdated_by());
+            res.setUpdated_on(old.getUpdated_on());
+            res.setDeleted_by(old.getDeleted_by());
+            res.setDeleted_on(old.getDeleted_on());
+        }
+
+        return res;
     }
 
     private RecordRes basicDataToResDTO(Record src) {
