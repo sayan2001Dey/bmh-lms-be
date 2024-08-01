@@ -53,7 +53,7 @@ public class RecordServiceImpl implements RecordService {
     public String saveRecord(RecordReq recordReq, String username) {
         LocalDateTime ldt = LocalDateTime.now();
 
-        Record record = basicDataFromReqDTO(null, recordReq);
+        Record record = basicDataFromReqDTO(recordReq);
 
         record.setRecId(commonUtils.generateUID("Record", "REC"));
         record.setModified_type("INSERTED");
@@ -69,6 +69,7 @@ public class RecordServiceImpl implements RecordService {
             mortgagedRepository.saveAll(mortgagedData);
         }
 
+        boolean mortgagedDataAvailable = false;
         Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
         if (recordReq.getPartlySold().equalsIgnoreCase("true")) {
             for (Mortgaged mortgaged : mortgagedData) {
@@ -81,10 +82,11 @@ public class RecordServiceImpl implements RecordService {
                 mortgaged.setUpdated_on(null);
                 mortgaged.setDeleted_by("NA");
                 mortgaged.setDeleted_on(null);
+                mortgagedDataAvailable = true;
             }
-            mortgagedRepository.saveAll(mortgagedData);
         }
 
+        boolean partlySoldDataAvailable = false;
         Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
         if (recordReq.getPartlySold().equalsIgnoreCase("true")) {
             for (PartlySold partlySold : partlySoldData) {
@@ -97,16 +99,21 @@ public class RecordServiceImpl implements RecordService {
                 partlySold.setUpdated_on(null);
                 partlySold.setDeleted_by("NA");
                 partlySold.setDeleted_on(null);
+                partlySoldDataAvailable = true;
             }
-            partlySoldRepository.saveAll(partlySoldData);
         }
+
+        if(mortgagedDataAvailable)
+            mortgagedRepository.saveAll(mortgagedData);
+
+        if(partlySoldDataAvailable)
+            partlySoldRepository.saveAll(partlySoldData);
 
         return recordRepository.save(record).getRecId();
     }
 
-    private Record basicDataFromReqDTO(Record dest, RecordReq src) {
-        if (dest == null)
-            dest = new Record();
+    private Record basicDataFromReqDTO(RecordReq src) {
+        Record dest = new Record();
         dest.setGroupName(src.getGroupName());
         dest.setState(src.getState());
         dest.setCity(src.getCity());
@@ -141,9 +148,8 @@ public class RecordServiceImpl implements RecordService {
         return dest;
     }
 
-    private RecordRes basicDataToResDTO(RecordRes dest, Record src) {
-        if (dest == null)
-            dest = new RecordRes();
+    private RecordRes basicDataToResDTO(Record src) {
+        RecordRes dest = new RecordRes();
         dest.setGroupName(src.getGroupName());
         dest.setState(src.getState());
         dest.setCity(src.getCity());
@@ -181,7 +187,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     private RecordRes recordResMaker(Record record, String recId) {
-        RecordRes res = basicDataToResDTO(null, record);
+        RecordRes res = basicDataToResDTO(record);
 
         Set<Mortgaged> mortSet = mortgagedRepository.findAllActive(recId);
         Set<MortgagedRes> mortResSet = new HashSet<>();
