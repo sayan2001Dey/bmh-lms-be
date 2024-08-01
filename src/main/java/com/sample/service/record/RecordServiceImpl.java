@@ -402,6 +402,7 @@ public class RecordServiceImpl implements RecordService {
         res.setHistoryChain(src.getHistoryChain());
 
         if(old!=null) {
+            res.setRecId(old.getRecId());
             res.setInserted_by(old.getInserted_by());
             res.setInserted_on(old.getInserted_on());
             res.setUpdated_by(old.getUpdated_by());
