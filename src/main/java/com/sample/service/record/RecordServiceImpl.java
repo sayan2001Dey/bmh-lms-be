@@ -150,7 +150,7 @@ public class RecordServiceImpl implements RecordService {
 
         Record record = basicDataFromReqDTO(existingRecord, recordReq);
         record.setUpdated_by(username);
-        record.setUpdated_on(null);
+        record.setUpdated_on(ldt);
 
         if (recordReq.getMortgaged().equalsIgnoreCase("true")) {
             Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
@@ -249,6 +249,7 @@ public class RecordServiceImpl implements RecordService {
             partlySoldRepository.saveAll(finalPartlySoldData);
 
         recordRepository.save(existingRecord);
+        recordRepository.save(record);
         return null;
     }
 
