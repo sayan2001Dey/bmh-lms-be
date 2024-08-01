@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.sample.service.record.RecordService;
 
+import java.util.Optional;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/api/landrecord/attachments")
@@ -18,11 +20,12 @@ public class FileController {
     
     @PostMapping("/{fieldName}")
     public ResponseEntity<String> uploadFile(@RequestBody byte[] fileBytes,
-    									     @PathVariable String fieldName,
+                                             @PathVariable String fieldName,
                                              @RequestParam(value = "id") String id,
                                              @RequestParam(value = "file") String originalFileName,
-                                             @RequestParam(value = "ext") String extension) {
-        return recordService.saveAttachment(fieldName, id, fileBytes, originalFileName, extension, "NA");
+                                             @RequestParam(value = "ext") String extension,
+                                             @RequestParam(value = "mort", required = false) String mortId) {
+        return recordService.saveAttachment(fieldName, id, fileBytes, originalFileName, extension, mortId, "NA");
     }
     
     
@@ -47,10 +50,11 @@ public class FileController {
     @DeleteMapping("/{fieldName}")
     public ResponseEntity<Void> deleteFile(@PathVariable String fieldName,
     		 @RequestParam(value = "id") String id,
-             @RequestParam(value = "filename") String fileName) {
+             @RequestParam(value = "filename") String fileName,
+             @RequestParam(value = "mort", required = false) String mortId) {
         try {
             // Assuming recordService.deleteFile returns true if deletion is successful
-            boolean deletionSuccessful = recordService.deleteFile(id, fieldName, fileName, "NA");
+            boolean deletionSuccessful = recordService.deleteFile(id, fieldName, fileName, mortId, "NA");
             
             if (deletionSuccessful) {
                 return ResponseEntity.accepted().build(); // 204 No Content

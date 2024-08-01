@@ -183,7 +183,13 @@ public class RecordServiceImpl implements RecordService {
         RecordRes res = basicDataToResDTO(null, record);
         res.setMortgagedData(mortgagedRepository.findAllActive(recId));
         res.setPartlySoldData(partlySoldRepository.findAllActive(recId));
-        //TODO: file and stuff
+//        res.setConversionFile();
+//        res.setAreaMapFile();
+//        res.setDocumentFile();
+//        res.setHcdocumentFile();
+//        res.setScanCopyFile();
+//        res.setMutationFile();
+    //TODO AAAAAAAAAAAAAA
         return res;
     }
 
@@ -559,7 +565,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public ResponseEntity<String> saveAttachment(String fieldName, String id, byte[] blobData, String originalFileName, String ext, String username) {
+    public ResponseEntity<String> saveAttachment(String fieldName, String id, byte[] blobData, String originalFileName, String ext, String insideId, String username) {
         LocalDateTime ldt = LocalDateTime.now();
         String uploadDir = env.getProperty("upload.dir"); // Assuming a property named upload.dir is defined
 
@@ -569,8 +575,7 @@ public class RecordServiceImpl implements RecordService {
         }
 
         Record record = recordRepository.findByRecId(id).orElse(null);
-        Optional<Mortgaged> mort = mortgagedRepository.findActiveByMortId(id);
-        if (record != null || mort.isPresent()) {
+        if (record != null) {
             String fileName = originalFileName + "-" + UUID.randomUUID().toString().substring(0, 5) + id + '.' + ext;
 
             FileUpload fileUpload = new FileUpload();
@@ -588,7 +593,14 @@ public class RecordServiceImpl implements RecordService {
                 case "documentFile":
                 case "areaMapFile":
                 case "hcdocumentFile":
+                    fileUploadRepository.save(fileUpload);
+                    break;
                 case "mortDocFile":
+                    Optional<Mortgaged> mort = mortgagedRepository.findActiveByMortId(insideId);
+                    if (insideId == null || (!mort.isPresent()))
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body("mortId not supplied or doesn't exist: " + fieldName);
+                    fileUpload.setInsideId(insideId);
                     fileUploadRepository.save(fileUpload);
                     break;
                 default:
@@ -613,7 +625,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     @Transactional
-    public boolean deleteFile(String id, String fieldName, String fileName, String username) {
+    public boolean deleteFile(String id, String fieldName, String fileName, String insideId, String username) {
         LocalDateTime ldt = LocalDateTime.now();
 
         FileUpload fileUpload = fileUploadRepository.findFilesByFileName(fileName).orElse(null);

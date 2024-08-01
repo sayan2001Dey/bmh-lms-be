@@ -19,10 +19,10 @@ public interface RecordService {
     Record updateRecord(Record record, String id, String username);
 
     boolean deleteRecord(String id, String username);
-    
-    ResponseEntity<String> saveAttachment(String fieldName, String id, byte[] blobData,String originalFileName, String ext, String username);
-    
+
     byte[] getFileBytes(String fieldName, String fileName);
-    
-	boolean deleteFile(String id, String fieldName, String fileName, String username);
+
+    ResponseEntity<String> saveAttachment(String fieldName, String id, byte[] blobData, String originalFileName, String ext, String insideId, String username);
+
+	boolean deleteFile(String id, String fieldName, String fileName, String insideId, String username);
 }

@@ -26,6 +26,9 @@ public class FileUpload {
     private String recId;
 
     @Column
+    private String insideId;
+
+    @Column
     private String modified_type;
 
     @Column
