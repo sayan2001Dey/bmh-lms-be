@@ -69,21 +69,6 @@ public class RecordServiceImpl implements RecordService {
             mortgagedRepository.saveAll(mortgagedData);
         }
 
-        Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
-        if (recordReq.getPartlySold().equalsIgnoreCase("true")) {
-            for (PartlySold partlySold : partlySoldData) {
-                partlySold.setRecId(record.getRecId());
-                partlySold.setPartId(commonUtils.generateUID("PartlySold", "PART"));
-                partlySold.setModified_type("INSERTED");
-                partlySold.setInserted_on(ldt);
-                partlySold.setInserted_by(username);
-                partlySold.setUpdated_by("NA");
-                partlySold.setUpdated_on(null);
-                partlySold.setDeleted_by("NA");
-                partlySold.setDeleted_on(null);
-            }
-        }
-
         Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
         if (recordReq.getPartlySold().equalsIgnoreCase("true")) {
             for (Mortgaged mortgaged : mortgagedData) {
@@ -97,10 +82,25 @@ public class RecordServiceImpl implements RecordService {
                 mortgaged.setDeleted_by("NA");
                 mortgaged.setDeleted_on(null);
             }
+            mortgagedRepository.saveAll(mortgagedData);
         }
 
-        partlySoldRepository.saveAll(partlySoldData);
-        mortgagedRepository.saveAll(mortgagedData);
+        Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
+        if (recordReq.getPartlySold().equalsIgnoreCase("true")) {
+            for (PartlySold partlySold : partlySoldData) {
+                partlySold.setRecId(record.getRecId());
+                partlySold.setPartId(commonUtils.generateUID("PartlySold", "PART"));
+                partlySold.setModified_type("INSERTED");
+                partlySold.setInserted_on(ldt);
+                partlySold.setInserted_by(username);
+                partlySold.setUpdated_by("NA");
+                partlySold.setUpdated_on(null);
+                partlySold.setDeleted_by("NA");
+                partlySold.setDeleted_on(null);
+            }
+            partlySoldRepository.saveAll(partlySoldData);
+        }
+
         return recordRepository.save(record).getRecId();
     }
 
