@@ -18,5 +18,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Query(value = "DELETE FROM user WHERE email=:email", nativeQuery = true)
     void deleteByEmail(String email);
-    //TODO
 }
