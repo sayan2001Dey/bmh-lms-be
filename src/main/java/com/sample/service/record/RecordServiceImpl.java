@@ -159,21 +159,70 @@ public class RecordServiceImpl implements RecordService {
 
         //TODO: do same as partly sold hp
         boolean mortgagedDataAvailable = false;
+        Set<Mortgaged> finalMortgagedData = new HashSet<>();
         Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
-        if (recordReq.getPartlySold() && mortgagedData!=null) {
-            for (Mortgaged mortgaged : mortgagedData) {
-                mortgaged.setRecId(record.getRecId());
-                mortgaged.setMortId(commonUtils.generateUID("Mortgaged", "MORT"));
-                mortgaged.setModified_type("INSERTED");
-                mortgaged.setInserted_on(ldt);
-                mortgaged.setInserted_by(username);
-                mortgaged.setUpdated_by("NA");
-                mortgaged.setUpdated_on(null);
-                mortgaged.setDeleted_by("NA");
-                mortgaged.setDeleted_on(null);
+        if (recordReq.getMortgaged() && mortgagedData!=null) {
+            Set<Mortgaged> oldMortgagedData = mortgagedRepository.findAllActive(recId);
+            // needs optimization my puny brain ain't helping
+            Set<Mortgaged> temp = new HashSet<>();
 
+            //new add
+            for (Mortgaged mortgaged : mortgagedData) {
+                if(mortgaged.getMortId()==null || mortgaged.getMortId().isEmpty()) {
+                    mortgaged.setRecId(record.getRecId());
+                    mortgaged.setMortId(commonUtils.generateUID("Mortgaged", "MORT"));
+                    mortgaged.setModified_type("INSERTED");
+                    mortgaged.setInserted_on(ldt);
+                    mortgaged.setInserted_by(username);
+                    mortgaged.setUpdated_by("NA");
+                    mortgaged.setUpdated_on(null);
+                    mortgaged.setDeleted_by("NA");
+                    mortgaged.setDeleted_on(null);
+
+                    finalMortgagedData.add(mortgaged);
+                    mortgagedDataAvailable = true;
+                }
+                else
+                    temp.add(mortgaged);
+            }
+
+            mortgagedData = temp;
+
+            //old stuff
+            // TODO: known lp bug, if any data in update queue doesn't exist in db it will behave unexpectedly. possible risk of data loss or corruption
+            for (Mortgaged oldMortgaged : oldMortgagedData) {
+                Mortgaged found = null;
+                for(Mortgaged mortgaged : mortgagedData) {
+                    if(mortgaged.getMortId().equals(oldMortgaged.getMortId())) {
+                        found = mortgaged;
+                        break;
+                    }
+                }
+                if (found != null) {
+                    //update
+                    oldMortgaged.setModified_type("UPDATED");
+                    oldMortgaged.setUpdated_on(ldt);
+                    oldMortgaged.setUpdated_by(username);
+
+                    Mortgaged tempMortgaged = copyMortgaged(oldMortgaged);
+                    tempMortgaged.setId(null);
+                    tempMortgaged.setRecId(record.getRecId());
+                    tempMortgaged.setModified_type("INSERTED");
+                    tempMortgaged.setUpdated_on(ldt);
+                    tempMortgaged.setUpdated_by(username);
+
+                    finalMortgagedData.add(tempMortgaged);
+                } else {
+                    //delete
+                    oldMortgaged.setModified_type("DELETED");
+                    oldMortgaged.setDeleted_on(ldt);
+                    oldMortgaged.setDeleted_by(username);
+                }
+                finalMortgagedData.add(oldMortgaged);
                 mortgagedDataAvailable = true;
             }
+        } else {
+            //TODO: delete? ask : confirmed need to delete :) mp
         }
 
         boolean partlySoldDataAvailable = false;
@@ -242,8 +291,9 @@ public class RecordServiceImpl implements RecordService {
         } else {
             //TODO: delete? ask : confirmed need to delete :) mp
         }
+
         if(mortgagedDataAvailable)
-            mortgagedRepository.saveAll(mortgagedData);
+            mortgagedRepository.saveAll(finalMortgagedData);
 
         if(partlySoldDataAvailable)
             partlySoldRepository.saveAll(finalPartlySoldData);
@@ -547,4 +597,5 @@ public class RecordServiceImpl implements RecordService {
 
         return res;
     }
+
 }

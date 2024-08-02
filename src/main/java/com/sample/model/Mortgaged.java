@@ -1,22 +1,18 @@
 package com.sample.model;
 
-import java.util.List;
-
 import javax.persistence.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor
+@Data
 @Entity
 @Table(name="mortgaged")
 public class Mortgaged extends CommonProperties{
-	
 	@Id
-	@Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
 	@Column(name="mort_id")
 	private String mortId;
@@ -29,5 +25,4 @@ public class Mortgaged extends CommonProperties{
 	
 	@Column(name="mort_Date")
 	private String mortDate;
-
 }
