@@ -13,4 +13,10 @@ import javax.transaction.Transactional;
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM user WHERE email=?", nativeQuery = true)
     User findByEmail(String email);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM user WHERE email=:email", nativeQuery = true)
+    void deleteByEmail(String email);
+    //TODO
 }
