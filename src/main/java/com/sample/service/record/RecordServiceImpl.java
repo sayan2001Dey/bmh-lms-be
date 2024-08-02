@@ -64,14 +64,14 @@ public class RecordServiceImpl implements RecordService {
         record.setDeleted_by("NA");
         record.setDeleted_on(null);
 
-        if (recordReq.getMortgaged().equalsIgnoreCase("true")) {
+        if (recordReq.getMortgaged()) {
             Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
             mortgagedRepository.saveAll(mortgagedData);
         }
 
         boolean mortgagedDataAvailable = false;
         Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
-        if (recordReq.getPartlySold().equalsIgnoreCase("true")) {
+        if (recordReq.getPartlySold()) {
             for (Mortgaged mortgaged : mortgagedData) {
                 mortgaged.setRecId(record.getRecId());
                 mortgaged.setMortId(commonUtils.generateUID("Mortgaged", "MORT"));
@@ -89,7 +89,7 @@ public class RecordServiceImpl implements RecordService {
 
         boolean partlySoldDataAvailable = false;
         Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
-        if (recordReq.getPartlySold().equalsIgnoreCase("true")) {
+        if (recordReq.getPartlySold()) {
             for (PartlySold partlySold : partlySoldData) {
                 partlySold.setRecId(record.getRecId());
                 partlySold.setPartId(commonUtils.generateUID("PartlySold", "PART"));
@@ -152,7 +152,7 @@ public class RecordServiceImpl implements RecordService {
         record.setUpdated_by(username);
         record.setUpdated_on(ldt);
 
-        if (recordReq.getMortgaged().equalsIgnoreCase("true")) {
+        if (recordReq.getMortgaged()) {
             Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
             mortgagedRepository.saveAll(mortgagedData);
         }
@@ -160,7 +160,7 @@ public class RecordServiceImpl implements RecordService {
         //TODO: do same as partly sold hp
         boolean mortgagedDataAvailable = false;
         Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
-        if (recordReq.getPartlySold().equalsIgnoreCase("true") && mortgagedData!=null) {
+        if (recordReq.getPartlySold() && mortgagedData!=null) {
             for (Mortgaged mortgaged : mortgagedData) {
                 mortgaged.setRecId(record.getRecId());
                 mortgaged.setMortId(commonUtils.generateUID("Mortgaged", "MORT"));
@@ -179,7 +179,7 @@ public class RecordServiceImpl implements RecordService {
         boolean partlySoldDataAvailable = false;
         Set<PartlySold> finalPartlySoldData = new HashSet<>();
         Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
-        if (recordReq.getPartlySold().equalsIgnoreCase("true") && partlySoldData!=null) {
+        if (recordReq.getPartlySold() && partlySoldData!=null) {
             Set<PartlySold> oldPartlySoldData = partlySoldRepository.findAllActive(recId);
             // needs optimization my puny brain ain't helping
             Set<PartlySold> temp = new HashSet<>();
@@ -402,6 +402,8 @@ public class RecordServiceImpl implements RecordService {
         res.setLegalMatters(src.getLegalMatters());
         res.setLedueDate(src.getLedueDate());
         res.setHistoryChain(src.getHistoryChain());
+        res.setMortgaged(src.getMortgaged());
+        res.setPartlySold(src.getPartlySold());
 
         if(old!=null) {
             res.setRecId(old.getRecId());
@@ -448,6 +450,8 @@ public class RecordServiceImpl implements RecordService {
         dest.setLegalMatters(src.getLegalMatters());
         dest.setLedueDate(src.getLedueDate());
         dest.setHistoryChain(src.getHistoryChain());
+        dest.setMortgaged(src.getMortgaged());
+        dest.setPartlySold(src.getPartlySold());
 
         dest.setRecId(src.getRecId());
 

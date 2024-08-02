@@ -2,7 +2,6 @@ package com.sample.model;
 
 
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.*;
 
@@ -114,10 +113,10 @@ public class Record extends CommonProperties {
     @Column(name = "history_chain", length = 255)
     private String historyChain;
     
-    @Column(name = "mortgaged", length = 50)
-    private String mortgaged;
+    @Column(name = "mortgaged")
+    private Boolean mortgaged;
     
-    @Column(name = "partly_sold", length = 50)
-    private String partlySold;
+    @Column(name = "partly_sold")
+    private Boolean partlySold;
 }
 

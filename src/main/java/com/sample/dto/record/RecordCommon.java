@@ -45,7 +45,7 @@ public class RecordCommon {
     private String legalMatters;
     private String ledueDate;
     private String historyChain;
-    private String mortgaged;
-    private String partlySold;
+    private Boolean mortgaged;
+    private Boolean partlySold;
     private Set<PartlySold> partlySoldData;
 }
