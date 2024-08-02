@@ -566,8 +566,6 @@ public class RecordServiceImpl implements RecordService {
         RecordRes res = basicDataToResDTO(record);
 
         Set<Mortgaged> mortSet = mortgagedRepository.findAllActive(recId);
-        System.out.println("resmaker");
-        System.out.println(mortSet);
         Set<MortgagedRes> mortResSet = new HashSet<>();
 
         mortSet.forEach((mort)->{
