@@ -157,13 +157,11 @@ public class RecordServiceImpl implements RecordService {
             mortgagedRepository.saveAll(mortgagedData);
         }
 
-        //TODO: do same as partly sold hp
-        boolean mortgagedDataAvailable = false;
+        //check partly sold
         Set<Mortgaged> finalMortgagedData = new HashSet<>();
         Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
         if (recordReq.getMortgaged() && mortgagedData!=null) {
             Set<Mortgaged> oldMortgagedData = mortgagedRepository.findAllActive(recId);
-            // needs optimization my puny brain ain't helping
             Set<Mortgaged> temp = new HashSet<>();
 
             //new add
@@ -180,7 +178,6 @@ public class RecordServiceImpl implements RecordService {
                     mortgaged.setDeleted_on(null);
 
                     finalMortgagedData.add(mortgaged);
-                    mortgagedDataAvailable = true;
                 }
                 else
                     temp.add(mortgaged);
@@ -219,13 +216,17 @@ public class RecordServiceImpl implements RecordService {
                     oldMortgaged.setDeleted_by(username);
                 }
                 finalMortgagedData.add(oldMortgaged);
-                mortgagedDataAvailable = true;
             }
         } else {
-            //TODO: delete? ask : confirmed need to delete :) mp
+            Set<Mortgaged> oldMortgagedData = mortgagedRepository.findAllActive(recId);
+            oldMortgagedData.forEach(mort-> {
+                mort.setModified_type("DELETED");
+                mort.setDeleted_on(ldt);
+                mort.setDeleted_by(username);
+                finalMortgagedData.add(mort);
+            });
         }
 
-        boolean partlySoldDataAvailable = false;
         Set<PartlySold> finalPartlySoldData = new HashSet<>();
         Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
         if (recordReq.getPartlySold() && partlySoldData!=null) {
@@ -247,7 +248,6 @@ public class RecordServiceImpl implements RecordService {
                     partlySold.setDeleted_on(null);
 
                     finalPartlySoldData.add(partlySold);
-                    partlySoldDataAvailable = true;
                 }
                 else
                     temp.add(partlySold);
@@ -286,22 +286,27 @@ public class RecordServiceImpl implements RecordService {
                     oldPartlySold.setDeleted_by(username);
                 }
                 finalPartlySoldData.add(oldPartlySold);
-                partlySoldDataAvailable = true;
             }
         } else {
-            //TODO: delete? ask : confirmed need to delete :) mp
+            Set<PartlySold> oldPartlySoldData = partlySoldRepository.findAllActive(recId);
+            oldPartlySoldData.forEach(part-> {
+                part.setModified_type("DELETED");
+                part.setDeleted_on(ldt);
+                part.setDeleted_by(username);
+                finalPartlySoldData.add(part);
+            });
         }
 
-        if(mortgagedDataAvailable)
+        if(!finalMortgagedData.isEmpty())
             mortgagedRepository.saveAll(finalMortgagedData);
 
-        if(partlySoldDataAvailable)
+        if(!finalPartlySoldData.isEmpty())
             partlySoldRepository.saveAll(finalPartlySoldData);
 
         recordRepository.save(existingRecord);
         recordRepository.save(record);
-        //TODO: lp return new record obj
-        return new RecordRes();
+
+        return recordResMaker(record, recId);
     }
 
 
