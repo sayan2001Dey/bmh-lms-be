@@ -64,14 +64,9 @@ public class RecordServiceImpl implements RecordService {
         record.setDeleted_by("NA");
         record.setDeleted_on(null);
 
-        if (recordReq.getMortgaged()) {
-            Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
-            mortgagedRepository.saveAll(mortgagedData);
-        }
-
         boolean mortgagedDataAvailable = false;
         Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
-        if (recordReq.getPartlySold()) {
+        if (recordReq.getMortgaged()) {
             for (Mortgaged mortgaged : mortgagedData) {
                 mortgaged.setRecId(record.getRecId());
                 mortgaged.setMortId(commonUtils.generateUID("Mortgaged", "MORT"));
@@ -152,16 +147,12 @@ public class RecordServiceImpl implements RecordService {
         record.setUpdated_by(username);
         record.setUpdated_on(ldt);
 
-        if (recordReq.getMortgaged()) {
-            Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
-            mortgagedRepository.saveAll(mortgagedData);
-        }
-
         //check partly sold
         Set<Mortgaged> finalMortgagedData = new HashSet<>();
+        Set<FileUpload> finalMortFileChanges = new HashSet<>();
         Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
+        Set<Mortgaged> oldMortgagedData = mortgagedRepository.findAllActive(recId);
         if (recordReq.getMortgaged() && mortgagedData!=null) {
-            Set<Mortgaged> oldMortgagedData = mortgagedRepository.findAllActive(recId);
             Set<Mortgaged> temp = new HashSet<>();
 
             //new add
@@ -186,7 +177,6 @@ public class RecordServiceImpl implements RecordService {
             mortgagedData = temp;
 
             //old stuff
-            // TODO: known lp bug, if any data in update queue doesn't exist in db it will behave unexpectedly. possible risk of data loss or corruption
             for (Mortgaged oldMortgaged : oldMortgagedData) {
                 Mortgaged found = null;
                 for(Mortgaged mortgaged : mortgagedData) {
@@ -203,6 +193,8 @@ public class RecordServiceImpl implements RecordService {
 
                     Mortgaged tempMortgaged = copyMortgaged(oldMortgaged);
                     tempMortgaged.setId(null);
+                    tempMortgaged.setParty(found.getParty());
+                    tempMortgaged.setMortDate(found.getMortDate());
                     tempMortgaged.setRecId(record.getRecId());
                     tempMortgaged.setModified_type("INSERTED");
                     tempMortgaged.setUpdated_on(ldt);
@@ -218,8 +210,13 @@ public class RecordServiceImpl implements RecordService {
                 finalMortgagedData.add(oldMortgaged);
             }
         } else {
-            Set<Mortgaged> oldMortgagedData = mortgagedRepository.findAllActive(recId);
             oldMortgagedData.forEach(mort-> {
+                fileUploadRepository.findAllFilesByMortId(mort.getMortId()).forEach(file->{
+                    file.setModified_type("DELETED");
+                    file.setDeleted_on(ldt);
+                    file.setDeleted_by(username);
+                    finalMortFileChanges.add(file);
+                });
                 mort.setModified_type("DELETED");
                 mort.setDeleted_on(ldt);
                 mort.setDeleted_by(username);
@@ -229,8 +226,8 @@ public class RecordServiceImpl implements RecordService {
 
         Set<PartlySold> finalPartlySoldData = new HashSet<>();
         Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
+        Set<PartlySold> oldPartlySoldData = partlySoldRepository.findAllActive(recId);
         if (recordReq.getPartlySold() && partlySoldData!=null) {
-            Set<PartlySold> oldPartlySoldData = partlySoldRepository.findAllActive(recId);
             // needs optimization my puny brain ain't helping
             Set<PartlySold> temp = new HashSet<>();
 
@@ -256,7 +253,6 @@ public class RecordServiceImpl implements RecordService {
             partlySoldData = temp;
 
             //old stuff
-            // TODO: known lp bug, if any data in update queue doesn't exist in db it will behave unexpectedly. possible risk of data loss or corruption
             for (PartlySold oldPartlySold : oldPartlySoldData) {
                 PartlySold found = null;
                 for(PartlySold partlySold : partlySoldData) {
@@ -273,6 +269,10 @@ public class RecordServiceImpl implements RecordService {
 
                     PartlySold tempPartlySold = copyPartlySold(oldPartlySold);
                     tempPartlySold.setId(null);
+                    tempPartlySold.setSale(found.getSale());
+                    tempPartlySold.setDate(found.getDate());
+                    tempPartlySold.setQty(found.getQty());
+                    tempPartlySold.setDeedLink(found.getDeedLink());
                     tempPartlySold.setRecId(record.getRecId());
                     tempPartlySold.setModified_type("INSERTED");
                     tempPartlySold.setUpdated_on(ldt);
@@ -288,7 +288,6 @@ public class RecordServiceImpl implements RecordService {
                 finalPartlySoldData.add(oldPartlySold);
             }
         } else {
-            Set<PartlySold> oldPartlySoldData = partlySoldRepository.findAllActive(recId);
             oldPartlySoldData.forEach(part-> {
                 part.setModified_type("DELETED");
                 part.setDeleted_on(ldt);
@@ -300,6 +299,9 @@ public class RecordServiceImpl implements RecordService {
         if(!finalMortgagedData.isEmpty())
             mortgagedRepository.saveAll(finalMortgagedData);
 
+        if(!finalMortFileChanges.isEmpty())
+            fileUploadRepository.saveAll(finalMortFileChanges);
+
         if(!finalPartlySoldData.isEmpty())
             partlySoldRepository.saveAll(finalPartlySoldData);
 
@@ -309,18 +311,64 @@ public class RecordServiceImpl implements RecordService {
         return recordResMaker(record, recId);
     }
 
-
     @Override
+    @Transactional
     public boolean deleteRecord(String id, String username) {
-        //TODO: lp delete needs to work
         LocalDateTime ldt = LocalDateTime.now();
         Optional<Record> optionalRecord = recordRepository.findByRecId(id);
+
         if (optionalRecord.isPresent()) {
             Record record = optionalRecord.get();
             record.setDeleted_by(username);
             record.setDeleted_on(ldt);
             record.setModified_type("DELETED");
+
             recordRepository.save(record);
+
+            List<Mortgaged> finalMort = new ArrayList<>();
+            List<FileUpload> finalFile = new ArrayList<>();
+            List<PartlySold> finalPart = new ArrayList<>();
+
+            if (record.getMortgaged()) {
+                mortgagedRepository.findAllActive(id).forEach(mortgaged -> {
+                    fileUploadRepository.findAllFilesByMortId(mortgaged.getMortId()).forEach(file->{
+                        file.setModified_type("DELETED");
+                        file.setDeleted_on(ldt);
+                        file.setDeleted_by(username);
+                        finalFile.add(file);
+                    });
+                    mortgaged.setModified_type("DELETED");
+                    mortgaged.setDeleted_on(ldt);
+                    mortgaged.setDeleted_by(username);
+                    finalMort.add(mortgaged);
+                });
+            }
+
+            if(record.getPartlySold()) {
+                partlySoldRepository.findAllActive(id).forEach(partlySold -> {
+                    partlySold.setModified_type("DELETED");
+                    partlySold.setDeleted_on(ldt);
+                    partlySold.setDeleted_by(username);
+                    finalPart.add(partlySold);
+                });
+            }
+
+            fileUploadRepository.findFilesByRecId(id).forEach(file->{
+                file.setModified_type("DELETED");
+                file.setDeleted_on(ldt);
+                file.setDeleted_by(username);
+                finalFile.add(file);
+            });
+
+            if(!finalMort.isEmpty())
+                mortgagedRepository.saveAll(finalMort);
+
+            if(!finalPart.isEmpty())
+                partlySoldRepository.saveAll(finalPart);
+
+            if(!finalFile.isEmpty())
+                fileUploadRepository.saveAll(finalFile);
+
             return true;
         } else {
             return false;
@@ -517,6 +565,8 @@ public class RecordServiceImpl implements RecordService {
         RecordRes res = basicDataToResDTO(record);
 
         Set<Mortgaged> mortSet = mortgagedRepository.findAllActive(recId);
+        System.out.println("resmaker");
+        System.out.println(mortSet);
         Set<MortgagedRes> mortResSet = new HashSet<>();
 
         mortSet.forEach((mort)->{
@@ -527,6 +577,7 @@ public class RecordServiceImpl implements RecordService {
             mortRes.setMortDocFile(fileUploadListToNameList(
                     fileUploadRepository.findAllFilesByMortId(mort.getMortId())
             ));
+            mortResSet.add(mortRes);
         });
 
         res.setMortgagedData(mortResSet);

@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Repository
 public interface MortgagedRepository extends JpaRepository<Mortgaged, Long> {
-    @Query (value="SELECT * FROM mortgaged WHERE rec_id=? AND modified_type='INSERTED' ORDER BY slno", nativeQuery=true)
+    @Query (value="SELECT * FROM mortgaged WHERE rec_id=? AND modified_type='INSERTED'", nativeQuery=true)
     Set<Mortgaged> findAllActive(String recId);
 
     @Query( value = "SELECT * FROM mortgaged WHERE mort_id=? AND modified_type='INSERTED'" ,nativeQuery=true)
