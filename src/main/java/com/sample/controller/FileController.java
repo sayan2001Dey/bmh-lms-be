@@ -38,7 +38,32 @@ public class FileController {
     	    }
     	   
     	    HttpHeaders headers = new HttpHeaders();
-    	    headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+            int extPtr = -1;
+            for(int i=fileName.length()-1; -1<i; i--) {
+                if(fileName.charAt(i)=='.') {
+                    extPtr = i;
+                }
+            }
+
+            if(extPtr>-1) {
+                String ext = fileName.substring(extPtr+1);
+                switch (ext.toLowerCase()) {
+                    case "pdf":
+    	                headers.setContentType(MediaType.APPLICATION_PDF);
+                        break;
+                    case "jpg":
+                    case "jpeg":
+                        headers.setContentType(MediaType.IMAGE_JPEG);
+                        break;
+                    case "png":
+                        headers.setContentType(MediaType.IMAGE_PNG);
+                        break;
+                    default:
+                        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+                }
+
+            }
 
     	    return ResponseEntity.ok()
     	            .headers(headers)
