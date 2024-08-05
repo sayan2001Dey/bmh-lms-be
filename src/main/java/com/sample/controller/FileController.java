@@ -43,6 +43,7 @@ public class FileController {
             for(int i=fileName.length()-1; -1<i; i--) {
                 if(fileName.charAt(i)=='.') {
                     extPtr = i;
+                    break;
                 }
             }
 
