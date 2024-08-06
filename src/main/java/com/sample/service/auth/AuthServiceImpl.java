@@ -15,18 +15,17 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Base64;
-import java.util.Random;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-	 @Autowired
+	@Autowired
 	    private UserRepository userRepository;
 
-	 @Autowired
-	 	private Environment env;
-	
-	 public AuthResDTO login(AuthReqDTO authReq) {
+	@Autowired
+		private Environment env;
+
+	public AuthResDTO login(AuthReqDTO authReq) {
 		 String username = authReq.getUsername().toLowerCase();
 
 		 if(username.isEmpty())
@@ -69,10 +68,6 @@ public class AuthServiceImpl implements AuthService {
 		return login(authReq);
     }
 
-	/**
-	 * @param token
-	 * @return username
-	 */
 	public String verifyToken(String token) {
 		long validity = 2629746000L;
 		ZoneId zoneId = ZoneId.of("Asia/Kolkata");
@@ -104,19 +99,6 @@ public class AuthServiceImpl implements AuthService {
 			System.out.println(err.getMessage());
 			return null;
 		}
-	}
-
-	private String randomStringGenerator(int targetStringLength) {
-		int leftLimit = 48;     // numeral '0'
-		int rightLimit = 122;   // letter 'z'
-
-		Random random = new Random();
-
-		return random.ints(leftLimit, rightLimit + 1)
-				.filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
-				.limit(targetStringLength)
-				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-				.toString();
 	}
 
 	private String getPasswordHash(String password, String username) {

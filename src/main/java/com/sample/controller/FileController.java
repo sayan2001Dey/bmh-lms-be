@@ -31,7 +31,8 @@ public class FileController {
     
 
     @GetMapping("/{fieldName}/{fileName}")
-    public ResponseEntity<byte[]> getFile(@PathVariable String fieldName,@PathVariable String fileName) {
+    public ResponseEntity<byte[]>
+    getFile(@PathVariable String fieldName,@PathVariable String fileName) {
     	 byte[] fileBytes = recordService.getFileBytes(fieldName, fileName);
     	    if (fileBytes == null) {
     	        return ResponseEntity.notFound().build();
