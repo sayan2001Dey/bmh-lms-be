@@ -1,30 +1,29 @@
 package com.sample.model;
 
-import lombok.Getter;
+import lombok.Data;
 
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "User")
+@Data
+@Table(name = "user")
 @NoArgsConstructor
-@Getter
-public class User {
+public class User extends CommonProperties{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Setter
-    @Column(columnDefinition = "varchar(20) default 'No name'")
+    @Column
     private String name;
 
-    @Setter
-    @Column(columnDefinition = "varchar(60)", unique = true, nullable = false)
-    private String email;
+    @Column(unique = true, nullable = false)
+    private String username;
 
-    @Setter
-    @Column(columnDefinition = "varchar(255)", nullable = false)
+    @Column
+    private Boolean admin;
+
+    @Column
     private String password;
 } 

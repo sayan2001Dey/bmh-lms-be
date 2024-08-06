@@ -7,6 +7,9 @@ import lombok.Getter;
 @JsonAppend
 @Getter
 @AllArgsConstructor
-public class LoginResDTO {
+public class AuthResDTO {
     private String name;
+    private String username;
+    private Boolean admin;
+    private String token;
 }

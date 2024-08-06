@@ -13,12 +13,10 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     public void updateUser(String email, String name) {
-        User user = userRepository.findByEmail(email);
-        user.setName(name);
-        userRepository.save(user);
+        return;
     }
 
     public void deleteUser(String email) {
-        userRepository.deleteByEmail(email);
+        return;
     }
 }

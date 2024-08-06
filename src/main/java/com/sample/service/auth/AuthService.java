@@ -1,6 +1,10 @@
 package com.sample.service.auth;
 
+import com.sample.dto.auth.AuthReqDTO;
+import com.sample.dto.auth.AuthResDTO;
+
 public interface AuthService {
-    public String login(String email, String password);
-    public void register(String name, String email, String password);
+    public AuthResDTO login(AuthReqDTO authReq);
+    public AuthResDTO register(AuthReqDTO authReq);
+    public String verifyToken(String token);
 }

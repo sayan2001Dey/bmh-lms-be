@@ -8,14 +8,10 @@ import org.springframework.stereotype.Repository;
 import com.sample.model.User;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query(value = "SELECT * FROM user WHERE email=?", nativeQuery = true)
-    User findByEmail(String email);
-
-    @Modifying
-    @Transactional
-    @Query(value = "DELETE FROM user WHERE email=:email", nativeQuery = true)
-    void deleteByEmail(String email);
+    @Query(value = "SELECT * FROM user WHERE username=?", nativeQuery = true)
+    Optional<User> findByUsername(String username);
 }

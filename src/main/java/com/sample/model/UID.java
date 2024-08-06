@@ -8,7 +8,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "uid")
-
 public class UID {
     @Id
     @Column(name = "id")
