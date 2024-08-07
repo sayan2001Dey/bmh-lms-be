@@ -1,11 +1,6 @@
 package com.sample.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.*;
-
-import com.sample.dto.user.UpdateNameReqDTO;
-import com.sample.service.user.UserService;
 
 @RestController
 @CrossOrigin

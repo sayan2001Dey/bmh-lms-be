@@ -18,7 +18,7 @@ public class User extends CommonProperties{
     @Column
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String username;
 
     @Column

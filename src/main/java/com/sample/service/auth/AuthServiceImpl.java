@@ -3,6 +3,7 @@ package com.sample.service.auth;
 import com.google.common.hash.Hashing;
 import com.sample.dto.auth.AuthReqDTO;
 import com.sample.dto.auth.AuthResDTO;
+import com.sample.dto.user.UserResDTO;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -13,6 +14,7 @@ import com.sample.repository.UserRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Base64;
 
@@ -41,11 +43,13 @@ public class AuthServiceImpl implements AuthService {
 		 } else throw new RuntimeException("invalid credential");
      }
 
-    public AuthResDTO register(AuthReqDTO authReq) {
-		String username = authReq.getUsername().toLowerCase();
+    public UserResDTO register(AuthReqDTO authReq, String adminUsername) {
+		LocalDateTime ldt = LocalDateTime.now();
+		String username = authReq.getUsername().toLowerCase().replaceAll("\\s+","");
 		String password = authReq.getPassword();
 		String name = authReq.getName();
 		Boolean admin = authReq.getAdmin();
+		admin = admin!=null && admin;
 
 		if(username.isEmpty() || userRepository.findByUsername(username).orElse(null) != null)
 			throw new RuntimeException("illegal username");
@@ -58,17 +62,24 @@ public class AuthServiceImpl implements AuthService {
 		if(name!=null && !name.isEmpty())
         	newUser.setName(authReq.getName());
 
-		newUser.setAdmin(admin!=null && admin);
+		newUser.setAdmin(admin);
 
 		newUser.setUsername(username);
 
 		newUser.setPassword(getPasswordHash(password, username));
 
+		newUser.setModified_type("INSERTED");
+
+		newUser.setInserted_on(ldt);
+
+		newUser.setInserted_by(adminUsername);
+
         userRepository.save(newUser);
-		return login(authReq);
+
+		return new UserResDTO(name, username, admin);
     }
 
-	public String verifyToken(String token) {
+	public Object[] verifyToken(String token) {
 		long validity = 2629746000L;
 		ZoneId zoneId = ZoneId.of("Asia/Kolkata");
 
@@ -90,7 +101,7 @@ public class AuthServiceImpl implements AuthService {
 						);
 					long epochTimeNow = LocalDate.now().atStartOfDay(zoneId).toInstant().toEpochMilli();
 					if(tokenParts[2].equals(localSignature) && validTill > epochTimeNow) {
-						return username;
+						return new Object[]{username, payload.getBoolean("admin")};
 					}
 				default:
 					return null;

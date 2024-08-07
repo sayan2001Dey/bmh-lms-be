@@ -1,15 +1,14 @@
 package com.sample.dto.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthReqDTO {
+    @Setter
     private String name;
+    @Setter
     private Boolean admin;
     @NonNull
     private String username;
