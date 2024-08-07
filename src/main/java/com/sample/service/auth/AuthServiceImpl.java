@@ -51,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
 		Boolean admin = authReq.getAdmin();
 		admin = admin!=null && admin;
 
-		if(username.isEmpty() || userRepository.findByUsername(username).orElse(null) != null)
+		if(username.isEmpty() || userRepository.findByUsername(username).orElse(null) != null || username.charAt(0) == '_')
 			throw new RuntimeException("illegal username");
 
 		if(password.length()<8)
