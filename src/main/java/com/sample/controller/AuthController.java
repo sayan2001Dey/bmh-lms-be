@@ -36,7 +36,7 @@ public class AuthController {
         Object[] authData = authService.verifyToken(token);
         String adminUsername = "LMS";
         if(authData == null || !((Boolean) authData[1])) {
-            if(!userRepository.findAllActive().isEmpty())
+            if(userRepository.countAllActive()!=0)
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             else authReq.setAdmin(true);
         } else adminUsername = (String) authData[0];

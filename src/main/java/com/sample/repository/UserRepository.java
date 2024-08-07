@@ -18,4 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT * FROM user WHERE modified_type='INSERTED'", nativeQuery = true)
     List<User> findAllActive();
+
+    @Query(value = "SELECT COUNT(*) FROM user WHERE modified_type='INSERTED'", nativeQuery = true)
+    int countAllActive();
 }
