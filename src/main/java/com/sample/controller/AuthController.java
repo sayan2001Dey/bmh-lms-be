@@ -34,7 +34,7 @@ public class AuthController {
             @RequestBody AuthReqDTO authReq
     ) {
         Object[] authData = authService.verifyToken(token);
-        String adminUsername = "LMS";
+        String adminUsername = "LMS_auto_created";
         if(authData == null || !((Boolean) authData[1])) {
             if(userRepository.countAllActive()!=0)
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
