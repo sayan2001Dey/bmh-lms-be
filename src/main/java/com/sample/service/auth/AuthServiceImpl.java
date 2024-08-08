@@ -33,7 +33,7 @@ public class AuthServiceImpl implements AuthService {
 		 if(username.isEmpty())
 			 throw new RuntimeException("invalid credential");
 
-		 User user = userRepository.findByUsername(username).orElse(null);
+		 User user = userRepository.findActiveByUsername(username).orElse(null);
 
 		 String passwordHash = getPasswordHash(authReq.getPassword(), username);
 
@@ -51,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
 		Boolean admin = authReq.getAdmin();
 		admin = admin!=null && admin;
 
-		if(username.isEmpty() || userRepository.findByUsername(username).orElse(null) != null || username.charAt(0) == '_')
+		if(username.isEmpty() || userRepository.findActiveByUsername(username).orElse(null) != null || username.charAt(0) == '_')
 			throw new RuntimeException("illegal username");
 
 		if(password.length()<8)
@@ -102,7 +102,7 @@ public class AuthServiceImpl implements AuthService {
 							validTill - validity
 						);
 					long epochTimeNow = LocalDate.now().atStartOfDay(zoneId).toInstant().toEpochMilli();
-					if(tokenParts[2].equals(localSignature) && validTill > epochTimeNow) {
+					if(tokenParts[2].equals(localSignature) && validTill > epochTimeNow && userRepository.findActiveByUsername(username).isPresent()) {
 						return new Object[]{username, payload.getBoolean("admin")};
 					}
 				default:
