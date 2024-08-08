@@ -92,7 +92,6 @@ public class AuthServiceImpl implements AuthService {
 			switch (header.getInt("version")) {
 				case 1:
 					String payloadStr = new String(Base64.getDecoder().decode(tokenParts[1]));
-					String signature = tokenParts[2];
 					JSONObject payload = new JSONObject(payloadStr);
 					String username = payload.getString("username");
 					long validTill = payload.getLong("validTill");
