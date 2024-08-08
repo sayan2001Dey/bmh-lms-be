@@ -84,6 +84,8 @@ public class AuthServiceImpl implements AuthService {
 		ZoneId zoneId = ZoneId.of("Asia/Kolkata");
 
 		try {
+			if(token.startsWith("Bearer "))
+				token = token.substring(7);
 			String[] tokenParts = token.split("\\.");
 			String headerStr = new String(Base64.getDecoder().decode(tokenParts[0]));
 			JSONObject header = new JSONObject(headerStr);
@@ -108,8 +110,8 @@ public class AuthServiceImpl implements AuthService {
 			}
 		} catch (Exception err) {
 			System.out.println(err.getMessage());
-			return null;
 		}
+		return null;
 	}
 
 	private String getPasswordHash(String password, String username) {
