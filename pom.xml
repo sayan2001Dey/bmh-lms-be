@@ -9,8 +9,8 @@
 		<version>2.7.18</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.back</groupId>
-	<artifactId>sample</artifactId>
+	<groupId>com.bmh</groupId>
+	<artifactId>lms</artifactId>
 	<version>1.0.0</version>
 	<name>LMS</name>
 	<description>Land management system backend</description>

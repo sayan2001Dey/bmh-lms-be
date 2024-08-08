@@ -1,0 +1,46 @@
+package com.bmh.lms.model;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = "fileUploads")
+public class FileUpload {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column
+    private String fieldName;
+
+    @Column
+    private String fileName;
+
+    @Column
+    private String recId;
+
+    @Column
+    private String insideId;
+
+    @Column
+    private String modified_type;
+
+    @Column
+    private LocalDateTime inserted_on;
+
+    @Column
+    private String inserted_by;
+
+    @Column
+    private LocalDateTime deleted_on;
+
+    @Column
+    private String deleted_by;
+
+}
