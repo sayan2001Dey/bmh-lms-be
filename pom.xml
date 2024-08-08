@@ -11,9 +11,9 @@
 	</parent>
 	<groupId>com.back</groupId>
 	<artifactId>sample</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>Sample Project</name>
-	<description>Sample project for Spring Boot</description>
+	<version>1.0.0</version>
+	<name>LMS</name>
+	<description>Land management system backend</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
