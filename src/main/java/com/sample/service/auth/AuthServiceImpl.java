@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
 
 		 if(user != null && user.getPassword().equals(passwordHash)) {
 			 Boolean admin = user.getAdmin();
-			 return new AuthResDTO(user.getName(), username, admin, generateToken(username, admin));
+			 return new AuthResDTO(user.getName(), username, admin, generateToken(username, passwordHash, admin));
 		 } else throw new RuntimeException("invalid credential");
      }
 
@@ -96,13 +96,15 @@ public class AuthServiceImpl implements AuthService {
 					JSONObject payload = new JSONObject(payloadStr);
 					String username = payload.getString("username");
 					long validTill = payload.getLong("validTill");
+					User user = userRepository.findActiveByUsername(username).orElse(null);
+					if(user == null) return null;
 					String localSignature = generateSignature(
 							username,
-							tokenParts[0] + "." + tokenParts[1],
+							tokenParts[0] + "." + tokenParts[1] + user.getPassword(),
 							validTill - validity
 						);
 					long epochTimeNow = LocalDate.now().atStartOfDay(zoneId).toInstant().toEpochMilli();
-					if(tokenParts[2].equals(localSignature) && validTill > epochTimeNow && userRepository.findActiveByUsername(username).isPresent()) {
+					if(tokenParts[2].equals(localSignature) && validTill > epochTimeNow) {
 						return new Object[]{username, payload.getBoolean("admin")};
 					}
 				default:
@@ -139,7 +141,7 @@ public class AuthServiceImpl implements AuthService {
 				.toString();
 	}
 
-	private String generateToken(String username, Boolean admin) {
+	private String generateToken(String username, String passwordHash, Boolean admin) {
 		long validity = 2629746000L;
 		ZoneId zoneId = ZoneId.of("Asia/Kolkata");
 
@@ -160,7 +162,7 @@ public class AuthServiceImpl implements AuthService {
 
 		String tokenObjStr = headerEncoded + "." + payloadEncoded;
 
-		return tokenObjStr + "." + generateSignature(username, tokenObjStr, ldt);
+		return tokenObjStr + "." + generateSignature(username, tokenObjStr + passwordHash, ldt);
 	}
 
 	private String base64RemovePadding(String b64str) {
