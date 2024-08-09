@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import com.bmh.lms.service.record.RecordService;
 import java.util.List;
 
-import javax.servlet.annotation.MultipartConfig;
-
-@MultipartConfig
 @RestController
 @CrossOrigin()
 @RequestMapping("api/landrecord")
