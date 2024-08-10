@@ -15,5 +15,6 @@ public class MortgagedRes {
     private String mortId;
     private String party;
     private String mortDate;
+    private Double mortQty;
     private List<String> mortDocFile;
 }

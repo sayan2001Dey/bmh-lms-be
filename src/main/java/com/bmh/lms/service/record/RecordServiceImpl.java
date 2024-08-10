@@ -575,6 +575,7 @@ public class RecordServiceImpl implements RecordService {
             mortRes.setMortId(mort.getMortId());
             mortRes.setMortDate(mort.getMortDate());
             mortRes.setParty(mort.getParty());
+            mortRes.setMortQty(mort.getMortQty());
             mortRes.setMortDocFile(fileUploadListToNameList(
                     fileUploadRepository.findAllFilesByMortId(mort.getMortId())
             ));
@@ -641,6 +642,7 @@ public class RecordServiceImpl implements RecordService {
         res.setMortId(src.getMortId());
         res.setParty(src.getParty());
         res.setMortDate(src.getMortDate());
+        res.setMortQty(src.getMortQty());
 
         res.setModified_type(src.getModified_type());
         res.setInserted_by(src.getInserted_by());

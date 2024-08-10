@@ -24,6 +24,9 @@ public class Mortgaged extends CommonProperties{
 	
 	@Column(name="mort_party")
 	private String party;
+
+	@Column
+	private Double mortQty;
 	
 	@Column(name="mort_Date")
 	private String mortDate;
