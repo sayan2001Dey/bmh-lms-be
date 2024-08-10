@@ -5,10 +5,12 @@ import java.util.List;
 
 import jakarta.persistence.*;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "record")

@@ -1,13 +1,14 @@
 package com.bmh.lms.model;
 
-import lombok.Data;
-
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "user")
 @NoArgsConstructor
 public class User extends CommonProperties{
