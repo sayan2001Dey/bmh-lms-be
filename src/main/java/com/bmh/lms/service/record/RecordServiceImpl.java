@@ -430,7 +430,7 @@ public class RecordServiceImpl implements RecordService {
                     break;
                 case "mortDocFile":
                     Optional<Mortgaged> mort = mortgagedRepository.findActiveByMortId(insideId);
-                    if (insideId == null || (!mort.isPresent()))
+                    if (insideId == null || (mort.isEmpty()))
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                                 .body("mortId not supplied or doesn't exist: " + fieldName);
                     fileUpload.setInsideId(insideId);
@@ -607,9 +607,7 @@ public class RecordServiceImpl implements RecordService {
 
     private List<String> fileUploadListToNameList(List<FileUpload> files) {
         List<String> res = new ArrayList<>();
-        files.forEach((fileUpload) -> {
-            res.add(fileUpload.getFileName());
-        });
+        files.forEach((fileUpload) -> res.add(fileUpload.getFileName()));
         return res;
     }
 
