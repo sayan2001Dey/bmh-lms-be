@@ -21,6 +21,7 @@ public class RecordCommon {
     private String mouza;
     private String block;
     private String JLno;
+    private Integer pincode;
     private String buyerOwner;
     private List<String> sellers;
     private String deedName;

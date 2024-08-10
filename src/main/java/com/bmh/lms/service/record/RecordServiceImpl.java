@@ -508,6 +508,7 @@ public class RecordServiceImpl implements RecordService {
         res.setHistoryChain(src.getHistoryChain());
         res.setMortgaged(src.getMortgaged());
         res.setPartlySold(src.getPartlySold());
+        res.setPincode(src.getPincode());
 
         if(old!=null) {
             res.setRecId(old.getRecId());
@@ -556,6 +557,7 @@ public class RecordServiceImpl implements RecordService {
         dest.setHistoryChain(src.getHistoryChain());
         dest.setMortgaged(src.getMortgaged());
         dest.setPartlySold(src.getPartlySold());
+        dest.setPincode(src.getPincode());
 
         dest.setRecId(src.getRecId());
 
