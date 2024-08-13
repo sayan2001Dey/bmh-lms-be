@@ -585,9 +585,8 @@ public class RecordServiceImpl implements RecordService {
             mortRes.setMortDate(mort.getMortDate());
             mortRes.setParty(mort.getParty());
             mortRes.setMortQty(mort.getMortQty());
-            mortRes.setMortDocFile(fileUploadListToNameList(
-                    fileUploadRepository.findAllFilesByMortId(mort.getMortId())
-            ));
+            fileUploadRepository.findFileByMortId(mort.getMortId())
+                    .ifPresent(file -> mortRes.setMortDocFile(file.getFileName()));
             mortResSet.add(mortRes);
         });
 
