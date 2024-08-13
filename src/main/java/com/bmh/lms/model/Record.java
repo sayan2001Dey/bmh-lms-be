@@ -89,6 +89,9 @@ public class Record extends CommonProperties {
     private String unMutedQty;
 
     @Column(length = 50)
+    private String landType;
+
+    @Column(length = 50)
     private String landStatus;
     
     @Column(name = "converted_unconverted")
@@ -102,9 +105,15 @@ public class Record extends CommonProperties {
     
     @Column
     private String govtRec;
+
+    @Column
+    private String remarks;
     
     @Column(length = 50)
     private String khazanaStatus;
+
+    @Column
+    private Float tax;
     
     @Column(length = 50)
     private String dueDate;
@@ -114,6 +123,9 @@ public class Record extends CommonProperties {
     
     @Column(name = "le_due_date", length = 50)
     private String ledueDate;
+
+    @Column(name = "le_last_date", length = 50)
+    private String lelastDate;
     
     @Column
     private String historyChain;

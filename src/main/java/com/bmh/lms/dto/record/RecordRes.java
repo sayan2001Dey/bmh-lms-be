@@ -17,4 +17,5 @@ public class RecordRes extends RecordCommon {
     private List<String> documentFile;
     private List<String> areaMapFile;
     private List<String> hcdocumentFile;
+    private List<String> parchaFile;
 }

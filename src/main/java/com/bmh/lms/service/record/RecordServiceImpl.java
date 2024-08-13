@@ -426,6 +426,7 @@ public class RecordServiceImpl implements RecordService {
                 case "documentFile":
                 case "areaMapFile":
                 case "hcdocumentFile":
+                case "parchaFile":
                     fileUploadRepository.save(fileUpload);
                     break;
                 case "mortDocFile":
@@ -509,6 +510,10 @@ public class RecordServiceImpl implements RecordService {
         res.setMortgaged(src.getMortgaged());
         res.setPartlySold(src.getPartlySold());
         res.setPincode(src.getPincode());
+        res.setTax(src.getTax());
+        res.setLelastDate(src.getLelastDate());
+        res.setRemarks(src.getRemarks());
+        res.setLandType(src.getLandType());
 
         if(old!=null) {
             res.setRecId(old.getRecId());
@@ -558,6 +563,10 @@ public class RecordServiceImpl implements RecordService {
         dest.setMortgaged(src.getMortgaged());
         dest.setPartlySold(src.getPartlySold());
         dest.setPincode(src.getPincode());
+        dest.setTax(src.getTax());
+        dest.setLelastDate(src.getLelastDate());
+        dest.setRemarks(src.getRemarks());
+        dest.setLandType(src.getLandType());
 
         dest.setRecId(src.getRecId());
 
@@ -598,6 +607,9 @@ public class RecordServiceImpl implements RecordService {
         ));
         res.setScanCopyFile(fileUploadListToNameList(
                 fileUploadRepository.findFilesByIdNFieldName(recId, "scanCopyFile")
+        ));
+        res.setParchaFile(fileUploadListToNameList(
+                fileUploadRepository.findFilesByIdNFieldName(recId, "parchaFile")
         ));
         res.setMutationFile(fileUploadListToNameList(
                 fileUploadRepository.findFilesByIdNFieldName(recId, "mutationFile")
