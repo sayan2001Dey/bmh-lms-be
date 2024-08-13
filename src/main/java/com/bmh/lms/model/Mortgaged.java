@@ -2,15 +2,13 @@ package com.bmh.lms.model;
 
 import jakarta.persistence.*;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name="mortgaged")
+@EqualsAndHashCode(callSuper = false)
 public class Mortgaged extends CommonProperties{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

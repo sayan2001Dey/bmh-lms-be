@@ -1,16 +1,14 @@
 package com.bmh.lms.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import jakarta.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Table(name = "user")
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class User extends CommonProperties{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

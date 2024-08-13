@@ -5,13 +5,10 @@ import java.time.LocalDateTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
+@Data
 @MappedSuperclass
-@Getter @Setter @ToString @EqualsAndHashCode
 public abstract class CommonProperties {
 	
 	@Column(columnDefinition="varchar(10) default 'INSERTED'")
