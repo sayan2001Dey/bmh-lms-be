@@ -197,6 +197,7 @@ public class RecordServiceImpl implements RecordService {
                     tempMortgaged.setParty(found.getParty());
                     tempMortgaged.setMortDate(found.getMortDate());
                     tempMortgaged.setRecId(record.getRecId());
+                    tempMortgaged.setMortQty(found.getMortQty());
                     tempMortgaged.setModified_type("INSERTED");
                     tempMortgaged.setUpdated_on(ldt);
                     tempMortgaged.setUpdated_by(username);
