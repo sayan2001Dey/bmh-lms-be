@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface RecordService {
 
-    String saveRecord(RecordReq recordReq, String username);
+    RecordRes saveRecord(RecordReq recordReq, String username);
 
     RecordRes getRecordById(String id);
 

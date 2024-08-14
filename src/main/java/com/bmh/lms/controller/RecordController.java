@@ -23,7 +23,7 @@ public class RecordController {
     
     // Save Record
     @PostMapping()
-    public ResponseEntity<String> saveRecord(
+    public ResponseEntity<RecordRes> saveRecord(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
             @RequestBody RecordReq recordReq) {
         Object[] authData = authService.verifyToken(token);
