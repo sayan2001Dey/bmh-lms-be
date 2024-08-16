@@ -5,7 +5,8 @@ import com.bmh.lms.dto.auth.AuthResDTO;
 import com.bmh.lms.dto.user.UserResDTO;
 
 public interface AuthService {
-    public AuthResDTO login(AuthReqDTO authReq);
-    public UserResDTO register(AuthReqDTO authReq, String adminUsername);
-    public Object[] verifyToken(String token);
+    AuthResDTO login(AuthReqDTO authReq);
+    UserResDTO register(AuthReqDTO authReq, String adminUsername);
+    Object[] verifyToken(String token);
+    String getPasswordHash(String password, String username);
 }

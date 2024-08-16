@@ -115,7 +115,7 @@ public class AuthServiceImpl implements AuthService {
 		return null;
 	}
 
-	private String getPasswordHash(String password, String username) {
+	public String getPasswordHash(String password, String username) {
 		String input = password + env.getProperty(
 				"password.salt",
 				env.getProperty("spring.datasource.password", "archi")

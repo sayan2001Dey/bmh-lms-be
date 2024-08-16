@@ -3,12 +3,11 @@ package com.bmh.lms.dto.auth;
 import lombok.*;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthReqDTO {
-    @Setter
     private String name;
-    @Setter
     private Boolean admin;
     @NonNull
     private String username;
