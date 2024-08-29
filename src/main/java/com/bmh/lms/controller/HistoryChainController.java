@@ -26,10 +26,10 @@ public class HistoryChainController {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
             @RequestBody HistoryChain historyChain
     ){
-        Object[] authData = authService.verifyToken(token);
-        if(authData == null) {
+//        Object[] authData = authService.verifyToken(token);
+//        if(authData == null) {
 //            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+//        }
         return new ResponseEntity<>(historyChainService.saveHc(historyChain, ""), HttpStatus.OK);
 
     }
@@ -39,10 +39,10 @@ public class HistoryChainController {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
             @PathVariable String id
     ) {
-        Object[] authData = authService.verifyToken(token);
-        if(authData == null) {
+//        Object[] authData = authService.verifyToken(token);
+//        if(authData == null) {
 //            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+//        }
 
         Set<HistoryChain> res = historyChainService.getFullGraphData(id);
         if (res != null) {
