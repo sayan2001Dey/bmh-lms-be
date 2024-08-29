@@ -4,7 +4,6 @@ import com.bmh.lms.model.HistoryChain;
 import com.bmh.lms.repository.HistoryChainRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
