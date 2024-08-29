@@ -1,6 +1,5 @@
 package com.bmh.lms.controller;
 
-import com.bmh.lms.dto.record.RecordReq;
 import com.bmh.lms.model.HistoryChain;
 import com.bmh.lms.service.auth.AuthService;
 import com.bmh.lms.service.historyChain.HistoryChainService;
