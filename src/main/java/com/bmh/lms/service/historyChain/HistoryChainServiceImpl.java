@@ -2,7 +2,6 @@ package com.bmh.lms.service.historyChain;
 
 import com.bmh.lms.model.HistoryChain;
 import com.bmh.lms.repository.HistoryChainRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,11 +42,11 @@ public class HistoryChainServiceImpl implements HistoryChainService{
             return;
         res.add(data);
 
-        hcLoopfn(data.getParents(), res);
-        hcLoopfn(data.getChildren(), res);
+        hcLoopFn(data.getParents(), res);
+        hcLoopFn(data.getChildren(), res);
     }
 
-    private void hcLoopfn(List<String> ids, Set<HistoryChain> res) {
+    private void hcLoopFn(List<String> ids, Set<HistoryChain> res) {
         ids.forEach(id -> {
             HistoryChain temp = historyChainRepository.findByRecId(id).orElse(null);
             if(temp==null)
