@@ -14,11 +14,6 @@ public class HistoryChainServiceImpl implements HistoryChainService{
     @Autowired
     private HistoryChainRepository historyChainRepository;
 
-
-    /**
-     * @param recId
-     * @return
-     */
     @Override
     public Set<HistoryChain> getFullGraphData(String recId) {
         Set<HistoryChain> res = new HashSet<>();
@@ -27,11 +22,6 @@ public class HistoryChainServiceImpl implements HistoryChainService{
         return res;
     }
 
-    /**
-     * @param historyChain
-     * @param username
-     * @return
-     */
     @Override
     public HistoryChain saveHc(HistoryChain historyChain, String username) {
         return historyChainRepository.save(historyChain);
