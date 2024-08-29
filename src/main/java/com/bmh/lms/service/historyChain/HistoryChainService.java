@@ -6,4 +6,5 @@ import java.util.Set;
 
 public interface HistoryChainService {
     Set<HistoryChain> getFullGraphData(String recId);
+    HistoryChain saveHc(HistoryChain historyChain, String username);
 }

@@ -1,5 +1,6 @@
 package com.bmh.lms.controller;
 
+import com.bmh.lms.dto.record.RecordReq;
 import com.bmh.lms.model.HistoryChain;
 import com.bmh.lms.service.auth.AuthService;
 import com.bmh.lms.service.historyChain.HistoryChainService;
@@ -13,7 +14,7 @@ import java.util.Set;
 
 @RestController
 @CrossOrigin()
-@RequestMapping("api/history")
+@RequestMapping("api/hc")
 public class HistoryChainController {
     @Autowired
     private HistoryChainService historyChainService;
@@ -22,14 +23,16 @@ public class HistoryChainController {
     private AuthService authService;
 
     @PostMapping()
-    public ResponseEntity<Set<HistoryChain>> saveHc(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token
+    public ResponseEntity<HistoryChain> saveHc(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
+            @RequestBody HistoryChain historyChain
     ){
         Object[] authData = authService.verifyToken(token);
         if(authData == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        return null;
+        return new ResponseEntity<>(historyChainService.saveHc(historyChain, ""), HttpStatus.OK);
+
     }
 
     @GetMapping("{id}")
@@ -39,7 +42,7 @@ public class HistoryChainController {
     ) {
         Object[] authData = authService.verifyToken(token);
         if(authData == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
         Set<HistoryChain> res = historyChainService.getFullGraphData(id);

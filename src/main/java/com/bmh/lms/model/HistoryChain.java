@@ -25,7 +25,7 @@ public class HistoryChain {
     @Indexed(unique = true)
     private String recId;
 
-    private List<ObjectId> parents;
+    private List<String> parents;
 
-    private List<ObjectId> children;
+    private List<String> children;
 }

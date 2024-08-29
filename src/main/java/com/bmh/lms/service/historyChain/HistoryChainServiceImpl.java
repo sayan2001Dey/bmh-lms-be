@@ -23,9 +23,19 @@ public class HistoryChainServiceImpl implements HistoryChainService{
     @Override
     public Set<HistoryChain> getFullGraphData(String recId) {
         Set<HistoryChain> res = new HashSet<>();
-        prepData(historyChainRepository.findByRecId(recId), res);
+        prepData(historyChainRepository.findByRecId(recId).orElse(null), res);
 
         return res;
+    }
+
+    /**
+     * @param historyChain
+     * @param username
+     * @return
+     */
+    @Override
+    public HistoryChain saveHc(HistoryChain historyChain, String username) {
+        return historyChainRepository.save(historyChain);
     }
 
     private void prepData(HistoryChain data, Set<HistoryChain> res) {
@@ -37,9 +47,9 @@ public class HistoryChainServiceImpl implements HistoryChainService{
         hcLoopfn(data.getChildren(), res);
     }
 
-    private void hcLoopfn(List<ObjectId> ids, Set<HistoryChain> res) {
+    private void hcLoopfn(List<String> ids, Set<HistoryChain> res) {
         ids.forEach(id -> {
-            HistoryChain temp = historyChainRepository.findById(id).orElse(null);
+            HistoryChain temp = historyChainRepository.findByRecId(id).orElse(null);
             if(temp==null)
                 return;
             prepData(temp, res);
