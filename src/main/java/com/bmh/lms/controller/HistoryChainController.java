@@ -52,4 +52,26 @@ public class HistoryChainController {
         }
     }
 
+    @PutMapping("/{recId}")
+    public ResponseEntity<HistoryChain> updateHc(@PathVariable String recId,
+                                                 @RequestBody HistoryChain updatedHistoryChain) {
+        HistoryChain updated = historyChainService.updateHc(recId, updatedHistoryChain);
+        if (updated != null) {
+            return new ResponseEntity<>(updated, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/{recId}")
+    public ResponseEntity<Void> deleteHc(@PathVariable String recId) {
+        try {
+            historyChainService.deleteHc(recId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content for successful deletion
+        } catch (Exception e) {
+
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found if the entity does not exist
+        }
+    }
+
 }
