@@ -15,7 +15,7 @@ public class UID {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "model_name")
+    @Column(name = "model_name", unique = true)
     private String modelName;
 
     @Column(name = "last_id")

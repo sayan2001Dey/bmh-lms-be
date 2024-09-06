@@ -1,8 +1,9 @@
 package com.bmh.lms.controller;
 
-import com.bmh.lms.model.Company;
+
+import com.bmh.lms.model.Group;
+import com.bmh.lms.service.Group.GroupService;
 import com.bmh.lms.service.auth.AuthService;
-import com.bmh.lms.service.company.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,19 +14,19 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/company")
-public class CompanyController {
+@RequestMapping("/api/group")
+public class GroupController {
 
     @Autowired
-    private CompanyService companyMasterService;
+    private GroupService groupService;
 
     @Autowired
     private AuthService authService;
 
     @PostMapping
-    public ResponseEntity<Company> createCompanyMaster(
+    public ResponseEntity<Group> createGroup(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
-            @RequestBody Company company
+            @RequestBody Group group
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))
@@ -33,67 +34,64 @@ public class CompanyController {
 
         try {
             return new ResponseEntity<>(
-                    companyMasterService.createCompanyMaster(company, (String) authData[0]),
+                    groupService.createGroup(group, (String) authData[0]),
                     HttpStatus.CREATED
             );
         } catch (Exception e) {
-            System.out.println(e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-
     @GetMapping
-    public ResponseEntity<List<Company>> getAllCompanyMasters(
+    public ResponseEntity<List<Group>> getAllGroup(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        return new ResponseEntity<>(companyMasterService.getAllCompanyMasters(), HttpStatus.OK);
+        return new ResponseEntity<>(groupService.getAllGroup(), HttpStatus.OK);
     }
 
-    @GetMapping("/{companyId}")
-    public ResponseEntity<Company> getCompanyMasterById(
+    @GetMapping("/{groupId}")
+    public ResponseEntity<Group> getGroupById(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
-            @PathVariable String companyId
+            @PathVariable String groupId
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        Company res = companyMasterService.getCompanyMasterById(companyId).orElse(null);
+        Group res = groupService.getGroupById(groupId).orElse(null);
         return res == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-
-    @PatchMapping("/{companyId}")
-    public ResponseEntity<Company> updateCompanyMaster(
+    @PatchMapping("/{groupId}")
+    public ResponseEntity<Group> updateGroup(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
-            @PathVariable String companyId,
-            @RequestBody Company company
+            @PathVariable String groupId,
+            @RequestBody Group group
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        Company res = companyMasterService.updateCompanyMaster(companyId, company, (String) authData[0]);
+        Group res = groupService.updateGroup(groupId, group, (String) authData[0]);
         return res == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-
-    @DeleteMapping("/{companyId}")
-    public ResponseEntity<Void> deleteCompanyMaster(
+    @DeleteMapping("/{groupId}")
+    public ResponseEntity<Void> deleteGroup(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
-            @PathVariable String companyId
+            @PathVariable String groupId
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        return companyMasterService.deleteCompanyMaster(companyId, (String) authData[0]) ?
+        return groupService.deleteGroup(groupId, (String) authData[0]) ?
                 new ResponseEntity<>(HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 }

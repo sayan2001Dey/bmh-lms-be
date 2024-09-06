@@ -3,6 +3,7 @@ package com.bmh.lms.service.company;
 import com.bmh.lms.model.Company;
 import com.bmh.lms.repository.CompanyRepository;
 import com.bmh.lms.service.utils.CommonUtils;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class CompanyServiceImpl implements CompanyService {
     public Company createCompanyMaster(Company company, String username) {
         LocalDateTime ldt = LocalDateTime.now();
 
-        company.setCompany_id(commonUtils.generateUID("CompanyMaster", "CM"));
+        company.setCompanyId(commonUtils.generateUID("CompanyMaster", "CM"));
         company.setModified_type("INSERTED");
         company.setInserted_by(username);
         company.setInserted_on(ldt);
@@ -46,6 +47,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
+    @Transactional
     public Company updateCompanyMaster(String company_id, Company updatedCompany, String username) {
         LocalDateTime ldt = LocalDateTime.now();
 
@@ -53,7 +55,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         if(oldCompany == null) return null;
 
-        updatedCompany.setCompany_id(company_id);
+        updatedCompany.setCompanyId(company_id);
         updatedCompany.setModified_type("INSERTED");
         updatedCompany.setInserted_by(oldCompany.getInserted_by());
         updatedCompany.setInserted_on(oldCompany.getInserted_on());

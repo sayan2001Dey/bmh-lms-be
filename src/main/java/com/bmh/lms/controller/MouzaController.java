@@ -1,8 +1,9 @@
 package com.bmh.lms.controller;
 
-import com.bmh.lms.model.Company;
+
+import com.bmh.lms.model.Mouza;
 import com.bmh.lms.service.auth.AuthService;
-import com.bmh.lms.service.company.CompanyService;
+import com.bmh.lms.service.mouza.MouzaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,21 +12,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 @CrossOrigin
-@RequestMapping("/api/company")
-public class CompanyController {
-
+@RestController
+@RequestMapping("/api/mouza")
+public class MouzaController {
     @Autowired
-    private CompanyService companyMasterService;
+    private MouzaService mouzaService;
 
     @Autowired
     private AuthService authService;
 
     @PostMapping
-    public ResponseEntity<Company> createCompanyMaster(
+    public ResponseEntity<Mouza> createMouza(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
-            @RequestBody Company company
+            @RequestBody Mouza mouza
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))
@@ -33,67 +33,65 @@ public class CompanyController {
 
         try {
             return new ResponseEntity<>(
-                    companyMasterService.createCompanyMaster(company, (String) authData[0]),
+                    mouzaService.createMouza(mouza, (String) authData[0]),
                     HttpStatus.CREATED
             );
         } catch (Exception e) {
-            System.out.println(e);
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
-
     @GetMapping
-    public ResponseEntity<List<Company>> getAllCompanyMasters(
+    public ResponseEntity<List<Mouza>> getAllMouza(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        return new ResponseEntity<>(companyMasterService.getAllCompanyMasters(), HttpStatus.OK);
+        return new ResponseEntity<>(mouzaService.getAllMouza(), HttpStatus.OK);
     }
 
-    @GetMapping("/{companyId}")
-    public ResponseEntity<Company> getCompanyMasterById(
+    @GetMapping("/{mouzaId}")
+    public ResponseEntity<Mouza> getMouzaById(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
-            @PathVariable String companyId
+            @PathVariable String mouzaId
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        Company res = companyMasterService.getCompanyMasterById(companyId).orElse(null);
+        Mouza res = mouzaService.getMouzaById(mouzaId).orElse(null);
         return res == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-
-    @PatchMapping("/{companyId}")
-    public ResponseEntity<Company> updateCompanyMaster(
+    @PatchMapping("/{mouzaId}")
+    public ResponseEntity<Mouza> updateMouza(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
-            @PathVariable String companyId,
-            @RequestBody Company company
+            @PathVariable String mouzaId,
+            @RequestBody Mouza mouza
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        Company res = companyMasterService.updateCompanyMaster(companyId, company, (String) authData[0]);
+        Mouza res = mouzaService.updateMouza(mouzaId, mouza, (String) authData[0]);
         return res == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-
-    @DeleteMapping("/{companyId}")
-    public ResponseEntity<Void> deleteCompanyMaster(
+    @DeleteMapping("/{mouzaId}")
+    public ResponseEntity<Void> deleteMouza(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
-            @PathVariable String companyId
+            @PathVariable String mouzaId
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        return companyMasterService.deleteCompanyMaster(companyId, (String) authData[0]) ?
+        return mouzaService.deleteMouza(mouzaId, (String) authData[0]) ?
                 new ResponseEntity<>(HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 }
+

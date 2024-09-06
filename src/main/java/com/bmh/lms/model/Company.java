@@ -13,7 +13,7 @@ public class Company extends  CommonProperties{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String company_id;
+    private String companyId;
 
     private String companyName;
 
