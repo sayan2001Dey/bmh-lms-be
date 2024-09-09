@@ -479,10 +479,10 @@ public class RecordServiceImpl implements RecordService {
         Record res = new Record();
 
         res.setModified_type("INSERTED");
-        res.setGroupName(src.getGroupName());
+        res.setGroupId(src.getGroupId());
 //        res.setState(src.getState());
 //        res.setCity(src.getCity());
-        res.setMouza(src.getMouza());
+        res.setMouzaId(src.getMouzaId());
 //        res.setBlock(src.getBlock());
 //        res.setJLno(src.getJLno());
         res.setBuyerOwner(src.getBuyerOwner());
@@ -532,10 +532,10 @@ public class RecordServiceImpl implements RecordService {
 
     private RecordRes basicDataToResDTO(Record src) {
         RecordRes dest = new RecordRes();
-        dest.setGroupName(src.getGroupName());
+        dest.setGroupId(src.getGroupId());
 //        dest.setState(src.getState());
 //        dest.setCity(src.getCity());
-        dest.setMouza(src.getMouza());
+        dest.setMouzaId(src.getMouzaId());
 //        dest.setBlock(src.getBlock());
 //        dest.setJLno(src.getJLno());
         dest.setBuyerOwner(src.getBuyerOwner());

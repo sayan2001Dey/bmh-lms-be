@@ -15,23 +15,13 @@ import java.util.Set;
 @AllArgsConstructor
 public class RecordCommon {
     private String recId;
-    private String groupName;
-    private String state;
-    private String city;
-    private String mouza;
-    private String block;
-    private String JLno;
-    private Integer pincode;
+    private String groupId;
+    private String mouzaId;
     private String buyerOwner;
     private List<String> sellers;
     private String deedName;
     private String deedNo;
     private String deedDate;
-    private String oldRsDag;
-    private String newLrDag;
-    private String oldKhatian;
-    private String newKhatian;
-    private String currKhatian;
     private String totalQty;
     private String purQty;
     private String mutedQty;

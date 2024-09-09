@@ -25,7 +25,7 @@ public class Record extends CommonProperties {
     private  String recId;
 
     @Column
-    private String groupName;
+    private String groupId;
 
 //    @Column(length = 50)
 //    private String state;
@@ -34,7 +34,7 @@ public class Record extends CommonProperties {
 //    private String city;
 
     @Column
-    private String mouza;
+    private String mouzaId;
 //
 //    @Column(length = 50)
 //    private String block;
