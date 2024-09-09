@@ -10,9 +10,9 @@ import java.util.Optional;
 
 @Repository
 public interface GroupRepository extends JpaRepository<Group, Long> {
-    @Query(value="SELECT * FROM group WHERE modified_type='INSERTED'", nativeQuery = true)
+    @Query(value="SELECT * FROM group_master WHERE modified_type='INSERTED'", nativeQuery = true)
     List<Group> findAllActiveByGroupId();
 
-    @Query(value="SELECT * FROM group WHERE group_id=? AND modified_type='INSERTED'", nativeQuery = true)
+    @Query(value="SELECT * FROM group_master WHERE group_id=? AND modified_type='INSERTED'", nativeQuery = true)
     Optional<Group> findByGroupId(String id);
 }

@@ -19,10 +19,16 @@ public class Mouza extends CommonProperties {
     private String mouzaId;
 
     @Column
+    private String groupId;
+
+    @Column
+    private String mouza;
+
+    @Column
     private String block;
 
     @Column
-    private String JLno;
+    private Long jlno;
 
     @Column(length = 50)
     private String oldRsDag;

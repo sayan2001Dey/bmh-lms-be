@@ -24,26 +24,26 @@ public class Record extends CommonProperties {
     @Column
     private  String recId;
 
-    @Column(length = 100)
+    @Column
     private String groupName;
 
-    @Column(length = 50)
-    private String state;
+//    @Column(length = 50)
+//    private String state;
+//
+//    @Column(length = 50)
+//    private String city;
 
-    @Column(length = 50)
-    private String city;
-
-    @Column(length = 50)
+    @Column
     private String mouza;
+//
+//    @Column(length = 50)
+//    private String block;
 
-    @Column(length = 50)
-    private String block;
+//    @Column(name = "jl_no", length = 20)
+//    private String JLno;
 
-    @Column(name = "jl_no", length = 20)
-    private String JLno;
-
-    @Column(length = 7)
-    private Integer pincode;
+//    @Column(length = 7)
+//    private Integer pincode;
 
     @Column(length = 100)
     private String buyerOwner;
@@ -61,20 +61,20 @@ public class Record extends CommonProperties {
     @Column(length = 50)
     private String deedDate;
  
-    @Column(length = 50)
-    private String oldRsDag;
-
-    @Column(length = 50)
-    private String newLrDag;
-
-    @Column(length = 50)
-    private String oldKhatian;
-
-    @Column(length = 50)
-    private String newKhatian;
-
-    @Column(length = 50)
-    private String currKhatian;
+//    @Column(length = 50)
+//    private String oldRsDag;
+//
+//    @Column(length = 50)
+//    private String newLrDag;
+//
+//    @Column(length = 50)
+//    private String oldKhatian;
+//
+//    @Column(length = 50)
+//    private String newKhatian;
+//
+//    @Column(length = 50)
+//    private String currKhatian;
 
     @Column(length = 20)
     private String totalQty;

@@ -21,9 +21,7 @@ public class Group extends CommonProperties {
 
     private String state;
 
-
     private String city;
-
 
     private Integer pincode;
 }
