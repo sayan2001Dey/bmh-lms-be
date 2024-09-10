@@ -478,23 +478,22 @@ public class RecordServiceImpl implements RecordService {
     private Record basicDataFromReqDTO(Record old, RecordReq src) {
         Record res = new Record();
 
+        String sellerType = src.getSellerType();
+        List<String> sellers = new ArrayList<>();
+        if(Objects.equals(sellerType, "within-group")) {
+            sellers.add(src.getSellers().getFirst());
+        } else
+            sellers = src.getSellers();
+
         res.setModified_type("INSERTED");
         res.setGroupId(src.getGroupId());
-//        res.setState(src.getState());
-//        res.setCity(src.getCity());
         res.setMouzaId(src.getMouzaId());
-//        res.setBlock(src.getBlock());
-//        res.setJLno(src.getJLno());
-        res.setBuyerOwner(src.getBuyerOwner());
-        res.setSellers(src.getSellers());
+        res.setCompanyId(src.getCompanyId());
+        res.setSellerType(sellerType);
+        res.setSellers(sellers);
         res.setDeedName(src.getDeedName());
         res.setDeedNo(src.getDeedNo());
         res.setDeedDate(src.getDeedDate());
-//        res.setOldRsDag(src.getOldRsDag());
-//        res.setNewLrDag(src.getNewLrDag());
-//        res.setOldKhatian(src.getOldKhatian());
-//        res.setNewKhatian(src.getNewKhatian());
-//        res.setCurrKhatian(src.getCurrKhatian());
         res.setTotalQty(src.getTotalQty());
         res.setPurQty(src.getPurQty());
         res.setMutedQty(src.getMutedQty());
@@ -511,7 +510,6 @@ public class RecordServiceImpl implements RecordService {
         res.setHistoryChain(src.getHistoryChain());
         res.setMortgaged(src.getMortgaged());
         res.setPartlySold(src.getPartlySold());
-//        res.setPincode(src.getPincode());
         res.setTax(src.getTax());
         res.setLelastDate(src.getLelastDate());
         res.setRemarks(src.getRemarks());
@@ -533,21 +531,13 @@ public class RecordServiceImpl implements RecordService {
     private RecordRes basicDataToResDTO(Record src) {
         RecordRes dest = new RecordRes();
         dest.setGroupId(src.getGroupId());
-//        dest.setState(src.getState());
-//        dest.setCity(src.getCity());
         dest.setMouzaId(src.getMouzaId());
-//        dest.setBlock(src.getBlock());
-//        dest.setJLno(src.getJLno());
-        dest.setBuyerOwner(src.getBuyerOwner());
+        dest.setSellerType(src.getSellerType());
+        dest.setCompanyId(src.getCompanyId());
         dest.setSellers(src.getSellers());
         dest.setDeedName(src.getDeedName());
         dest.setDeedNo(src.getDeedNo());
         dest.setDeedDate(src.getDeedDate());
-//        dest.setOldRsDag(src.getOldRsDag());
-//        dest.setNewLrDag(src.getNewLrDag());
-//        dest.setOldKhatian(src.getOldKhatian());
-//        dest.setNewKhatian(src.getNewKhatian());
-//        dest.setCurrKhatian(src.getCurrKhatian());
         dest.setTotalQty(src.getTotalQty());
         dest.setPurQty(src.getPurQty());
         dest.setMutedQty(src.getMutedQty());
@@ -564,7 +554,6 @@ public class RecordServiceImpl implements RecordService {
         dest.setHistoryChain(src.getHistoryChain());
         dest.setMortgaged(src.getMortgaged());
         dest.setPartlySold(src.getPartlySold());
-//        dest.setPincode(src.getPincode());
         dest.setTax(src.getTax());
         dest.setLelastDate(src.getLelastDate());
         dest.setRemarks(src.getRemarks());

@@ -17,7 +17,8 @@ public class RecordCommon {
     private String recId;
     private String groupId;
     private String mouzaId;
-    private String buyerOwner;
+    private String companyId;
+    private String sellerType;
     private List<String> sellers;
     private String deedName;
     private String deedNo;
