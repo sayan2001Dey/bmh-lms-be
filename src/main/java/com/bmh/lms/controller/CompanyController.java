@@ -48,7 +48,7 @@ public class CompanyController {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(companyMasterService.getAllCompanyMasters(), HttpStatus.OK);
     }
@@ -59,7 +59,7 @@ public class CompanyController {
             @PathVariable String companyId
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         Company res = companyMasterService.getCompanyMasterById(companyId).orElse(null);
         return res == null ?

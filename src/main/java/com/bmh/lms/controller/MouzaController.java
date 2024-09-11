@@ -46,7 +46,7 @@ public class MouzaController {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(mouzaService.getAllMouza(), HttpStatus.OK);
     }
@@ -57,7 +57,7 @@ public class MouzaController {
             @PathVariable String mouzaId
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         Mouza res = mouzaService.getMouzaById(mouzaId).orElse(null);
         return res == null ?

@@ -47,7 +47,7 @@ public class GroupController {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(groupService.getAllGroup(), HttpStatus.OK);
     }
@@ -58,7 +58,7 @@ public class GroupController {
             @PathVariable String groupId
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         Group res = groupService.getGroupById(groupId).orElse(null);
         return res == null ?

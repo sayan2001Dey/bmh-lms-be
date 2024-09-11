@@ -28,7 +28,7 @@ public class DeedController {
             @RequestBody Deed deed
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         try {
@@ -47,7 +47,7 @@ public class DeedController {
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         return new ResponseEntity<>(deedService.getAllDeed(), HttpStatus.OK);
     }
@@ -58,7 +58,7 @@ public class DeedController {
             @PathVariable String deedId
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
        Deed res = deedService.getDeedById(deedId).orElse(null);
         return res == null ?
@@ -73,7 +73,7 @@ public class DeedController {
             @RequestBody Deed deed
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         Deed res = deedService.updateDeed(deedId, deed, (String) authData[0]);
         return res == null ?
@@ -87,7 +87,7 @@ public class DeedController {
             @PathVariable String deedId
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         return deedService.deleteDeed(deedId, (String) authData[0]) ?
                 new ResponseEntity<>(HttpStatus.OK) :
