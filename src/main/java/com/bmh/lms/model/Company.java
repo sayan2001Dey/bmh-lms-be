@@ -10,7 +10,7 @@ import lombok.*;
 @Table( name = "company")
 public class Company extends  CommonProperties{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String companyId;

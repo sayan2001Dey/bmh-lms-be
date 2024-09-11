@@ -12,7 +12,7 @@ import jakarta.persistence.*;
 public class UID {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "model_name", unique = true)

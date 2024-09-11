@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 @EqualsAndHashCode(callSuper = false)
 public class User extends CommonProperties{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column

@@ -12,7 +12,7 @@ import java.util.List;
 @Table( name ="group_master")
 public class Group extends CommonProperties {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String groupId;
