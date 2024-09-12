@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Repository
 public interface PartlySoldRepository extends JpaRepository<PartlySold, Long> {
-    @Query(value="SELECT * FROM partly_sold WHERE rec_id=? AND modified_type='INSERTED'", nativeQuery=true)
+    @Query(value="SELECT * FROM partly_sold WHERE deed_id=? AND modified_type='INSERTED'", nativeQuery=true)
     Set<PartlySold> findAllActive(String recId);
 
     @Query( value = "SELECT * FROM partly_sold  WHERE part_id=? AND modified_type='INSERTED'" ,nativeQuery=true)

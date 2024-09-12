@@ -17,8 +17,8 @@ public class PartlySold extends CommonProperties {
     @Column(name = "part_id")
     private String partId;
 
-    @Column(name="rec_id")
-    private String recId;
+    @Column(name="deed_id")
+    private String deedId;
 
     @Column(name="sale_party")
     private String sale;

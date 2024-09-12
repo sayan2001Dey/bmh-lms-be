@@ -75,9 +75,9 @@ public class Deed extends CommonProperties {
     @Column(name = "le_last_date", length = 50)
     private String lelastDate;
 
-//    @Column
-//    private Boolean mortgaged;
-//
-//    @Column
-//    private Boolean partlySold;
+    @Column
+    private Boolean mortgaged;
+
+    @Column
+    private Boolean partlySold;
 }

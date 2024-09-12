@@ -23,7 +23,7 @@ public class FileUpload {
     private String fileName;
 
     @Column
-    private String recId;
+    private String deedId;
 
     @Column
     private String insideId;

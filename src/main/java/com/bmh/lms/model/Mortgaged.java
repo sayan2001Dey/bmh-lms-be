@@ -17,8 +17,8 @@ public class Mortgaged extends CommonProperties{
 	@Column(name="mort_id")
 	private String mortId;
 
-	@Column(name="rec_id")
-	private String recId;
+	@Column(name="deed_id")
+	private String deedId;
 	
 	@Column(name="mort_party")
 	private String party;

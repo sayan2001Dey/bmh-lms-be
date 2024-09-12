@@ -1,20 +1,29 @@
 package com.bmh.lms.service.deed;
 
+import com.bmh.lms.dto.deed.DeedReq;
+import com.bmh.lms.dto.deed.DeedRes;
+import com.bmh.lms.dto.record.RecordReq;
 import com.bmh.lms.model.Deed;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface DeedService {
 
-    Deed createDeed(Deed deed,String username);
+    DeedRes createDeed(DeedReq deedReq, String username);
 
-    List<Deed> getAllDeed();
+    List<DeedRes> getAllDeed();
 
-    Optional<Deed> getDeedById(String deed_id);
+    DeedRes getDeedById(String deed_id);
 
-    Deed updateDeed(String deed_id, Deed updatedDeed,String username);
+    DeedRes updateDeed(DeedReq deeedReq, String deed_Id, String username);
 
-    Boolean deleteDeed(String deed_id, String username);
+    boolean deleteDeed(String deed_id, String username);
+
+    byte[] getFileBytes(String fieldName, String fileName);
+
+    ResponseEntity<String> saveAttachment(String fieldName, String id, byte[] blobData, String originalFileName, String ext, String insideId, String username);
+
+    boolean deleteFile(String id, String fieldName, String fileName, String insideId, String username);
 
 }

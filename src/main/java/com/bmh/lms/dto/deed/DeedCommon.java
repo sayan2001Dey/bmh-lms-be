@@ -1,7 +1,17 @@
 package com.bmh.lms.dto.deed;
 
-import jakarta.persistence.Column;
+import com.bmh.lms.model.PartlySold;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.Set;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class DeedCommon {
 
     private String deedId;
@@ -24,7 +34,7 @@ public class DeedCommon {
     private String legalMatters;
     private String ledueDate;
     private String lelastDate;
-//    private Boolean mortgaged;
-
-//    private Boolean partlySol
+    private Boolean mortgaged;
+    private Boolean partlySold;
+    private Set<PartlySold> partlySoldData;
 }
