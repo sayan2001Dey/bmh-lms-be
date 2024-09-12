@@ -1,20 +1,21 @@
 package com.bmh.lms.controller;
 import com.bmh.lms.service.auth.AuthService;
+import com.bmh.lms.service.deed.DeedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.bmh.lms.service.record.RecordService;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/api/landrecord/attachments")
+@RequestMapping("/api/attachments")
 public class FileController {
 
+
     @Autowired
-    private RecordService recordService;
+    private DeedService deedService;
 
     @Autowired
     private AuthService authService;
@@ -35,7 +36,7 @@ public class FileController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        return recordService.saveAttachment(fieldName, id, fileBytes, originalFileName, extension, mortId, (String) authData[0]);
+        return deedService.saveAttachment(fieldName, id, fileBytes, originalFileName, extension, mortId, (String) authData[0]);
     }
     
     
@@ -51,7 +52,7 @@ public class FileController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-        byte[] fileBytes = recordService.getFileBytes(fieldName, fileName);
+        byte[] fileBytes = deedService.getFileBytes(fieldName, fileName);
         if (fileBytes == null) {
             return ResponseEntity.notFound().build();
         }
@@ -106,7 +107,7 @@ public class FileController {
 
         try {
             // Assuming recordService.deleteFile returns true if deletion is successful
-            boolean deletionSuccessful = recordService.deleteFile(id, fieldName, fileName, mortId, (String) authData[0]);
+            boolean deletionSuccessful = deedService.deleteFile(id, fieldName, fileName, mortId, (String) authData[0]);
             
             if (deletionSuccessful) {
                 return ResponseEntity.accepted().build(); // 204 No Content

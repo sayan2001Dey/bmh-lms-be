@@ -3,12 +3,10 @@ package com.bmh.lms.service.deed;
 import com.bmh.lms.dto.deed.DeedReq;
 import com.bmh.lms.dto.deed.DeedRes;
 import com.bmh.lms.dto.record.MortgagedRes;
-import com.bmh.lms.dto.record.RecordReq;
 import com.bmh.lms.model.Deed;
 import com.bmh.lms.model.FileUpload;
 import com.bmh.lms.model.Mortgaged;
 import com.bmh.lms.model.PartlySold;
-import com.bmh.lms.model.Record;
 import com.bmh.lms.repository.DeedRepository;
 import com.bmh.lms.repository.FileUploadRepository;
 import com.bmh.lms.repository.MortgagedRepository;
@@ -358,7 +356,7 @@ public class DeedServiceImpl implements DeedService{
                 });
             }
 
-            fileUploadRepository.findFilesByRecId(deed_id).forEach(file -> {
+            fileUploadRepository.findFilesByDeedId(deed_id).forEach(file -> {
                 file.setModified_type("DELETED");
                 file.setDeleted_on(ldt);
                 file.setDeleted_by(username);

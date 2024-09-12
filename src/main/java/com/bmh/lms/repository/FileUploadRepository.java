@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface FileUploadRepository extends JpaRepository<FileUpload, Long> {
     @Query(value = "SELECT * FROM file_uploads  WHERE deed_id=? AND modified_type='INSERTED'", nativeQuery = true)
-    List<FileUpload> findFilesByRecId(String id);
+    List<FileUpload> findFilesByDeedId(String id);
 
     @Query(value = "SELECT * FROM file_uploads  WHERE file_name=? AND modified_type='INSERTED'", nativeQuery = true)
     Optional<FileUpload> findFilesByFileName(String fileName);
