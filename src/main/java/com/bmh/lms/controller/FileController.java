@@ -93,7 +93,7 @@ public class FileController {
     
    
     @DeleteMapping("/{fieldName}")
-    public ResponseEntity<Void> deleteFile(
+    public ResponseEntity<String> deleteFile(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
             @PathVariable String fieldName,
             @RequestParam(value = "id") String id,
@@ -110,7 +110,7 @@ public class FileController {
             boolean deletionSuccessful = deedService.deleteFile(id, fieldName, fileName, mortId, (String) authData[0]);
             
             if (deletionSuccessful) {
-                return ResponseEntity.accepted().build(); // 204 No Content
+                return ResponseEntity.ok("File deleted successfully: " + fileName);
             } else {
                 return ResponseEntity.notFound().build(); // 404 Not Found
             }

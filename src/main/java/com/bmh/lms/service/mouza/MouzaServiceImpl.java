@@ -1,6 +1,5 @@
 package com.bmh.lms.service.mouza;
 
-import com.bmh.lms.model.Group;
 import com.bmh.lms.model.Mouza;
 import com.bmh.lms.repository.MouzaRepository;
 import com.bmh.lms.service.utils.CommonUtils;

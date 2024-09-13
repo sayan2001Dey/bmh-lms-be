@@ -37,12 +37,12 @@ public class Mouza extends CommonProperties {
     private String newLrDag;
 
     @Column(length = 50)
-    private String oldKhatian;
+    private String dagNo;
 
-    @Column(length = 50)
-    private String newKhatian;
-
-    @Column(length = 50)
-    private String currKhatian;
+//    @Column(length = 50)
+//    private String newKhatian;
+//
+//    @Column(length = 50)
+//    private String currKhatian;
 
 }
