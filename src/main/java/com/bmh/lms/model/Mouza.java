@@ -12,7 +12,7 @@ import lombok.Setter;
 @Table( name ="mouza")
 public class Mouza extends CommonProperties {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column

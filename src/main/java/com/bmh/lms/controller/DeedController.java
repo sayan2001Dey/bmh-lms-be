@@ -2,8 +2,6 @@ package com.bmh.lms.controller;
 
 import com.bmh.lms.dto.deed.DeedReq;
 import com.bmh.lms.dto.deed.DeedRes;
-import com.bmh.lms.dto.record.RecordRes;
-import com.bmh.lms.model.Deed;
 import com.bmh.lms.service.auth.AuthService;
 import com.bmh.lms.service.deed.DeedService;
 import org.springframework.beans.factory.annotation.Autowired;

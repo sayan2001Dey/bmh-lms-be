@@ -2,8 +2,6 @@ package com.bmh.lms.service.deed;
 
 import com.bmh.lms.dto.deed.DeedReq;
 import com.bmh.lms.dto.deed.DeedRes;
-import com.bmh.lms.dto.record.RecordReq;
-import com.bmh.lms.model.Deed;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

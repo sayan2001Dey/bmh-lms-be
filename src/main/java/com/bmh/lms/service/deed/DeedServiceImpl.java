@@ -107,8 +107,8 @@ public class DeedServiceImpl implements DeedService{
             partlySoldRepository.saveAll(partlySoldData);
 
         Deed res = deedRepository.save(deed);
-        return deedResMaker(res, res.getDeedId());
 
+        return deedResMaker(res, res.getDeedId());
     }
 
     @Override
@@ -381,9 +381,7 @@ public class DeedServiceImpl implements DeedService{
     }
 
     private Deed basicDataFromReqDTO(Deed old, DeedReq src) {
-       Deed res = new Deed();
-
-
+        Deed res = new Deed();
         res.setModified_type("INSERTED");
 
         res.setDeedNo(src.getDeedNo());
