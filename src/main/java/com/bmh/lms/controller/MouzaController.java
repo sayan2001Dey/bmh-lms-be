@@ -26,6 +26,7 @@ public class MouzaController {
     public ResponseEntity<Mouza> createMouza(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
             @RequestBody Mouza mouza
+
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))

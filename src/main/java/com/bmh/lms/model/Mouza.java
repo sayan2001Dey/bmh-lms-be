@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,19 +32,6 @@ public class Mouza extends CommonProperties {
     @Column
     private Long jlno;
 
-    @Column(length = 50)
-    private String oldRsDag;
-
-    @Column(length = 50)
-    private String newLrDag;
-
-    @Column(length = 50)
-    private String dagNo;
-
-//    @Column(length = 50)
-//    private String newKhatian;
-//
-//    @Column(length = 50)
-//    private String currKhatian;
-
+    @Column
+    private String landSpecifics;
 }
