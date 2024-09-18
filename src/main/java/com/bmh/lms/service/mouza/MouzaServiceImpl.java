@@ -37,7 +37,12 @@ public class MouzaServiceImpl implements MouzaService {
         MouzaCollection mouzaCollection = precessedData.b;
         Mouza mouza = precessedData.a;
 
-        //TODO: null check is needed for robust soln mona
+        if(mouzaCollection == null){
+            throw new IllegalArgumentException("MouzaCollection cannot be null");
+        }
+
+        mouzaCollection = mouzaMongoRepository.save(mouzaCollection);
+
         mouza.setLandSpecifics(mouzaMongoRepository.save(mouzaCollection).getId());
 
         mouza.setMouzaId(commonUtils.generateUID("Mouza", "MZM"));
@@ -49,10 +54,12 @@ public class MouzaServiceImpl implements MouzaService {
         mouza.setDeleted_by("NA");
         mouza.setDeleted_on(null);
 
-        mouzaRepository.save(mouza);
+        mouza = mouzaRepository.save(mouza);
 
-    //TODO: mone rakh mona
-    return null;
+        MouzaDTO resultDTO;
+        resultDTO = dataToMouzaDTO(mouza, mouzaCollection);
+
+        return resultDTO;
     }
 
     @Override
@@ -61,7 +68,9 @@ public class MouzaServiceImpl implements MouzaService {
         List<MouzaDTO> res = new ArrayList<>();
 
         mouzaList.forEach((mouza)->{
-            MouzaCollection mouza2 = mouzaMongoRepository.findById(mouza.getLandSpecifics()).orElse(null);
+            MouzaCollection mouza2 = null;
+            if(mouza.getLandSpecifics() != null)
+                mouza2 = mouzaMongoRepository.findById(mouza.getLandSpecifics()).orElse(null);
             res.add(dataToMouzaDTO(mouza, mouza2));
         });
 
@@ -81,12 +90,17 @@ public class MouzaServiceImpl implements MouzaService {
 
     @Override
     @Transactional
-    public Mouza updateMouza(String mouza_id, Mouza updatedMouza, String username) {
+    public MouzaDTO updateMouza(String mouza_id, MouzaDTO updatedMouzaDTO, String username) {
         LocalDateTime ldt = LocalDateTime.now();
 
         Mouza oldMouza = mouzaRepository.findByMouzaId(mouza_id).orElse(null);
 
         if(oldMouza == null) return null;
+
+        Pair<Mouza, MouzaCollection> precessedData =  mouzaDTOToData(updatedMouzaDTO);
+
+        MouzaCollection mouzaCollection = mouzaMongoRepository.save(precessedData.b);
+        Mouza updatedMouza = precessedData.a;
 
         updatedMouza.setMouzaId(mouza_id);
         updatedMouza.setModified_type("INSERTED");
@@ -97,15 +111,15 @@ public class MouzaServiceImpl implements MouzaService {
         updatedMouza.setDeleted_by("NA");
         updatedMouza.setDeleted_on(null);
 
+        updatedMouza.setLandSpecifics(mouzaCollection.getId());
+
         oldMouza.setModified_type("UPDATED");
         oldMouza.setUpdated_by(username);
         oldMouza.setUpdated_on(ldt);
 
         mouzaRepository.save(oldMouza);
-
-        return mouzaRepository.save(updatedMouza);
+        return dataToMouzaDTO(mouzaRepository.save(updatedMouza), mouzaCollection);
     }
-
 
     @Override
     public Boolean deleteMouza(String mouza_id, String username) {
@@ -132,13 +146,15 @@ public class MouzaServiceImpl implements MouzaService {
         mouza.setBlock(mouzaDTO.getBlock());
         mouza.setJlno(mouzaDTO.getJlno());
 
-        mouzaCollection.setLandSpesifics(mouzaDTO.getLandSpecifics());
+        if(mouzaDTO.getLandSpecifics() == null)
+            mouzaDTO.setLandSpecifics(new ArrayList<>());
+        mouzaCollection.setLandSpecifics(mouzaDTO.getLandSpecifics());
 
         return res;
     }
 
     private MouzaDTO dataToMouzaDTO(Mouza mouza, MouzaCollection mouzaCollection) {
-        if(mouza == null || mouzaCollection == null)
+        if(mouza == null)
             return null;
 
         MouzaDTO res = new MouzaDTO();
@@ -148,7 +164,11 @@ public class MouzaServiceImpl implements MouzaService {
         res.setMouza(mouza.getMouza());
         res.setBlock(mouza.getBlock());
         res.setJlno(mouza.getJlno());
-        res.setLandSpecifics(mouzaCollection.getLandSpesifics());
+
+        if(mouzaCollection == null || mouzaCollection.getLandSpecifics() == null) {
+            res.setLandSpecifics(new ArrayList<>());
+        } else
+            res.setLandSpecifics(mouzaCollection.getLandSpecifics());
 
         return res;
     }

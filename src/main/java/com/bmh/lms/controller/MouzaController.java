@@ -1,6 +1,7 @@
 package com.bmh.lms.controller;
 
 
+import com.bmh.lms.dto.mouza.MouzaDTO;
 import com.bmh.lms.model.Mouza;
 import com.bmh.lms.service.auth.AuthService;
 import com.bmh.lms.service.mouza.MouzaService;
@@ -23,62 +24,68 @@ public class MouzaController {
     private AuthService authService;
 
     @PostMapping
-    public ResponseEntity<Mouza> createMouza(
+    public ResponseEntity<MouzaDTO> createMouza(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
-            @RequestBody Mouza mouza
+            @RequestBody MouzaDTO mouzaDTO
 
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null || !((Boolean) authData[1])){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
 
         try {
-            return new ResponseEntity<>(
-                    mouzaService.createMouza(mouza, (String) authData[0]),
-                    HttpStatus.CREATED
-            );
+            MouzaDTO createdMouza = mouzaService.createMouza(mouzaDTO, (String) authData[0]);
+            return new ResponseEntity<>(createdMouza, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping
-    public ResponseEntity<List<Mouza>> getAllMouza(
+    public ResponseEntity<List<MouzaDTO>> getAllMouza(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null)
+        if (authData == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        return new ResponseEntity<>(mouzaService.getAllMouza(), HttpStatus.OK);
+        }
+
+        List<MouzaDTO> mouzaList = mouzaService.getAllMouza();
+        return new ResponseEntity<>(mouzaList, HttpStatus.OK);
     }
 
     @GetMapping("/{mouzaId}")
-    public ResponseEntity<Mouza> getMouzaById(
+    public ResponseEntity<MouzaDTO> getMouzaById(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
             @PathVariable String mouzaId
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null)
+        if (authData == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        Mouza res = mouzaService.getMouzaById(mouzaId).orElse(null);
-        return res == null ?
-                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                new ResponseEntity<>(res, HttpStatus.OK);
+        }
+
+        MouzaDTO mouzaDTO = mouzaService.getMouzaById(mouzaId);
+        return mouzaDTO != null ?
+                new ResponseEntity<>(mouzaDTO, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping("/{mouzaId}")
-    public ResponseEntity<Mouza> updateMouza(
+    public ResponseEntity<MouzaDTO> updateMouza(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
             @PathVariable String mouzaId,
-            @RequestBody Mouza mouza
+            @RequestBody MouzaDTO updatedMouzaDTO
     ) {
         Object[] authData = authService.verifyToken(token);
-        if (authData == null || !((Boolean) authData[1]))
+        if (authData == null || !((Boolean) authData[1])) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        Mouza res = mouzaService.updateMouza(mouzaId, mouza, (String) authData[0]);
-        return res == null ?
-                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                new ResponseEntity<>(res, HttpStatus.OK);
+        }
+
+        MouzaDTO updatedMouza = mouzaService.updateMouza(mouzaId, updatedMouzaDTO, (String) authData[0]);
+        return updatedMouza != null ?
+                new ResponseEntity<>(updatedMouza, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{mouzaId}")
