@@ -64,7 +64,10 @@ public class Deed extends CommonProperties {
     private Float tax;
 
     @Column(length = 50)
-    private String dueDate;
+    private String lastUpDate;
+
+    @Column(length = 50)
+    private String taxDueDate;
 
     @Column
     private String legalMatters;
@@ -74,6 +77,9 @@ public class Deed extends CommonProperties {
 
     @Column(name = "le_last_date", length = 50)
     private String lelastDate;
+
+    @Column
+    private String leDescription;
 
     @Column
     private Boolean mortgaged;

@@ -396,9 +396,11 @@ public class DeedServiceImpl implements DeedService{
         res.setPhotoLoc(src.getPhotoLoc());
         res.setGovtRec(src.getGovtRec());
         res.setKhazanaStatus(src.getKhazanaStatus());
-        res.setDueDate(src.getDueDate());
+        res.setTaxDueDate(src.getTaxDueDate());
+        res.setLastUpDate(src.getLastUpDate());
         res.setLegalMatters(src.getLegalMatters());
         res.setLedueDate(src.getLedueDate());
+        res.setLeDescription(src.getLeDescription());
         res.setMortgaged(src.getMortgaged());
         res.setPartlySold(src.getPartlySold());
         res.setTax(src.getTax());
@@ -434,9 +436,11 @@ public class DeedServiceImpl implements DeedService{
         dest.setPhotoLoc(src.getPhotoLoc());
         dest.setGovtRec(src.getGovtRec());
         dest.setKhazanaStatus(src.getKhazanaStatus());
-        dest.setDueDate(src.getDueDate());
+        dest.setTaxDueDate(src.getTaxDueDate());
+        dest.setLastUpDate(src.getLastUpDate());
         dest.setLegalMatters(src.getLegalMatters());
         dest.setLedueDate(src.getLedueDate());
+        dest.setLeDescription(src.getLeDescription());
         dest.setMortgaged(src.getMortgaged());
         dest.setPartlySold(src.getPartlySold());
         dest.setTax(src.getTax());
@@ -482,6 +486,9 @@ public class DeedServiceImpl implements DeedService{
         ));
         res.setScanCopyFile(fileUploadListToNameList(
                 fileUploadRepository.findFilesByIdNFieldName(deedId, "scanCopyFile")
+        ));
+        res.setVestedFile(fileUploadListToNameList(
+                fileUploadRepository.findFilesByIdNFieldName(deedId, "vestedFile")
         ));
         res.setParchaFile(fileUploadListToNameList(
                 fileUploadRepository.findFilesByIdNFieldName(deedId, "parchaFile")
@@ -592,6 +599,7 @@ public class DeedServiceImpl implements DeedService{
                 case "documentFile":
                 case "areaMapFile":
                 case "hcdocumentFile":
+                case "vestedFile":
                 case "parchaFile":
                     fileUploadRepository.save(fileUpload);
                     break;

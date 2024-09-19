@@ -10,5 +10,6 @@ import lombok.Data;
 public class MouzaLandSpecifics {
     private String oldRsDag;
     private String newLrDag;
-    private Integer qty;
+    private String landType;
+    private Double maxQty;
 }

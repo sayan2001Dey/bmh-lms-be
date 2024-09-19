@@ -110,7 +110,6 @@ public class MouzaServiceImpl implements MouzaService {
         updatedMouza.setUpdated_on(ldt);
         updatedMouza.setDeleted_by("NA");
         updatedMouza.setDeleted_on(null);
-
         updatedMouza.setLandSpecifics(mouzaCollection.getId());
 
         oldMouza.setModified_type("UPDATED");

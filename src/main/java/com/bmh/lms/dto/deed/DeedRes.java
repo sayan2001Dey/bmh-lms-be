@@ -21,5 +21,6 @@ public class DeedRes extends DeedCommon {
     private List<String> documentFile;
     private List<String> areaMapFile;
     private List<String> hcdocumentFile;
+    private List<String> vestedFile;
     private List<String> parchaFile;
 }

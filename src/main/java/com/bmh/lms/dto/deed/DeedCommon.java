@@ -17,6 +17,7 @@ public class DeedCommon {
     private String deedId;
     private String deedNo;
     private String deedDate;
+    private String groupId;
     private String totalQty;
     private String purQty;
     private String mutedQty;
@@ -30,10 +31,12 @@ public class DeedCommon {
     private String remarks;
     private String khazanaStatus;
     private Float tax;
-    private String dueDate;
+    private String lastUpDate;
+    private String taxDueDate;
     private String legalMatters;
     private String ledueDate;
     private String lelastDate;
+    private String leDescription;
     private Boolean mortgaged;
     private Boolean partlySold;
     private Set<PartlySold> partlySoldData;
