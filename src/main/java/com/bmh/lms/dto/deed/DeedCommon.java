@@ -1,11 +1,13 @@
 package com.bmh.lms.dto.deed;
 
+import com.bmh.lms.model.DeedMouza;
 import com.bmh.lms.model.PartlySold;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -40,4 +42,5 @@ public class DeedCommon {
     private Boolean mortgaged;
     private Boolean partlySold;
     private Set<PartlySold> partlySoldData;
+    private List<DeedMouza> mouza;
 }

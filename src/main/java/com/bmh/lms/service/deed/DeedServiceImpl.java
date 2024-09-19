@@ -386,6 +386,7 @@ public class DeedServiceImpl implements DeedService{
 
         res.setDeedNo(src.getDeedNo());
         res.setDeedDate(src.getDeedDate());
+        res.setGroupId(src.getGroupId());
         res.setTotalQty(src.getTotalQty());
         res.setPurQty(src.getPurQty());
         res.setMutedQty(src.getMutedQty());
@@ -426,6 +427,7 @@ public class DeedServiceImpl implements DeedService{
 
         dest.setDeedNo(src.getDeedNo());
         dest.setDeedDate(src.getDeedDate());
+        dest.setGroupId(src.getGroupId());
         dest.setTotalQty(src.getTotalQty());
         dest.setPurQty(src.getPurQty());
         dest.setMutedQty(src.getMutedQty());
@@ -447,7 +449,6 @@ public class DeedServiceImpl implements DeedService{
         dest.setLelastDate(src.getLelastDate());
         dest.setRemarks(src.getRemarks());
         dest.setLandType(src.getLandType());
-
         dest.setDeedId(src.getDeedId());
 
         return dest;

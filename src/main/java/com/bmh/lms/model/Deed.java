@@ -24,6 +24,12 @@ public class Deed extends CommonProperties {
     @Column(length = 50)
     private String deedDate;
 
+    @Column
+    private String groupId;
+
+    @Column
+    private String mouzaRefId;
+
     @Column(length = 20)
     private String totalQty;
 
