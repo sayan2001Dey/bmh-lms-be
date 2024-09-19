@@ -11,12 +11,12 @@ import java.util.List;
 
 @Data
 @Builder
-@Document(value = "mouza")
+@Document(value = "deed")
 @NoArgsConstructor
 @AllArgsConstructor
-public class MouzaCollection {
+public class DeedCollection {
     @Id
     private String id;
 
-    private List<MouzaLandSpecifics> landSpecifics;
+    private List<DeedMouza> mouza;
 }
