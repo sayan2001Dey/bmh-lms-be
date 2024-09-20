@@ -14,7 +14,7 @@ import java.util.List;
 @Document(value = "deed")
 @NoArgsConstructor
 @AllArgsConstructor
-public class DeedCollection {
+public class DeedMouzaCollection {
     @Id
     private String id;
 

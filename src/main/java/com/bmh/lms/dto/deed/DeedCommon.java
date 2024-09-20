@@ -24,7 +24,6 @@ public class DeedCommon {
     private String purQty;
     private String mutedQty;
     private String unMutedQty;
-    private String landType;
     private String landStatus;
     private String conversionLandStatus;
     private String deedLoc;

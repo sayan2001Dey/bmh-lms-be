@@ -3,14 +3,8 @@ package com.bmh.lms.service.deed;
 import com.bmh.lms.dto.deed.DeedReq;
 import com.bmh.lms.dto.deed.DeedRes;
 import com.bmh.lms.dto.record.MortgagedRes;
-import com.bmh.lms.model.Deed;
-import com.bmh.lms.model.FileUpload;
-import com.bmh.lms.model.Mortgaged;
-import com.bmh.lms.model.PartlySold;
-import com.bmh.lms.repository.DeedRepository;
-import com.bmh.lms.repository.FileUploadRepository;
-import com.bmh.lms.repository.MortgagedRepository;
-import com.bmh.lms.repository.PartlySoldRepository;
+import com.bmh.lms.model.*;
+import com.bmh.lms.repository.*;
 import com.bmh.lms.service.utils.CommonUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -40,6 +34,9 @@ public class DeedServiceImpl implements DeedService{
     private MortgagedRepository mortgagedRepository;
 
     @Autowired
+    private DeedMouzaCollectionRepository dmcRepo;
+
+    @Autowired
     private FileUploadRepository fileUploadRepository;
 
     @Autowired
@@ -49,6 +46,7 @@ public class DeedServiceImpl implements DeedService{
     private CommonUtils commonUtils;
 
     @Override
+    @Transactional
     public DeedRes createDeed(DeedReq deedReq, String username) {
         LocalDateTime ldt = LocalDateTime.now();
 
@@ -63,6 +61,11 @@ public class DeedServiceImpl implements DeedService{
         deed.setDeleted_by("NA");
         deed.setDeleted_on(null);
 
+        DeedMouzaCollection newDeedMouzaCollection = new DeedMouzaCollection();
+        newDeedMouzaCollection.setMouza(
+                deedReq.getMouza() == null ? new ArrayList<>() : deedReq.getMouza()
+        );
+        deed.setMouzaRefId(dmcRepo.save(newDeedMouzaCollection).getId());
 
         boolean mortgagedDataAvailable = false;
         Set<Mortgaged> mortgagedData = deedReq.getMortgagedData();
@@ -148,6 +151,11 @@ public class DeedServiceImpl implements DeedService{
         deed.setUpdated_by(username);
         deed.setUpdated_on(ldt);
 
+        DeedMouzaCollection newDeedMouzaCollection = new DeedMouzaCollection();
+        newDeedMouzaCollection.setMouza(
+                deedReq.getMouza() == null ? new ArrayList<>() : deedReq.getMouza()
+        );
+        deed.setMouzaRefId(dmcRepo.save(newDeedMouzaCollection).getId());
 
         Set<Mortgaged> finalMortgagedData = new HashSet<>();
         Set<FileUpload> finalMortFileChanges = new HashSet<>();
@@ -407,7 +415,6 @@ public class DeedServiceImpl implements DeedService{
         res.setTax(src.getTax());
         res.setLelastDate(src.getLelastDate());
         res.setRemarks(src.getRemarks());
-        res.setLandType(src.getLandType());
 
         if(old!=null) {
             res.setDeedId(old.getDeedId());
@@ -448,7 +455,6 @@ public class DeedServiceImpl implements DeedService{
         dest.setTax(src.getTax());
         dest.setLelastDate(src.getLelastDate());
         dest.setRemarks(src.getRemarks());
-        dest.setLandType(src.getLandType());
         dest.setDeedId(src.getDeedId());
 
         return dest;
@@ -473,6 +479,16 @@ public class DeedServiceImpl implements DeedService{
 
         res.setMortgagedData(mortResSet);
         res.setPartlySoldData(partlySoldRepository.findAllActive(deedId));
+
+        DeedMouzaCollection mouzaRec = null;
+        if(deed.getMouzaRefId() != null)
+            mouzaRec = dmcRepo.findById(deed.getMouzaRefId()).orElse(null);
+
+        if (mouzaRec == null)
+            res.setMouza(new ArrayList<>());
+        else
+            res.setMouza(mouzaRec.getMouza());
+
         res.setConversionFile(fileUploadListToNameList(
                 fileUploadRepository.findFilesByIdNFieldName(deedId, "conversionFile")
         ));
