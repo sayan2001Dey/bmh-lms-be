@@ -390,11 +390,22 @@ public class DeedServiceImpl implements DeedService{
 
     private Deed basicDataFromReqDTO(Deed old, DeedReq src) {
         Deed res = new Deed();
+
+        String sellerType = src.getSellerType();
+        List<String> sellers = new ArrayList<>();
+        if(Objects.equals(sellerType, "within-group")) {
+            sellers.add(src.getSellers().getFirst());
+        } else
+            sellers = src.getSellers();
+
         res.setModified_type("INSERTED");
 
         res.setDeedNo(src.getDeedNo());
         res.setDeedDate(src.getDeedDate());
         res.setGroupId(src.getGroupId());
+        res.setCompanyId(src.getCompanyId());
+        res.setSellerType(sellerType);
+        res.setSellers(sellers);
         res.setTotalQty(src.getTotalQty());
         res.setPurQty(src.getPurQty());
         res.setMutedQty(src.getMutedQty());
@@ -435,6 +446,9 @@ public class DeedServiceImpl implements DeedService{
         dest.setDeedNo(src.getDeedNo());
         dest.setDeedDate(src.getDeedDate());
         dest.setGroupId(src.getGroupId());
+        dest.setSellerType(src.getSellerType());
+        dest.setCompanyId(src.getCompanyId());
+        dest.setSellers(src.getSellers());
         dest.setTotalQty(src.getTotalQty());
         dest.setPurQty(src.getPurQty());
         dest.setMutedQty(src.getMutedQty());

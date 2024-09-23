@@ -20,6 +20,9 @@ public class DeedCommon {
     private String deedNo;
     private String deedDate;
     private String groupId;
+    private String companyId;
+    private String sellerType;
+    private List<String> sellers;
     private String totalQty;
     private String purQty;
     private String mutedQty;

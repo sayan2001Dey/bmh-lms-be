@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,6 +28,15 @@ public class Deed extends CommonProperties {
 
     @Column
     private String groupId;
+
+    @Column
+    private String companyId;
+
+    @Column
+    private String sellerType;
+    @Column(length = 1000)
+    @ElementCollection
+    private List<String> sellers;
 
     @Column
     private String mouzaRefId;
