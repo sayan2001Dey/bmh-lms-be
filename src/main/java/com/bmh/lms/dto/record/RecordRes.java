@@ -8,14 +8,14 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 public class RecordRes extends RecordCommon {
-    private Set<MortgagedRes> mortgagedData;
-    private List<String> scanCopyFile;
-    private List<String> mutationFile;
-    private List<String> conversionFile;
-    private List<String> documentFile;
-    private List<String> areaMapFile;
-    private List<String> hcdocumentFile;
-    private List<String> parchaFile;
+//    private Set<MortgagedRes> mortgagedData;
+//    private List<String> scanCopyFile;
+//    private List<String> mutationFile;
+//    private List<String> conversionFile;
+//    private List<String> documentFile;
+//    private List<String> areaMapFile;
+ //   private List<String> hcdocumentFile;
+//    private List<String> parchaFile;
 }

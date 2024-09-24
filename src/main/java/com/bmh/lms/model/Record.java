@@ -25,8 +25,8 @@ public class Record extends CommonProperties {
     @Column
     private  String recId;
 
-    @Column
-    private String groupId;
+//    @Column
+//    private String groupId;
 
 //    @Column(length = 50)
 //    private String state;
@@ -34,8 +34,8 @@ public class Record extends CommonProperties {
 //    @Column(length = 50)
 //    private String city;
 
-    @Column
-    private String mouzaId;
+//    @Column
+//    private String mouzaId;
 //
 //    @Column(length = 50)
 //    private String block;
@@ -49,21 +49,21 @@ public class Record extends CommonProperties {
     @Column(length = 100)
     private String companyId;
 
+//    @Column
+//    private String sellerType;
+//
+//    @Column(length = 1000)
+//    @ElementCollection
+//    private List<String> sellers;
+    
     @Column
-    private String sellerType;
-
-    @Column(length = 1000)
-    @ElementCollection
-    private List<String> sellers;
+    private String deedType;
+    
+//    @Column(length = 50)
+//    private String deedNo;
     
     @Column(length = 50)
-    private String deedName;
-    
-    @Column(length = 50)
-    private String deedNo;
-    
-    @Column(length = 50)
-    private String deedDate;
+    private String deedId;
  
 //    @Column(length = 50)
 //    private String oldRsDag;
@@ -80,64 +80,64 @@ public class Record extends CommonProperties {
 //    @Column(length = 50)
 //    private String currKhatian;
 
-    @Column(length = 20)
-    private String totalQty;
-
-    @Column(length = 20)
-    private String purQty;
-
-    @Column(length = 20)
-    private String mutedQty;
-
-    @Column(name = "unmuted_qty", length = 20)
-    private String unMutedQty;
-
-    @Column(length = 50)
-    private String landType;
-
-    @Column(length = 50)
-    private String landStatus;
-    
-    @Column(name = "converted_unconverted")
-    private String conversionLandStus;
-    
-    @Column
-    private String deedLoc;
-    
-    @Column
-    private String photoLoc;
-    
-    @Column
-    private String govtRec;
-
+//    @Column(length = 20)
+//    private String totalQty;
+//
+//    @Column(length = 20)
+//    private String purQty;
+//
+//    @Column(length = 20)
+//    private String mutedQty;
+//
+//    @Column(name = "unmuted_qty", length = 20)
+//    private String unMutedQty;
+//
+//    @Column(length = 50)
+//    private String landType;
+//
+//    @Column(length = 50)
+//    private String landStatus;
+//
+//    @Column(name = "converted_unconverted")
+//    private String conversionLandStus;
+//
+//    @Column
+//    private String deedLoc;
+//
+//    @Column
+//    private String photoLoc;
+//
+//    @Column
+//    private String govtRec;
+//
     @Column
     private String remarks;
-    
-    @Column(length = 50)
-    private String khazanaStatus;
-
-    @Column
-    private Float tax;
-    
-    @Column(length = 50)
-    private String dueDate;
-
-    @Column
-    private String legalMatters;
-    
-    @Column(name = "le_due_date", length = 50)
-    private String ledueDate;
-
-    @Column(name = "le_last_date", length = 50)
-    private String lelastDate;
+//
+//    @Column(length = 50)
+//    private String khazanaStatus;
+//
+//    @Column
+//    private Float tax;
+//
+//    @Column(length = 50)
+//    private String dueDate;
+//
+//    @Column
+//    private String legalMatters;
+//
+//    @Column(name = "le_due_date", length = 50)
+//    private String ledueDate;
+//
+//    @Column(name = "le_last_date", length = 50)
+//    private String lelastDate;
     
     @Column
     private String historyChain;
     
-    @Column
-    private Boolean mortgaged;
-    
-    @Column
-    private Boolean partlySold;
+//    @Column
+//    private Boolean mortgaged;
+//
+//    @Column
+//    private Boolean partlySold;
 }
 

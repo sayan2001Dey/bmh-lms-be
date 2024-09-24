@@ -20,6 +20,8 @@ public class Deed extends CommonProperties {
 
     private String deedId;
 
+    private String companyId;
+
     @Column(length = 50)
     private String deedNo;
 
@@ -30,10 +32,8 @@ public class Deed extends CommonProperties {
     private String groupId;
 
     @Column
-    private String companyId;
-
-    @Column
     private String sellerType;
+
     @Column(length = 1000)
     @ElementCollection
     private List<String> sellers;

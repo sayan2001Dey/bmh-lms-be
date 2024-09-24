@@ -446,8 +446,8 @@ public class DeedServiceImpl implements DeedService{
         dest.setDeedNo(src.getDeedNo());
         dest.setDeedDate(src.getDeedDate());
         dest.setGroupId(src.getGroupId());
-        dest.setSellerType(src.getSellerType());
         dest.setCompanyId(src.getCompanyId());
+        dest.setSellerType(src.getSellerType());
         dest.setSellers(src.getSellers());
         dest.setTotalQty(src.getTotalQty());
         dest.setPurQty(src.getPurQty());

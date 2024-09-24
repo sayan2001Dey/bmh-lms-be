@@ -1,69 +1,69 @@
-//package com.bmh.lms.service.record;
-//
-//import com.bmh.lms.dto.record.MortgagedRes;
-//import com.bmh.lms.dto.record.RecordReq;
-//import com.bmh.lms.dto.record.RecordRes;
-//import com.bmh.lms.model.FileUpload;
-//import com.bmh.lms.model.Mortgaged;
-//import com.bmh.lms.model.PartlySold;
-//import com.bmh.lms.model.Record;
-//import com.bmh.lms.repository.FileUploadRepository;
-//import com.bmh.lms.repository.MortgagedRepository;
-//import com.bmh.lms.repository.PartlySoldRepository;
-//import com.bmh.lms.repository.RecordRepository;
-//import com.bmh.lms.service.utils.CommonUtils;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.core.env.Environment;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.stereotype.Service;
-//
-//import jakarta.persistence.EntityNotFoundException;
-//import jakarta.transaction.Transactional;
-//import java.io.IOException;
-//import java.nio.file.Files;
-//import java.nio.file.Path;
-//import java.nio.file.Paths;
-//import java.time.LocalDateTime;
-//import java.util.*;
-//
-//
-//@Service
-//public class RecordServiceImpl implements RecordService {
-//
-//    @Autowired
-//    private RecordRepository recordRepository;
-//
-//    @Autowired
-//    private PartlySoldRepository partlySoldRepository;
-//
-//    @Autowired
-//    private MortgagedRepository mortgagedRepository;
-//
-//    @Autowired
-//    private FileUploadRepository fileUploadRepository;
-//
-//    @Autowired
-//    private Environment env;
-//
-//    @Autowired
-//    private CommonUtils commonUtils;
-//
-//    @Override
-//    @Transactional
-//    public RecordRes saveRecord(RecordReq recordReq, String username) {
-//        LocalDateTime ldt = LocalDateTime.now();
-//
-//        Record record = basicDataFromReqDTO(null, recordReq);
-//
-//        record.setRecId(commonUtils.generateUID("Record", "REC"));
-//        record.setInserted_on(ldt);
-//        record.setInserted_by(username);
-//        record.setUpdated_by("NA");
-//        record.setUpdated_on(null);
-//        record.setDeleted_by("NA");
-//        record.setDeleted_on(null);
-//
+package com.bmh.lms.service.record;
+
+import com.bmh.lms.dto.record.MortgagedRes;
+import com.bmh.lms.dto.record.RecordReq;
+import com.bmh.lms.dto.record.RecordRes;
+import com.bmh.lms.model.FileUpload;
+import com.bmh.lms.model.Mortgaged;
+import com.bmh.lms.model.PartlySold;
+import com.bmh.lms.model.Record;
+import com.bmh.lms.repository.FileUploadRepository;
+import com.bmh.lms.repository.MortgagedRepository;
+import com.bmh.lms.repository.PartlySoldRepository;
+import com.bmh.lms.repository.RecordRepository;
+import com.bmh.lms.service.utils.CommonUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.util.*;
+
+
+@Service
+public class RecordServiceImpl implements RecordService {
+
+    @Autowired
+    private RecordRepository recordRepository;
+
+    @Autowired
+    private PartlySoldRepository partlySoldRepository;
+
+    @Autowired
+    private MortgagedRepository mortgagedRepository;
+
+    @Autowired
+    private FileUploadRepository fileUploadRepository;
+
+    @Autowired
+    private Environment env;
+
+    @Autowired
+    private CommonUtils commonUtils;
+
+    @Override
+    @Transactional
+    public RecordRes saveRecord(RecordReq recordReq, String username) {
+        LocalDateTime ldt = LocalDateTime.now();
+
+        Record record = basicDataFromReqDTO(null, recordReq);
+
+        record.setRecId(commonUtils.generateUID("Record", "REC"));
+        record.setInserted_on(ldt);
+        record.setInserted_by(username);
+        record.setUpdated_by("NA");
+        record.setUpdated_on(null);
+        record.setDeleted_by("NA");
+        record.setDeleted_on(null);
+
 //        boolean mortgagedDataAvailable = false;
 //        Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
 //        if (recordReq.getMortgaged()) {
@@ -81,7 +81,7 @@
 //                mortgagedDataAvailable = true;
 //            }
 //        }
-//
+
 //        boolean partlySoldDataAvailable = false;
 //        Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
 //        if (recordReq.getPartlySold()) {
@@ -99,60 +99,60 @@
 //                partlySoldDataAvailable = true;
 //            }
 //        }
-//
+
 //        if(mortgagedDataAvailable)
 //            mortgagedRepository.saveAll(mortgagedData);
 //
 //        if(partlySoldDataAvailable)
 //            partlySoldRepository.saveAll(partlySoldData);
-//
-//        Record res = recordRepository.save(record);
-//        return recordResMaker(res, res.getRecId());
-//    }
-//
-//    @Override
-//    public RecordRes getRecordById(String id) {
-//        Optional<Record> optionalRecord = recordRepository.findByRecId(id);
-//        if (optionalRecord.isPresent()) {
-//            Record record = optionalRecord.get();
-//            return recordResMaker(record, id);
-//        }
-//        return null;
-//    }
-//
-//    @Override
-//    public List<RecordRes> getAllRecords() {
-//        List<Record> recordList = recordRepository.findAllActive();
-//        List<RecordRes> recordResList = new ArrayList<>();
-//        for (Record record : recordList) {
-//            recordResList.add(recordResMaker(record, record.getRecId()));
-//        }
-//        return recordResList;
-//    }
-//
-//    @Override
-//    @Transactional
-//    public RecordRes updateRecord(RecordReq recordReq, String recId, String username) {
-//        LocalDateTime ldt = LocalDateTime.now();
-//
-//        // Fetch the existing record
-//        Record existingRecord = recordRepository.findByRecId(recId)
-//                .orElseThrow(() -> new EntityNotFoundException("Record with recId " + recId + " not found"));
-//
-//        // Update existing record
-//        existingRecord.setModified_type("UPDATED");
-//        existingRecord.setUpdated_by(username);
-//        existingRecord.setUpdated_on(ldt);
-//
-//        Record record = basicDataFromReqDTO(existingRecord, recordReq);
-//        record.setUpdated_by(username);
-//        record.setUpdated_on(ldt);
-//
-//        //check partly sold
-//        Set<Mortgaged> finalMortgagedData = new HashSet<>();
-//        Set<FileUpload> finalMortFileChanges = new HashSet<>();
-//        Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
-//        Set<Mortgaged> oldMortgagedData = mortgagedRepository.findAllActive(recId);
+
+        Record res = recordRepository.save(record);
+        return recordResMaker(res, res.getRecId());
+    }
+
+    @Override
+    public RecordRes getRecordById(String id) {
+        Optional<Record> optionalRecord = recordRepository.findByRecId(id);
+        if (optionalRecord.isPresent()) {
+            Record record = optionalRecord.get();
+            return recordResMaker(record, id);
+        }
+        return null;
+    }
+
+    @Override
+    public List<RecordRes> getAllRecords() {
+        List<Record> recordList = recordRepository.findAllActive();
+        List<RecordRes> recordResList = new ArrayList<>();
+        for (Record record : recordList) {
+            recordResList.add(recordResMaker(record, record.getRecId()));
+        }
+        return recordResList;
+    }
+
+    @Override
+    @Transactional
+    public RecordRes updateRecord(RecordReq recordReq, String recId, String username) {
+        LocalDateTime ldt = LocalDateTime.now();
+
+        // Fetch the existing record
+        Record existingRecord = recordRepository.findByRecId(recId)
+                .orElseThrow(() -> new EntityNotFoundException("Record with recId " + recId + " not found"));
+
+        // Update existing record
+        existingRecord.setModified_type("UPDATED");
+        existingRecord.setUpdated_by(username);
+        existingRecord.setUpdated_on(ldt);
+
+        Record record = basicDataFromReqDTO(existingRecord, recordReq);
+        record.setUpdated_by(username);
+        record.setUpdated_on(ldt);
+
+        //check partly sold
+        Set<Mortgaged> finalMortgagedData = new HashSet<>();
+        Set<FileUpload> finalMortFileChanges = new HashSet<>();
+        Set<Mortgaged> mortgagedData = recordReq.getMortgagedData();
+        Set<Mortgaged> oldMortgagedData = mortgagedRepository.findAllActive(recId);
 //        if (recordReq.getMortgaged() && mortgagedData!=null) {
 //            Set<Mortgaged> temp = new HashSet<>();
 //
@@ -225,7 +225,7 @@
 //                finalMortgagedData.add(mort);
 //            });
 //        }
-//
+
 //        Set<PartlySold> finalPartlySoldData = new HashSet<>();
 //        Set<PartlySold> partlySoldData = recordReq.getPartlySoldData();
 //        Set<PartlySold> oldPartlySoldData = partlySoldRepository.findAllActive(recId);
@@ -306,31 +306,31 @@
 //
 //        if(!finalPartlySoldData.isEmpty())
 //            partlySoldRepository.saveAll(finalPartlySoldData);
-//
-//        recordRepository.save(existingRecord);
-//        recordRepository.save(record);
-//
-//        return recordResMaker(record, recId);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public boolean deleteRecord(String id, String username) {
-//        LocalDateTime ldt = LocalDateTime.now();
-//        Optional<Record> optionalRecord = recordRepository.findByRecId(id);
-//
-//        if (optionalRecord.isPresent()) {
-//            Record record = optionalRecord.get();
-//            record.setDeleted_by(username);
-//            record.setDeleted_on(ldt);
-//            record.setModified_type("DELETED");
-//
-//            recordRepository.save(record);
-//
+
+        recordRepository.save(existingRecord);
+        recordRepository.save(record);
+
+        return recordResMaker(record, recId);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteRecord(String id, String username) {
+        LocalDateTime ldt = LocalDateTime.now();
+        Optional<Record> optionalRecord = recordRepository.findByRecId(id);
+
+        if (optionalRecord.isPresent()) {
+            Record record = optionalRecord.get();
+            record.setDeleted_by(username);
+            record.setDeleted_on(ldt);
+            record.setModified_type("DELETED");
+
+            recordRepository.save(record);
+
 //            List<Mortgaged> finalMort = new ArrayList<>();
 //            List<FileUpload> finalFile = new ArrayList<>();
 //            List<PartlySold> finalPart = new ArrayList<>();
-//
+
 //            if (record.getMortgaged()) {
 //                mortgagedRepository.findAllActive(id).forEach(mortgaged -> {
 //                    fileUploadRepository.findAllFilesByMortId(mortgaged.getMortId()).forEach(file->{
@@ -370,14 +370,14 @@
 //
 //            if(!finalFile.isEmpty())
 //                fileUploadRepository.saveAll(finalFile);
-//
-//
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
-//
+
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 //    @Override
 //    public byte[] getFileBytes(String fieldName, String fileName) {
 //        String uploadDir = env.getProperty("upload.dir"); // Assuming a property named upload.dir is defined
@@ -398,7 +398,7 @@
 //            throw new RuntimeException("Failed to read file: " + fileName, e);
 //        }
 //    }
-//
+
 //    @Override
 //    public ResponseEntity<String> saveAttachment(String fieldName, String id, byte[] blobData, String originalFileName, String ext, String insideId, String username) {
 //        LocalDateTime ldt = LocalDateTime.now();
@@ -458,7 +458,7 @@
 //        return ResponseEntity.status(HttpStatus.NOT_FOUND)
 //                .body("Entry not found.");
 //    }
-//
+
 //    @Override
 //    @Transactional
 //    public boolean deleteFile(String id, String fieldName, String fileName, String insideId, String username) {
@@ -474,21 +474,24 @@
 //
 //        return true;
 //    }
-//
-//    private Record basicDataFromReqDTO(Record old, RecordReq src) {
-//        Record res = new Record();
-//
+
+    private Record basicDataFromReqDTO(Record old, RecordReq src) {
+        Record res = new Record();
+//ToDo:Dont remove
 //        String sellerType = src.getSellerType();
 //        List<String> sellers = new ArrayList<>();
 //        if(Objects.equals(sellerType, "within-group")) {
 //            sellers.add(src.getSellers().getFirst());
 //        } else
 //            sellers = src.getSellers();
-//
-//        res.setModified_type("INSERTED");
+
+        res.setModified_type("INSERTED");
+
 //        res.setGroupId(src.getGroupId());
 //        res.setMouzaId(src.getMouzaId());
-//        res.setCompanyId(src.getCompanyId());
+        res.setCompanyId(src.getCompanyId());
+        res.setDeedId(src.getDeedId());
+        res.setDeedType(src.getDeedType());
 //        res.setSellerType(sellerType);
 //        res.setSellers(sellers);
 //        res.setDeedName(src.getDeedName());
@@ -507,33 +510,35 @@
 //        res.setDueDate(src.getDueDate());
 //        res.setLegalMatters(src.getLegalMatters());
 //        res.setLedueDate(src.getLedueDate());
-//        res.setHistoryChain(src.getHistoryChain());
+        res.setHistoryChain(src.getHistoryChain());
 //        res.setMortgaged(src.getMortgaged());
 //        res.setPartlySold(src.getPartlySold());
 //        res.setTax(src.getTax());
 //        res.setLelastDate(src.getLelastDate());
-//        res.setRemarks(src.getRemarks());
+        res.setRemarks(src.getRemarks());
 //        res.setLandType(src.getLandType());
-//
-//        if(old!=null) {
-//            res.setRecId(old.getRecId());
-//            res.setInserted_by(old.getInserted_by());
-//            res.setInserted_on(old.getInserted_on());
-//            res.setUpdated_by(old.getUpdated_by());
-//            res.setUpdated_on(old.getUpdated_on());
-//            res.setDeleted_by(old.getDeleted_by());
-//            res.setDeleted_on(old.getDeleted_on());
-//        }
-//
-//        return res;
-//    }
-//
-//    private RecordRes basicDataToResDTO(Record src) {
-//        RecordRes dest = new RecordRes();
+
+        if(old!=null) {
+            res.setRecId(old.getRecId());
+            res.setInserted_by(old.getInserted_by());
+            res.setInserted_on(old.getInserted_on());
+            res.setUpdated_by(old.getUpdated_by());
+            res.setUpdated_on(old.getUpdated_on());
+            res.setDeleted_by(old.getDeleted_by());
+            res.setDeleted_on(old.getDeleted_on());
+        }
+
+        return res;
+    }
+
+    private RecordRes basicDataToResDTO(Record src) {
+        RecordRes dest = new RecordRes();
 //        dest.setGroupId(src.getGroupId());
 //        dest.setMouzaId(src.getMouzaId());
 //        dest.setSellerType(src.getSellerType());
-//        dest.setCompanyId(src.getCompanyId());
+        dest.setCompanyId(src.getCompanyId());
+        dest.setDeedId(src.getDeedId());
+        dest.setDeedType(src.getDeedType());
 //        dest.setSellers(src.getSellers());
 //        dest.setDeedName(src.getDeedName());
 //        dest.setDeedNo(src.getDeedNo());
@@ -551,22 +556,22 @@
 //        dest.setDueDate(src.getDueDate());
 //        dest.setLegalMatters(src.getLegalMatters());
 //        dest.setLedueDate(src.getLedueDate());
-//        dest.setHistoryChain(src.getHistoryChain());
+        dest.setHistoryChain(src.getHistoryChain());
 //        dest.setMortgaged(src.getMortgaged());
 //        dest.setPartlySold(src.getPartlySold());
 //        dest.setTax(src.getTax());
 //        dest.setLelastDate(src.getLelastDate());
-//        dest.setRemarks(src.getRemarks());
+        dest.setRemarks(src.getRemarks());
 //        dest.setLandType(src.getLandType());
-//
-//        dest.setRecId(src.getRecId());
-//
-//        return dest;
-//    }
-//
-//    private RecordRes recordResMaker(Record record, String recId) {
-//        RecordRes res = basicDataToResDTO(record);
-//
+
+        dest.setRecId(src.getRecId());
+
+        return dest;
+    }
+
+    private RecordRes recordResMaker(Record record, String recId) {
+        RecordRes res = basicDataToResDTO(record);
+
 //        Set<Mortgaged> mortSet = mortgagedRepository.findAllActive(recId);
 //        Set<MortgagedRes> mortResSet = new HashSet<>();
 //
@@ -580,7 +585,7 @@
 //                    .ifPresent(file -> mortRes.setMortDocFile(file.getFileName()));
 //            mortResSet.add(mortRes);
 //        });
-//
+
 //        res.setMortgagedData(mortResSet);
 //        res.setPartlySoldData(partlySoldRepository.findAllActive(recId));
 //        res.setConversionFile(fileUploadListToNameList(
@@ -604,16 +609,16 @@
 //        res.setMutationFile(fileUploadListToNameList(
 //                fileUploadRepository.findFilesByIdNFieldName(recId, "mutationFile")
 //        ));
-//
-//        return res;
-//    }
-//
+
+        return res;
+    }
+
 //    private List<String> fileUploadListToNameList(List<FileUpload> files) {
 //        List<String> res = new ArrayList<>();
 //        files.forEach((fileUpload) -> res.add(fileUpload.getFileName()));
 //        return res;
 //    }
-//
+
 //    private PartlySold copyPartlySold(PartlySold src) {
 //        PartlySold res = new PartlySold();
 //
@@ -635,7 +640,7 @@
 //
 //        return res;
 //    }
-//
+
 //    private Mortgaged copyMortgaged(Mortgaged src) {
 //        Mortgaged res = new Mortgaged();
 //
@@ -656,5 +661,5 @@
 //
 //        return res;
 //    }
-//
-//}
+
+}
