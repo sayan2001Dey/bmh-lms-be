@@ -47,10 +47,8 @@ public class HistoryChainServiceImpl implements HistoryChainService{
             existingHc.setName(updatedHistoryChain.getName());
             existingHc.setParents(updatedHistoryChain.getParents());
             existingHc.setChildren(updatedHistoryChain.getChildren());
-           
 
             return historyChainRepository.save(existingHc);
-
 
             } else return null;
         }

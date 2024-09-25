@@ -1,5 +1,6 @@
 package com.bmh.lms.dto.record;
 
+import com.bmh.lms.model.ChainDeedData;
 import com.bmh.lms.model.PartlySold;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,33 +16,10 @@ import java.util.Set;
 @AllArgsConstructor
 public class RecordCommon {
     private String recId;
-//    private String groupId;
-//    private String mouzaId;
     private String companyId;
-//    private String sellerType;
-//    private List<String> sellers;
     private String deedType;
+    private List<ChainDeedData> chainDeedData;
     private String deedId;
-//    private String deedDate;
-//    private String totalQty;
-//    private String purQty;
-//    private String mutedQty;
-//    private String unMutedQty;
-//    private String landType;
-//    private String landStatus;
-//    private String conversionLandStus;
-//    private String deedLoc;
-//    private String photoLoc;
-//    private String govtRec;
     private String remarks;
-//    private String khazanaStatus;
-//    private Float tax;
-//    private String dueDate;
-//    private String legalMatters;
-//    private String ledueDate;
-//    private String lelastDate;
     private String historyChain;
-//    private Boolean mortgaged;
-//    private Boolean partlySold;
-//    private Set<PartlySold> partlySoldData;
 }

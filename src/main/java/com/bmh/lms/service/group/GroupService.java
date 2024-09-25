@@ -1,6 +1,5 @@
-package com.bmh.lms.service.Group;
+package com.bmh.lms.service.group;
 
-import com.bmh.lms.model.Company;
 import com.bmh.lms.model.Group;
 
 import java.util.List;

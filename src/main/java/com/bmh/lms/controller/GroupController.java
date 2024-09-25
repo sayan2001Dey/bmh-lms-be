@@ -2,7 +2,7 @@ package com.bmh.lms.controller;
 
 
 import com.bmh.lms.model.Group;
-import com.bmh.lms.service.Group.GroupService;
+import com.bmh.lms.service.group.GroupService;
 import com.bmh.lms.service.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

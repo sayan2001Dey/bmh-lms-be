@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "record")
 public class Record extends CommonProperties {
-
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,120 +23,20 @@ public class Record extends CommonProperties {
 
     @Column
     private  String recId;
-
-//    @Column
-//    private String groupId;
-
-//    @Column(length = 50)
-//    private String state;
-//
-//    @Column(length = 50)
-//    private String city;
-
-//    @Column
-//    private String mouzaId;
-//
-//    @Column(length = 50)
-//    private String block;
-
-//    @Column(name = "jl_no", length = 20)
-//    private String JLno;
-
-//    @Column(length = 7)
-//    private Integer pincode;
-
-    @Column(length = 100)
-    private String companyId;
-
-//    @Column
-//    private String sellerType;
-//
-//    @Column(length = 1000)
-//    @ElementCollection
-//    private List<String> sellers;
     
     @Column
     private String deedType;
-    
-//    @Column(length = 50)
-//    private String deedNo;
-    
-    @Column(length = 50)
-    private String deedId;
- 
-//    @Column(length = 50)
-//    private String oldRsDag;
-//
-//    @Column(length = 50)
-//    private String newLrDag;
-//
-//    @Column(length = 50)
-//    private String oldKhatian;
-//
-//    @Column(length = 50)
-//    private String newKhatian;
-//
-//    @Column(length = 50)
-//    private String currKhatian;
 
-//    @Column(length = 20)
-//    private String totalQty;
-//
-//    @Column(length = 20)
-//    private String purQty;
-//
-//    @Column(length = 20)
-//    private String mutedQty;
-//
-//    @Column(name = "unmuted_qty", length = 20)
-//    private String unMutedQty;
-//
-//    @Column(length = 50)
-//    private String landType;
-//
-//    @Column(length = 50)
-//    private String landStatus;
-//
-//    @Column(name = "converted_unconverted")
-//    private String conversionLandStus;
-//
-//    @Column
-//    private String deedLoc;
-//
-//    @Column
-//    private String photoLoc;
-//
-//    @Column
-//    private String govtRec;
-//
+    @Column
+    private String deedId;
+
+    @Column
+    private String chainDeedRefId;
+
     @Column
     private String remarks;
-//
-//    @Column(length = 50)
-//    private String khazanaStatus;
-//
-//    @Column
-//    private Float tax;
-//
-//    @Column(length = 50)
-//    private String dueDate;
-//
-//    @Column
-//    private String legalMatters;
-//
-//    @Column(name = "le_due_date", length = 50)
-//    private String ledueDate;
-//
-//    @Column(name = "le_last_date", length = 50)
-//    private String lelastDate;
     
     @Column
     private String historyChain;
-    
-//    @Column
-//    private Boolean mortgaged;
-//
-//    @Column
-//    private Boolean partlySold;
 }
 

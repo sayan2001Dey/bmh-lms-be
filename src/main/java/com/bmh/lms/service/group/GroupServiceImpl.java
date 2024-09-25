@@ -1,6 +1,5 @@
-package com.bmh.lms.service.Group;
+package com.bmh.lms.service.group;
 
-import com.bmh.lms.model.Company;
 import com.bmh.lms.model.Group;
 import com.bmh.lms.repository.GroupRepository;
 import com.bmh.lms.service.utils.CommonUtils;
