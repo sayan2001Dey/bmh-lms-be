@@ -169,7 +169,10 @@ public class RecordServiceImpl implements RecordService {
     private RecordRes recordResMaker(Record record, String recId) {
         RecordRes res = basicDataToResDTO(record);
 
-        ChainDeedDataCollection chainDeedDataCollection = recordCollectionRepository.findById(record.getChainDeedRefId()).orElse(null);
+        ChainDeedDataCollection chainDeedDataCollection = null;
+        if(record.getChainDeedRefId() != null) {
+            chainDeedDataCollection = recordCollectionRepository.findById(record.getChainDeedRefId()).orElse(null);
+        }
         List<ChainDeedData> chainDeedData = chainDeedDataCollection == null ? new ArrayList<>() : chainDeedDataCollection.getChainDeedData();
 
         res.setChainDeedData(chainDeedData);
