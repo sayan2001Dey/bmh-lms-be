@@ -49,7 +49,7 @@ public class RecordServiceImpl implements RecordService {
 
         ChainDeedDataCollection chainDeedDataCollection = new ChainDeedDataCollection();
         chainDeedDataCollection.setChainDeedData(
-                recordReq.getChainDeedData() == null || Objects.equals(recordReq.getDeedType(), "chain-deed") ?
+                recordReq.getChainDeedData() == null || Objects.equals(recordReq.getDeedType(), "main-deed") ?
                         new ArrayList<>()
                         : recordReq.getChainDeedData()
         );
@@ -99,7 +99,7 @@ public class RecordServiceImpl implements RecordService {
 
         ChainDeedDataCollection chainDeedDataCollection = new ChainDeedDataCollection();
         chainDeedDataCollection.setChainDeedData(
-                recordReq.getChainDeedData() == null || Objects.equals(recordReq.getDeedType(), "chain-deed") ?
+                recordReq.getChainDeedData() == null || Objects.equals(recordReq.getDeedType(), "main-deed") ?
                         new ArrayList<>()
                         : recordReq.getChainDeedData()
         );

@@ -16,7 +16,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class RecordCommon {
     private String recId;
-    private String companyId;
     private String deedType;
     private List<ChainDeedData> chainDeedData;
     private String deedId;
