@@ -34,7 +34,7 @@ public class DeedServiceImpl implements DeedService{
     private MortgagedRepository mortgagedRepository;
 
     @Autowired
-    private DeedMouzaCollectionRepository dmcRepo;
+    private DeedCollectionRepository dmcRepo;
 
     @Autowired
     private FileUploadRepository fileUploadRepository;
@@ -61,11 +61,11 @@ public class DeedServiceImpl implements DeedService{
         deed.setDeleted_by("NA");
         deed.setDeleted_on(null);
 
-        DeedMouzaCollection newDeedMouzaCollection = new DeedMouzaCollection();
-        newDeedMouzaCollection.setMouza(
+        DeedCollection newDeedCollection = new DeedCollection();
+        newDeedCollection.setMouza(
                 deedReq.getMouza() == null ? new ArrayList<>() : deedReq.getMouza()
         );
-        deed.setMouzaRefId(dmcRepo.save(newDeedMouzaCollection).getId());
+        deed.setMouzaRefId(dmcRepo.save(newDeedCollection).getId());
 
         boolean mortgagedDataAvailable = false;
         Set<Mortgaged> mortgagedData = deedReq.getMortgagedData();
@@ -151,11 +151,11 @@ public class DeedServiceImpl implements DeedService{
         deed.setUpdated_by(username);
         deed.setUpdated_on(ldt);
 
-        DeedMouzaCollection newDeedMouzaCollection = new DeedMouzaCollection();
-        newDeedMouzaCollection.setMouza(
+        DeedCollection newDeedCollection = new DeedCollection();
+        newDeedCollection.setMouza(
                 deedReq.getMouza() == null ? new ArrayList<>() : deedReq.getMouza()
         );
-        deed.setMouzaRefId(dmcRepo.save(newDeedMouzaCollection).getId());
+        deed.setMouzaRefId(dmcRepo.save(newDeedCollection).getId());
 
         Set<Mortgaged> finalMortgagedData = new HashSet<>();
         Set<FileUpload> finalMortFileChanges = new HashSet<>();
@@ -421,6 +421,7 @@ public class DeedServiceImpl implements DeedService{
         res.setLegalMatters(src.getLegalMatters());
         res.setLedueDate(src.getLedueDate());
         res.setLeDescription(src.getLeDescription());
+        // res.setRecId(src.getRecId()); // don't enable recId, it's just not meant to be.
         res.setMortgaged(src.getMortgaged());
         res.setPartlySold(src.getPartlySold());
         res.setTax(src.getTax());
@@ -464,6 +465,7 @@ public class DeedServiceImpl implements DeedService{
         dest.setLegalMatters(src.getLegalMatters());
         dest.setLedueDate(src.getLedueDate());
         dest.setLeDescription(src.getLeDescription());
+        dest.setRecId(src.getRecId());
         dest.setMortgaged(src.getMortgaged());
         dest.setPartlySold(src.getPartlySold());
         dest.setTax(src.getTax());
@@ -494,7 +496,7 @@ public class DeedServiceImpl implements DeedService{
         res.setMortgagedData(mortResSet);
         res.setPartlySoldData(partlySoldRepository.findAllActive(deedId));
 
-        DeedMouzaCollection mouzaRec = null;
+        DeedCollection mouzaRec = null;
         if(deed.getMouzaRefId() != null)
             mouzaRec = dmcRepo.findById(deed.getMouzaRefId()).orElse(null);
 

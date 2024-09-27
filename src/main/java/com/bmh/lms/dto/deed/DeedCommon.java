@@ -43,6 +43,7 @@ public class DeedCommon {
     private String leDescription;
     private Boolean mortgaged;
     private Boolean partlySold;
+    private String recId;
     private Set<PartlySold> partlySoldData;
     private List<DeedMouza> mouza;
 }
