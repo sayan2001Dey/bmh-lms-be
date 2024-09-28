@@ -21,6 +21,9 @@ import java.util.*;
 public class RecordServiceImpl implements RecordService {
 
     @Autowired
+    private  DeedRepository deedRepository;
+
+    @Autowired
     private RecordRepository recordRepository;
 
     @Autowired
@@ -47,12 +50,26 @@ public class RecordServiceImpl implements RecordService {
         record.setDeleted_by("NA");
         record.setDeleted_on(null);
 
+        if (recordReq.getDeedId() != null) {
+            if (linkDeed(recordReq.getDeedId(), recordReq.getRecId())) {
+                return null;
+            }
+        }
+
+        List<ChainDeedData> finalChainDeedDataList = new ArrayList<>();
+        for (ChainDeedData data : recordReq.getChainDeedData()) {
+            if (linkDeed(data.getDeedId(), recordReq.getRecId())) {
+                finalChainDeedDataList.add(data);
+            }
+        }
+
         ChainDeedDataCollection chainDeedDataCollection = new ChainDeedDataCollection();
         chainDeedDataCollection.setChainDeedData(
-                recordReq.getChainDeedData() == null || Objects.equals(recordReq.getDeedType(), "main-deed") ?
+                Objects.equals(recordReq.getDeedType(), "main-deed") ?
                         new ArrayList<>()
-                        : recordReq.getChainDeedData()
+                        : finalChainDeedDataList
         );
+
         record.setChainDeedRefId(recordCollectionRepository.save(chainDeedDataCollection).getId());
 
         Record res = recordRepository.save(record);
@@ -97,11 +114,38 @@ public class RecordServiceImpl implements RecordService {
         record.setUpdated_by(username);
         record.setUpdated_on(ldt);
 
+        //compare and unlink deeds
+        if (Objects.equals(recordReq.getDeedId(), existingRecord.getDeedId())) {
+           if(recordReq.getDeedId() == null) {
+               System.out.println("deedId can't be null");
+           } else {
+               if (!linkDeed(recordReq.getDeedId(), existingRecord.getRecId())) return null;
+               unlinkDeed(existingRecord.getDeedId());
+           }
+        }
+
+        ChainDeedDataCollection existingChainDeedData = recordCollectionRepository.findById(
+                existingRecord.getChainDeedRefId()
+        ).orElse(null);
+
+        if(existingChainDeedData != null && existingChainDeedData.getChainDeedData() != null) {
+            existingChainDeedData.getChainDeedData().forEach((data) -> {
+                unlinkDeed(data.getDeedId());
+            });
+        }
+
+        List<ChainDeedData> finalChainDeedDataList = new ArrayList<>();
+        for (ChainDeedData data : recordReq.getChainDeedData()) {
+            if (linkDeed(data.getDeedId(), recordReq.getRecId())) {
+                finalChainDeedDataList.add(data);
+            }
+        }
+
         ChainDeedDataCollection chainDeedDataCollection = new ChainDeedDataCollection();
         chainDeedDataCollection.setChainDeedData(
-                recordReq.getChainDeedData() == null || Objects.equals(recordReq.getDeedType(), "main-deed") ?
+                Objects.equals(recordReq.getDeedType(), "main-deed") ?
                         new ArrayList<>()
-                        : recordReq.getChainDeedData()
+                        : finalChainDeedDataList
         );
         record.setChainDeedRefId(recordCollectionRepository.save(chainDeedDataCollection).getId());
 
@@ -122,6 +166,20 @@ public class RecordServiceImpl implements RecordService {
             record.setDeleted_by(username);
             record.setDeleted_on(ldt);
             record.setModified_type("DELETED");
+
+            if (record.getDeedId() != null)
+                unlinkDeed(record.getDeedId());
+
+            if (record.getChainDeedRefId() != null) {
+                ChainDeedDataCollection data = recordCollectionRepository.findById(
+                        record.getChainDeedRefId()
+                ).orElse(null);
+
+                if(data != null) {
+                    for (ChainDeedData d : data.getChainDeedData())
+                        unlinkDeed(d.getDeedId());
+                }
+            }
 
             recordRepository.save(record);
 
@@ -178,5 +236,23 @@ public class RecordServiceImpl implements RecordService {
         res.setChainDeedData(chainDeedData);
 
         return res;
+    }
+
+    private boolean linkDeed(String deedId, String recId) {
+        Deed deed = deedRepository.findByDeedId(deedId).orElse(null);
+        if(deed != null && deed.getRecId() != null) {
+            deed.setRecId(recId);
+            deedRepository.save(deed);
+            return true;
+        }
+        return false;
+    }
+
+    private void unlinkDeed(String deedId) {
+        Deed deed = deedRepository.findByDeedId(deedId).orElse(null);
+        if(deed != null) {
+            deed.setRecId(null);
+            deedRepository.save(deed);
+        }
     }
 }
