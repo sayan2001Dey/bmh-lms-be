@@ -148,6 +148,7 @@ public class DeedServiceImpl implements DeedService{
         existingDeed.setUpdated_on(ldt);
 
         Deed deed = basicDataFromReqDTO(existingDeed,deedReq);
+        deed.setRecId(existingDeed.getRecId());
         deed.setUpdated_by(username);
         deed.setUpdated_on(ldt);
 
