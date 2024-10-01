@@ -16,9 +16,12 @@ import java.util.Set;
 @AllArgsConstructor
 public class RecordCommon {
     private String recId;
-    private String deedType;
+
+//    KEEP THIS FOR FUTURE USE
+//    private String deedId;
+//    private String deedType;
+
     private List<ChainDeedData> chainDeedData;
-    private String deedId;
     private String remarks;
     private String historyChain;
 }

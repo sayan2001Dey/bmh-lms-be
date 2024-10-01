@@ -23,12 +23,13 @@ public class Record extends CommonProperties {
 
     @Column
     private  String recId;
-    
-    @Column
-    private String deedType;
 
-    @Column
-    private String deedId;
+//    KEEP THIS FOR FUTURE USE
+//    @Column
+//    private String deedType;
+//
+//    @Column
+//    private String deedId;
 
     @Column
     private String chainDeedRefId;

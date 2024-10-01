@@ -50,11 +50,12 @@ public class RecordServiceImpl implements RecordService {
         record.setDeleted_by("NA");
         record.setDeleted_on(null);
 
-        if (recordReq.getDeedId() != null) {
-            if (linkDeed(recordReq.getDeedId(), record.getRecId())) {
-                return null;
-            }
-        }
+//        KEEP THIS FOR FUTURE USE
+//        if (recordReq.getDeedId() != null) {
+//            if (linkDeed(recordReq.getDeedId(), record.getRecId())) {
+//                return null;
+//            }
+//        }
 
         List<ChainDeedData> finalChainDeedDataList = new ArrayList<>();
         for (ChainDeedData data : recordReq.getChainDeedData()) {
@@ -64,11 +65,13 @@ public class RecordServiceImpl implements RecordService {
         }
 
         ChainDeedDataCollection chainDeedDataCollection = new ChainDeedDataCollection();
-        chainDeedDataCollection.setChainDeedData(
-                Objects.equals(recordReq.getDeedType(), "main-deed") ?
-                        new ArrayList<>()
-                        : finalChainDeedDataList
-        );
+//        chainDeedDataCollection.setChainDeedData(
+//                Objects.equals(recordReq.getDeedType(), "main-deed") ?
+//                        new ArrayList<>()
+//                        : finalChainDeedDataList
+//        );
+
+        chainDeedDataCollection.setChainDeedData(finalChainDeedDataList);
 
         record.setChainDeedRefId(recordCollectionRepository.save(chainDeedDataCollection).getId());
 
@@ -114,19 +117,23 @@ public class RecordServiceImpl implements RecordService {
         record.setUpdated_by(username);
         record.setUpdated_on(ldt);
 
-        //compare and unlink deeds
-        if (Objects.equals(recordReq.getDeedId(), existingRecord.getDeedId())) {
-           if(recordReq.getDeedId() == null) {
-               System.out.println("deedId can't be null");
-           } else {
-               if (!linkDeed(recordReq.getDeedId(), existingRecord.getRecId())) return null;
-               unlinkDeed(existingRecord.getDeedId());
-           }
-        }
+//        KEEP THIS FOR FUTURE USE
+//        //compare and unlink deeds
+//        if (Objects.equals(recordReq.getDeedId(), existingRecord.getDeedId())) {
+//           if(recordReq.getDeedId() == null) {
+//               System.out.println("deedId can't be null");
+//           } else {
+//               if (!linkDeed(recordReq.getDeedId(), existingRecord.getRecId())) return null;
+//               unlinkDeed(existingRecord.getDeedId());
+//           }
+//        }
 
-        ChainDeedDataCollection existingChainDeedData = recordCollectionRepository.findById(
-                existingRecord.getChainDeedRefId()
-        ).orElse(null);
+        ChainDeedDataCollection existingChainDeedData = null;
+        if(existingRecord.getChainDeedRefId() != null) {
+            existingChainDeedData = recordCollectionRepository.findById(
+                    existingRecord.getChainDeedRefId()
+            ).orElse(null);
+        }
 
         if(existingChainDeedData != null && existingChainDeedData.getChainDeedData() != null) {
             existingChainDeedData.getChainDeedData().forEach((data) -> {
@@ -142,11 +149,15 @@ public class RecordServiceImpl implements RecordService {
         }
 
         ChainDeedDataCollection chainDeedDataCollection = new ChainDeedDataCollection();
-        chainDeedDataCollection.setChainDeedData(
-                Objects.equals(recordReq.getDeedType(), "main-deed") ?
-                        new ArrayList<>()
-                        : finalChainDeedDataList
-        );
+
+//        KEEP THIS FOR FUTURE USE
+//        chainDeedDataCollection.setChainDeedData(
+//                Objects.equals(recordReq.getDeedType(), "main-deed") ?
+//                        new ArrayList<>()
+//                        : finalChainDeedDataList
+//        );
+
+        chainDeedDataCollection.setChainDeedData(finalChainDeedDataList);
         record.setChainDeedRefId(recordCollectionRepository.save(chainDeedDataCollection).getId());
 
         recordRepository.save(existingRecord);
@@ -167,8 +178,9 @@ public class RecordServiceImpl implements RecordService {
             record.setDeleted_on(ldt);
             record.setModified_type("DELETED");
 
-            if (record.getDeedId() != null)
-                unlinkDeed(record.getDeedId());
+//            KEEP THIS FOR FUTURE USE
+//            if (record.getDeedId() != null)
+//                unlinkDeed(record.getDeedId());
 
             if (record.getChainDeedRefId() != null) {
                 ChainDeedDataCollection data = recordCollectionRepository.findById(
@@ -194,8 +206,10 @@ public class RecordServiceImpl implements RecordService {
 
         res.setModified_type("INSERTED");
 
-        res.setDeedId(src.getDeedId());
-        res.setDeedType(src.getDeedType());
+//        KEEP THIS FOR FUTURE USE
+//        res.setDeedId(src.getDeedId());
+//        res.setDeedType(src.getDeedType());
+
         res.setHistoryChain(src.getHistoryChain());
         res.setRemarks(src.getRemarks());
 
@@ -215,8 +229,10 @@ public class RecordServiceImpl implements RecordService {
     private RecordRes basicDataToResDTO(Record src) {
         RecordRes dest = new RecordRes();
 
-        dest.setDeedId(src.getDeedId());
-        dest.setDeedType(src.getDeedType());
+//        KEEP THIS FOR FUTURE USE
+//        dest.setDeedId(src.getDeedId());
+//        dest.setDeedType(src.getDeedType());
+
         dest.setHistoryChain(src.getHistoryChain());
         dest.setRemarks(src.getRemarks());
         dest.setRecId(src.getRecId());
