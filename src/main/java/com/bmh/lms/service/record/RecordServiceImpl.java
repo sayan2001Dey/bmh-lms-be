@@ -59,7 +59,7 @@ public class RecordServiceImpl implements RecordService {
 
         List<ChainDeedData> finalChainDeedDataList = new ArrayList<>();
         for (ChainDeedData data : recordReq.getChainDeedData()) {
-            if (linkDeed(data.getDeedId(), recordReq.getRecId())) {
+            if (linkDeed(data.getDeedId(), record.getRecId())) {
                 finalChainDeedDataList.add(data);
             }
         }
@@ -256,8 +256,8 @@ public class RecordServiceImpl implements RecordService {
 
     private boolean linkDeed(String deedId, String recId) {
         Deed deed = deedRepository.findByDeedId(deedId).orElse(null);
-        System.out.println(deed);
-        System.out.println(recId);
+//        System.out.println(deed);
+//        System.out.println(recId);
         if(deed != null && deed.getRecId() == null) {
             deed.setRecId(recId);
             deedRepository.save(deed);

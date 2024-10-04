@@ -422,7 +422,10 @@ public class DeedServiceImpl implements DeedService{
         res.setLegalMatters(src.getLegalMatters());
         res.setLedueDate(src.getLedueDate());
         res.setLeDescription(src.getLeDescription());
-        // res.setRecId(src.getRecId()); // don't enable recId, it's just not meant to be.
+        // res.setRecId(src.getRecId());
+        // don't enable recId, it's just not meant to be.
+        // btw confirmed again so.
+        // this was only meant to set by record service in linkDeed fn so check there.
         res.setMortgaged(src.getMortgaged());
         res.setPartlySold(src.getPartlySold());
         res.setTax(src.getTax());
