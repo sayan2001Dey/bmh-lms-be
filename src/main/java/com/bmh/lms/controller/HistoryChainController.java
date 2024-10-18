@@ -69,7 +69,6 @@ public class HistoryChainController {
             historyChainService.deleteHc(recId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content for successful deletion
         } catch (Exception e) {
-
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found if the entity does not exist
         }
     }

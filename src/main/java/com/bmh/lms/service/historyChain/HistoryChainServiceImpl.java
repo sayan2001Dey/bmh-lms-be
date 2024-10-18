@@ -39,7 +39,7 @@ public class HistoryChainServiceImpl implements HistoryChainService{
     }
 
     @Override
-   public HistoryChain updateHc(String recId, HistoryChain updatedHistoryChain){
+    public HistoryChain updateHc(String recId, HistoryChain updatedHistoryChain){
         Optional<HistoryChain> optionalExisting=historyChainRepository.findByRecId(recId);
         if(optionalExisting.isPresent()){
             HistoryChain existingHc= optionalExisting.get();
@@ -50,8 +50,8 @@ public class HistoryChainServiceImpl implements HistoryChainService{
 
             return historyChainRepository.save(existingHc);
 
-            } else return null;
-        }
+        } else return null;
+    }
 
     @Override
     public void deleteHc(String recId) {

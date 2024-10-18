@@ -17,4 +17,6 @@ public class ChainDeedData {
     private Integer order;
 
     private List<String> parentDeedIds;
+
+    private List<String> childDeedIds;
 }
