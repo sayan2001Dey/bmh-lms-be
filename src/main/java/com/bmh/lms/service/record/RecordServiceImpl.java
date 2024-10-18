@@ -21,13 +21,16 @@ import java.util.*;
 public class RecordServiceImpl implements RecordService {
 
     @Autowired
-    private  DeedRepository deedRepository;
+    private DeedRepository deedRepository;
 
     @Autowired
     private RecordRepository recordRepository;
 
     @Autowired
     private RecordCollectionRepository recordCollectionRepository;
+
+    @Autowired
+    private HistoryChainRepository historyChainRepository;
 
     @Autowired
     private Environment env;
@@ -64,6 +67,8 @@ public class RecordServiceImpl implements RecordService {
             }
         }
 
+        saveHC(finalChainDeedDataList);
+
         ChainDeedDataCollection chainDeedDataCollection = new ChainDeedDataCollection();
 //        chainDeedDataCollection.setChainDeedData(
 //                Objects.equals(recordReq.getDeedType(), "main-deed") ?
@@ -72,6 +77,7 @@ public class RecordServiceImpl implements RecordService {
 //        );
 
         chainDeedDataCollection.setChainDeedData(finalChainDeedDataList);
+
 
         record.setChainDeedRefId(recordCollectionRepository.save(chainDeedDataCollection).getId());
 
@@ -273,4 +279,23 @@ public class RecordServiceImpl implements RecordService {
             deedRepository.save(deed);
         }
     }
+
+    private void saveHC(List<ChainDeedData> chainDeedDataList) {
+        List<HistoryChain> hcArr = new ArrayList<>();
+        for(ChainDeedData chainDeedData : chainDeedDataList) {
+            String deedId = chainDeedData.getDeedId();
+            HistoryChain hc = historyChainRepository.findByDeedId(deedId).orElse(null);
+            if(hc == null) {
+                hc = new HistoryChain();
+                hc.setDeedId(deedId);
+                hc.setParents(new ArrayList<>());
+                hc.setChildren(new ArrayList<>());
+            }
+            hc.setParents(chainDeedData.getParentDeedIds());
+            hc.setChildren(chainDeedData.getChildDeedIds());
+            hcArr.add(hc);
+        }
+        historyChainRepository.saveAll(hcArr);
+    }
+    //TODO: HC on update and delete
 }

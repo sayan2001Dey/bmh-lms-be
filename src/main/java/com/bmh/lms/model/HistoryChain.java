@@ -23,7 +23,7 @@ public class HistoryChain {
     private String name;
 
     @Indexed(unique = true)
-    private String recId;
+    private String deedId;
 
     private List<String> parents;
 

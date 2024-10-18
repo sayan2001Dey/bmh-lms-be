@@ -19,7 +19,7 @@ public class HistoryChainServiceImpl implements HistoryChainService{
     @Override
     public Set<HistoryChain> getFullGraphData(String recId) {
         Set<HistoryChain> res = new HashSet<>();
-        prepData(historyChainRepository.findByRecId(recId).orElse(null), res);
+        prepData(historyChainRepository.findByDeedId(recId).orElse(null), res);
 
         return res;
     }
@@ -40,7 +40,7 @@ public class HistoryChainServiceImpl implements HistoryChainService{
 
     @Override
     public HistoryChain updateHc(String recId, HistoryChain updatedHistoryChain){
-        Optional<HistoryChain> optionalExisting=historyChainRepository.findByRecId(recId);
+        Optional<HistoryChain> optionalExisting=historyChainRepository.findByDeedId(recId);
         if(optionalExisting.isPresent()){
             HistoryChain existingHc= optionalExisting.get();
 
@@ -56,24 +56,24 @@ public class HistoryChainServiceImpl implements HistoryChainService{
     @Override
     public void deleteHc(String recId) {
         try {
-            Optional<HistoryChain> optionalExisting = historyChainRepository.findByRecId(recId);
+            Optional<HistoryChain> optionalExisting = historyChainRepository.findByDeedId(recId);
             if (optionalExisting.isPresent()) {
                 HistoryChain historyChain = optionalExisting.get();
                 historyChainRepository.delete(historyChain);
             } else {
 
-                 throw new EntityNotFoundException("HistoryChain with recId: " + recId + " not found");
+                 throw new EntityNotFoundException("HistoryChain with deedId: " + recId + " not found");
             }
         } catch (Exception e) {
 
-            throw new RuntimeException("Error deleting HistoryChain with recId: " + recId, e);
+            throw new RuntimeException("Error deleting HistoryChain with deedId: " + recId, e);
         }
     }
 
 
     private void hcLoopFn(List<String> ids, Set<HistoryChain> res) {
         ids.forEach(id -> {
-            HistoryChain temp = historyChainRepository.findByRecId(id).orElse(null);
+            HistoryChain temp = historyChainRepository.findByDeedId(id).orElse(null);
             if(temp==null)
                 return;
             prepData(temp, res);

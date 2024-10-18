@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface HistoryChainRepository extends MongoRepository<HistoryChain, ObjectId> {
-    @Query("{ 'recId' : ?0 }")
-    Optional<HistoryChain> findByRecId(String recId);
+    @Query("{ 'deedId' : ?0 }")
+    Optional<HistoryChain> findByDeedId(String deedId);
 }

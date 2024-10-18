@@ -40,6 +40,9 @@ public class DeedServiceImpl implements DeedService{
     private FileUploadRepository fileUploadRepository;
 
     @Autowired
+    private HistoryChainRepository historyChainRepository;
+
+    @Autowired
     private Environment env;
 
     @Autowired
@@ -108,6 +111,12 @@ public class DeedServiceImpl implements DeedService{
 
         if(partlySoldDataAvailable)
             partlySoldRepository.saveAll(partlySoldData);
+
+        HistoryChain historyChain = new HistoryChain();
+        historyChain.setDeedId(deed.getDeedId());
+        historyChain.setParents(new ArrayList<>());
+        historyChain.setChildren(new ArrayList<>());
+        historyChainRepository.save(historyChain);
 
         Deed res = deedRepository.save(deed);
 
