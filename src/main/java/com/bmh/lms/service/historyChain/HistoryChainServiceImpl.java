@@ -24,11 +24,6 @@ public class HistoryChainServiceImpl implements HistoryChainService{
         return res;
     }
 
-    @Override
-    public HistoryChain saveHc(HistoryChain historyChain, String username) {
-        return historyChainRepository.save(historyChain);
-    }
-
     private void prepData(HistoryChain data, Set<HistoryChain> res) {
         if(res.contains(data))
             return;
@@ -37,39 +32,6 @@ public class HistoryChainServiceImpl implements HistoryChainService{
         hcLoopFn(data.getParents(), res);
         hcLoopFn(data.getChildren(), res);
     }
-
-    @Override
-    public HistoryChain updateHc(String recId, HistoryChain updatedHistoryChain){
-        Optional<HistoryChain> optionalExisting=historyChainRepository.findByDeedId(recId);
-        if(optionalExisting.isPresent()){
-            HistoryChain existingHc= optionalExisting.get();
-
-            existingHc.setName(updatedHistoryChain.getName());
-            existingHc.setParents(updatedHistoryChain.getParents());
-            existingHc.setChildren(updatedHistoryChain.getChildren());
-
-            return historyChainRepository.save(existingHc);
-
-        } else return null;
-    }
-
-    @Override
-    public void deleteHc(String recId) {
-        try {
-            Optional<HistoryChain> optionalExisting = historyChainRepository.findByDeedId(recId);
-            if (optionalExisting.isPresent()) {
-                HistoryChain historyChain = optionalExisting.get();
-                historyChainRepository.delete(historyChain);
-            } else {
-
-                 throw new EntityNotFoundException("HistoryChain with deedId: " + recId + " not found");
-            }
-        } catch (Exception e) {
-
-            throw new RuntimeException("Error deleting HistoryChain with deedId: " + recId, e);
-        }
-    }
-
 
     private void hcLoopFn(List<String> ids, Set<HistoryChain> res) {
         ids.forEach(id -> {

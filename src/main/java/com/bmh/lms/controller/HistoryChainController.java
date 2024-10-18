@@ -13,26 +13,13 @@ import java.util.Set;
 
 @RestController
 @CrossOrigin()
-@RequestMapping("api/hc")
+@RequestMapping("/api/report/hc")
 public class HistoryChainController {
     @Autowired
     private HistoryChainService historyChainService;
 
     @Autowired
     private AuthService authService;
-
-    @PostMapping()
-    public ResponseEntity<HistoryChain> saveHc(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
-            @RequestBody HistoryChain historyChain
-    ){
-//        Object[] authData = authService.verifyToken(token);
-//        if(authData == null) {
-//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//        }
-        return new ResponseEntity<>(historyChainService.saveHc(historyChain, ""), HttpStatus.OK);
-
-    }
 
     @GetMapping("{id}")
     public ResponseEntity<Set<HistoryChain>> getHcById(
@@ -51,26 +38,4 @@ public class HistoryChainController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-    @PutMapping("/{recId}")
-    public ResponseEntity<HistoryChain> updateHc(@PathVariable String recId,
-                                                 @RequestBody HistoryChain updatedHistoryChain) {
-        HistoryChain updated = historyChainService.updateHc(recId, updatedHistoryChain);
-        if (updated != null) {
-            return new ResponseEntity<>(updated, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @DeleteMapping("/{recId}")
-    public ResponseEntity<Void> deleteHc(@PathVariable String recId) {
-        try {
-            historyChainService.deleteHc(recId);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content for successful deletion
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found if the entity does not exist
-        }
-    }
-
 }
