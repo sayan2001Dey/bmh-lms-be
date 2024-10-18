@@ -298,4 +298,31 @@ public class RecordServiceImpl implements RecordService {
         historyChainRepository.saveAll(hcArr);
     }
     //TODO: HC on update and delete
+
+    private void deleteHC(List<ChainDeedData> chainDeedDataList) {
+        List<HistoryChain> hcArr = new ArrayList<>();
+        for(ChainDeedData chainDeedData : chainDeedDataList) {
+            String deedId = chainDeedData.getDeedId();
+            HistoryChain hc = historyChainRepository.findByDeedId(deedId).orElse(null);
+            if(hc != null) {
+                hcArr.add(hc);
+            }
+        }
+        historyChainRepository.deleteAll(hcArr);
+    }
+
+    private void updateHC(List<ChainDeedData> chainDeedDataList) {
+        List<HistoryChain> hcArr = new ArrayList<>();
+        for(ChainDeedData chainDeedData : chainDeedDataList) {
+            String deedId = chainDeedData.getDeedId();
+            HistoryChain hc = historyChainRepository.findByDeedId(deedId).orElse(null);
+            if(hc != null) {
+                hc.setParents(chainDeedData.getParentDeedIds());
+                hc.setChildren(chainDeedData.getChildDeedIds());
+                hcArr.add(hc);
+            }
+        }
+        historyChainRepository.saveAll(hcArr);
+    }
+
 }
