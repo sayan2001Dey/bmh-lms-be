@@ -34,11 +34,12 @@ public class HistoryChainServiceImpl implements HistoryChainService{
     }
 
     private void hcLoopFn(List<String> ids, Set<HistoryChain> res) {
-        ids.forEach(id -> {
-            HistoryChain temp = historyChainRepository.findByDeedId(id).orElse(null);
-            if(temp==null)
-                return;
-            prepData(temp, res);
-        });
+        if(ids!=null)
+            ids.forEach(id -> {
+                HistoryChain temp = historyChainRepository.findByDeedId(id).orElse(null);
+                if(temp==null)
+                    return;
+                prepData(temp, res);
+            });
     }
 }

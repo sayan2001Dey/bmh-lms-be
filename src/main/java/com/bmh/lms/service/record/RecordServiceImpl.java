@@ -291,8 +291,10 @@ public class RecordServiceImpl implements RecordService {
                 hc.setParents(new ArrayList<>());
                 hc.setChildren(new ArrayList<>());
             }
-            hc.setParents(chainDeedData.getParentDeedIds());
-            hc.setChildren(chainDeedData.getChildDeedIds());
+            if(chainDeedData.getParentDeedIds()!=null)
+                hc.setParents(chainDeedData.getParentDeedIds());
+            if(chainDeedData.getChildDeedIds()!=null)
+                hc.setChildren(chainDeedData.getChildDeedIds());
             hcArr.add(hc);
         }
         historyChainRepository.saveAll(hcArr);
