@@ -285,9 +285,9 @@ public class RecordServiceImpl implements RecordService {
         if(deed != null) {
             DeedCollection deedCollection = dmcRepo.findById(deed.getMouzaRefId()).orElse(null);
             if(deedCollection != null) {
-                Set<String> recIds = new HashSet<>();
-                if (deedCollection.getRecIds() != null)
-                    recIds = deedCollection.getRecIds();
+                Set<String> recIds = deedCollection.getRecIds();
+                if (recIds == null)
+                    recIds = new HashSet<>();
                 recIds.add(recId);
                 deedCollection.setRecIds(recIds);
                 dmcRepo.save(deedCollection);
@@ -303,6 +303,8 @@ public class RecordServiceImpl implements RecordService {
             DeedCollection deedCollection = dmcRepo.findById(deed.getMouzaRefId()).orElse(null);
             if(deedCollection != null) {
                 Set<String> recIds = deedCollection.getRecIds();
+                if (recIds == null)
+                    recIds = new HashSet<>();
                 recIds.remove(recId);
                 deedCollection.setRecIds(recIds);
                 dmcRepo.save(deedCollection);
