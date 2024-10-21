@@ -33,6 +33,9 @@ public class RecordServiceImpl implements RecordService {
     private HistoryChainRepository historyChainRepository;
 
     @Autowired
+    private DeedCollectionRepository dmcRepo;
+
+    @Autowired
     private Environment env;
 
     @Autowired
@@ -144,7 +147,7 @@ public class RecordServiceImpl implements RecordService {
         boolean _condition1 = existingChainDeedData != null && existingChainDeedData.getChainDeedData() != null;
         if(_condition1) {
             existingChainDeedData.getChainDeedData().forEach((data) -> {
-                unlinkDeed(data.getDeedId());
+                unlinkDeed(data.getDeedId(), existingRecord.getRecId());
             });
         }
 
@@ -202,8 +205,18 @@ public class RecordServiceImpl implements RecordService {
 
                 if(data != null) {
                     for (ChainDeedData d : data.getChainDeedData())
-                        unlinkDeed(d.getDeedId());
+                        unlinkDeed(d.getDeedId(), record.getRecId());
                 }
+            }
+
+            ChainDeedDataCollection existingChainDeedData = null;
+            if(record.getChainDeedRefId() != null) {
+                existingChainDeedData = recordCollectionRepository.findById(
+                        record.getChainDeedRefId()
+                ).orElse(null);
+
+                if (existingChainDeedData != null)
+                    deleteHC(existingChainDeedData.getChainDeedData());
             }
 
             recordRepository.save(record);
@@ -269,22 +282,29 @@ public class RecordServiceImpl implements RecordService {
 
     private boolean linkDeed(String deedId, String recId) {
         Deed deed = deedRepository.findByDeedId(deedId).orElse(null);
-//        System.out.println(deed);
-//        System.out.println(recId);
-//        && deed.getRecId() == null
         if(deed != null) {
-            deed.setRecId(recId);
-            deedRepository.save(deed);
-            return true;
+            DeedCollection deedCollection = dmcRepo.findById(deed.getMouzaRefId()).orElse(null);
+            if(deedCollection != null) {
+                Set<String> recIds = deedCollection.getRecIds();
+                recIds.add(recId);
+                deedCollection.setRecIds(recIds);
+                dmcRepo.save(deedCollection);
+                return true;
+            }
         }
         return false;
     }
 
-    private void unlinkDeed(String deedId) {
+    private void unlinkDeed(String deedId, String recId) {
         Deed deed = deedRepository.findByDeedId(deedId).orElse(null);
         if(deed != null) {
-            deed.setRecId(null);
-            deedRepository.save(deed);
+            DeedCollection deedCollection = dmcRepo.findById(deed.getMouzaRefId()).orElse(null);
+            if(deedCollection != null) {
+                Set<String> recIds = deedCollection.getRecIds();
+                recIds.remove(recId);
+                deedCollection.setRecIds(recIds);
+                dmcRepo.save(deedCollection);
+            }
         }
     }
 
@@ -316,33 +336,23 @@ public class RecordServiceImpl implements RecordService {
     //TODO: HC on update and delete
 
     private void deleteHC(List<ChainDeedData> chainDeedDataList) {
-        List<HistoryChain> hcArr = new ArrayList<>();
-        for(ChainDeedData chainDeedData : chainDeedDataList) {
-            String deedId = chainDeedData.getDeedId();
+        Set<HistoryChain> hcArr = new HashSet<>();
+        chainDeedDataList.forEach(oldChainDeedData -> {
+            String deedId = oldChainDeedData.getDeedId();
             HistoryChain hc = historyChainRepository.findByDeedId(deedId).orElse(null);
             if(hc != null) {
+                Set<String> children = hc.getChildren();
+                Set<String> parents = hc.getParents();
+                oldChainDeedData.getChildDeedIds().forEach(children::remove);
+                oldChainDeedData.getParentDeedIds().forEach(parents::remove);
                 hcArr.add(hc);
             }
-        }
-        historyChainRepository.deleteAll(hcArr);
-    }
-
-    private void updateHC(List<ChainDeedData> oldChainDeedDataList, List<ChainDeedData> upadatedChainDeedDataList) {
-        Set<HistoryChain> hcArr = new HashSet<>();
-        for(ChainDeedData chainDeedData : upadatedChainDeedDataList) {
-//            String deedId = chainDeedData.getDeedId();
-//            HistoryChain hc = historyChainRepository.findByDeedId(deedId).orElse(null);
-//            if(hc != null) {
-//                hc.setParents(chainDeedData.getParentDeedIds());
-//                hc.setChildren(chainDeedData.getChildDeedIds());
-//                hcArr.add(hc);
-//            }
-        }
-
-        oldChainDeedDataList.forEach(oldChainDeedData -> {
-
         });
         historyChainRepository.saveAll(hcArr);
     }
 
+    private void updateHC(List<ChainDeedData> oldChainDeedDataList, List<ChainDeedData> upadatedChainDeedDataList) {
+        deleteHC(oldChainDeedDataList);
+        saveHC(upadatedChainDeedDataList);
+    }
 }

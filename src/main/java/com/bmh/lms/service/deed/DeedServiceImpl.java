@@ -68,6 +68,7 @@ public class DeedServiceImpl implements DeedService{
         newDeedCollection.setMouza(
                 deedReq.getMouza() == null ? new ArrayList<>() : deedReq.getMouza()
         );
+        newDeedCollection.setRecIds(new HashSet<>());
         deed.setMouzaRefId(dmcRepo.save(newDeedCollection).getId());
 
         boolean mortgagedDataAvailable = false;
@@ -157,7 +158,6 @@ public class DeedServiceImpl implements DeedService{
         existingDeed.setUpdated_on(ldt);
 
         Deed deed = basicDataFromReqDTO(existingDeed,deedReq);
-        deed.setRecId(existingDeed.getRecId());
         deed.setUpdated_by(username);
         deed.setUpdated_on(ldt);
 
@@ -165,6 +165,8 @@ public class DeedServiceImpl implements DeedService{
         newDeedCollection.setMouza(
                 deedReq.getMouza() == null ? new ArrayList<>() : deedReq.getMouza()
         );
+        Set<String> recIds = dmcRepo.findById(existingDeed.getMouzaRefId()).orElse(newDeedCollection).getRecIds();
+        newDeedCollection.setRecIds(recIds == null ? new HashSet<>() : recIds);
         deed.setMouzaRefId(dmcRepo.save(newDeedCollection).getId());
 
         Set<Mortgaged> finalMortgagedData = new HashSet<>();
@@ -478,7 +480,6 @@ public class DeedServiceImpl implements DeedService{
         dest.setLegalMatters(src.getLegalMatters());
         dest.setLedueDate(src.getLedueDate());
         dest.setLeDescription(src.getLeDescription());
-        dest.setRecId(src.getRecId());
         dest.setMortgaged(src.getMortgaged());
         dest.setPartlySold(src.getPartlySold());
         dest.setTax(src.getTax());

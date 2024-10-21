@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -19,4 +20,6 @@ public class DeedCollection {
     private String id;
 
     private List<DeedMouza> mouza;
+
+    private Set<String> recIds;
 }
