@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -25,7 +26,7 @@ public class HistoryChain {
     @Indexed(unique = true)
     private String deedId;
 
-    private List<String> parents;
+    private Set<String> parents;
 
-    private List<String> children;
+    private Set<String> children;
 }

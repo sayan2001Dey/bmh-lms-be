@@ -141,7 +141,8 @@ public class RecordServiceImpl implements RecordService {
             ).orElse(null);
         }
 
-        if(existingChainDeedData != null && existingChainDeedData.getChainDeedData() != null) {
+        boolean _condition1 = existingChainDeedData != null && existingChainDeedData.getChainDeedData() != null;
+        if(_condition1) {
             existingChainDeedData.getChainDeedData().forEach((data) -> {
                 unlinkDeed(data.getDeedId());
             });
@@ -152,6 +153,12 @@ public class RecordServiceImpl implements RecordService {
             if (linkDeed(data.getDeedId(), existingRecord.getRecId())) {
                 finalChainDeedDataList.add(data);
             }
+        }
+
+        if(_condition1) {
+            updateHC(existingChainDeedData.getChainDeedData(), finalChainDeedDataList);
+        } else {
+            saveHC(finalChainDeedDataList);
         }
 
         ChainDeedDataCollection chainDeedDataCollection = new ChainDeedDataCollection();
@@ -264,7 +271,8 @@ public class RecordServiceImpl implements RecordService {
         Deed deed = deedRepository.findByDeedId(deedId).orElse(null);
 //        System.out.println(deed);
 //        System.out.println(recId);
-        if(deed != null && deed.getRecId() == null) {
+//        && deed.getRecId() == null
+        if(deed != null) {
             deed.setRecId(recId);
             deedRepository.save(deed);
             return true;
@@ -288,13 +296,19 @@ public class RecordServiceImpl implements RecordService {
             if(hc == null) {
                 hc = new HistoryChain();
                 hc.setDeedId(deedId);
-                hc.setParents(new ArrayList<>());
-                hc.setChildren(new ArrayList<>());
+                hc.setParents(new HashSet<>());
+                hc.setChildren(new HashSet<>());
             }
-            if(chainDeedData.getParentDeedIds()!=null)
-                hc.setParents(chainDeedData.getParentDeedIds());
-            if(chainDeedData.getChildDeedIds()!=null)
-                hc.setChildren(chainDeedData.getChildDeedIds());
+            if(chainDeedData.getParentDeedIds()!=null) {
+                Set<String> parents = hc.getParents();
+                parents.addAll(chainDeedData.getParentDeedIds());
+                hc.setParents(parents);
+            }
+            if(chainDeedData.getChildDeedIds()!=null) {
+                Set<String> children = hc.getChildren();
+                children.addAll(chainDeedData.getChildDeedIds());
+                hc.setChildren(children);
+            }
             hcArr.add(hc);
         }
         historyChainRepository.saveAll(hcArr);
@@ -314,9 +328,8 @@ public class RecordServiceImpl implements RecordService {
     }
 
     private void updateHC(List<ChainDeedData> oldChainDeedDataList, List<ChainDeedData> upadatedChainDeedDataList) {
-        List<HistoryChain> hcArr = new ArrayList<>();
-
-//        for(ChainDeedData chainDeedData : chainDeedDataList) {
+        Set<HistoryChain> hcArr = new HashSet<>();
+        for(ChainDeedData chainDeedData : upadatedChainDeedDataList) {
 //            String deedId = chainDeedData.getDeedId();
 //            HistoryChain hc = historyChainRepository.findByDeedId(deedId).orElse(null);
 //            if(hc != null) {
@@ -324,7 +337,11 @@ public class RecordServiceImpl implements RecordService {
 //                hc.setChildren(chainDeedData.getChildDeedIds());
 //                hcArr.add(hc);
 //            }
-//        }
+        }
+
+        oldChainDeedDataList.forEach(oldChainDeedData -> {
+
+        });
         historyChainRepository.saveAll(hcArr);
     }
 
