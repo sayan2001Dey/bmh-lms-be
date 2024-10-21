@@ -114,8 +114,8 @@ public class DeedServiceImpl implements DeedService{
 
         HistoryChain historyChain = new HistoryChain();
         historyChain.setDeedId(deed.getDeedId());
-        historyChain.setParents(new ArrayList<>());
-        historyChain.setChildren(new ArrayList<>());
+        historyChain.setParents(new HashSet<>());
+        historyChain.setChildren(new HashSet<>());
         historyChainRepository.save(historyChain);
 
         Deed res = deedRepository.save(deed);
