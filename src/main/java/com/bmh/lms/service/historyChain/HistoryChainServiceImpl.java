@@ -33,7 +33,7 @@ public class HistoryChainServiceImpl implements HistoryChainService{
         hcLoopFn(data.getChildren(), res);
     }
 
-    private void hcLoopFn(List<String> ids, Set<HistoryChain> res) {
+    private void hcLoopFn(Set<String> ids, Set<HistoryChain> res) {
         if(ids!=null)
             ids.forEach(id -> {
                 HistoryChain temp = historyChainRepository.findByDeedId(id).orElse(null);
