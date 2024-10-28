@@ -347,8 +347,10 @@ public class RecordServiceImpl implements RecordService {
             if(hc != null) {
                 Set<String> children = hc.getChildren();
                 Set<String> parents = hc.getParents();
-                oldChainDeedData.getChildDeedIds().forEach(children::remove);
-                oldChainDeedData.getParentDeedIds().forEach(parents::remove);
+                if(oldChainDeedData.getChildDeedIds() != null)
+                    oldChainDeedData.getChildDeedIds().forEach(children::remove);
+                if(oldChainDeedData.getParentDeedIds() != null)
+                    oldChainDeedData.getParentDeedIds().forEach(parents::remove);
                 hcArr.add(hc);
             }
         });
