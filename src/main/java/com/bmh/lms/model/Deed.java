@@ -22,6 +22,8 @@ public class Deed extends CommonProperties {
 
     private String companyId;
 
+    private String khatianId;
+
     @Column(length = 50)
     private String deedNo;
 
