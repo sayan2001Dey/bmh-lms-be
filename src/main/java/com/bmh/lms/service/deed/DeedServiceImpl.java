@@ -417,6 +417,7 @@ public class DeedServiceImpl implements DeedService{
         res.setGroupId(src.getGroupId());
         res.setKhatianId(src.getKhatianId());
         res.setCompanyId(src.getCompanyId());
+        res.setWebsite(src.getWebsite());
         res.setSellerType(sellerType);
         res.setSellers(sellers);
         res.setTotalQty(src.getTotalQty());
@@ -466,6 +467,7 @@ public class DeedServiceImpl implements DeedService{
         dest.setKhatianId(src.getKhatianId());
         dest.setCompanyId(src.getCompanyId());
         dest.setSellerType(src.getSellerType());
+        dest.setWebsite(src.getWebsite());
         dest.setSellers(src.getSellers());
         dest.setTotalQty(src.getTotalQty());
         dest.setPurQty(src.getPurQty());
