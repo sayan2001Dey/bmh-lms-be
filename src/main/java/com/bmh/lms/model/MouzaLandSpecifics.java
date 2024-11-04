@@ -1,5 +1,4 @@
 package com.bmh.lms.model;
-
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.Data;
