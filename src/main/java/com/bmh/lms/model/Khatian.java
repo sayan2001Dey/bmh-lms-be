@@ -17,9 +17,10 @@ public class Khatian extends CommonProperties{
     private Long id;
 
     private String khatianId;
-     private String khatianNo;
+    private String khatianNo;
+    private String remarks;
     private String linkUrl;
-    private String bhumiType; // "Bihar" or "Banglar" to distinguish between the two
+    private String website; // "Bihar" or "Banglar" to distinguish between the two
     private String jila; // Bihar - Jila | Banglar - District
     private String anchal; // Bihar only
     private String block; // Banglar only
