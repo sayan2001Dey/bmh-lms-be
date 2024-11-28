@@ -1,5 +1,6 @@
 package com.bmh.lms.controller;
 
+import com.bmh.lms.dto.khatian.KhatianDTO;
 import com.bmh.lms.model.Khatian;
 import com.bmh.lms.service.auth.AuthService;
 import com.bmh.lms.service.khatian.KhatianService;
@@ -24,9 +25,9 @@ public class KhatianController {
     private AuthService authService;
 
     @PostMapping
-    public ResponseEntity<Khatian> createKhatianMaster(
+    public ResponseEntity<KhatianDTO> createKhatianMaster(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
-            @RequestBody Khatian khatian
+            @RequestBody KhatianDTO khatian
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))
@@ -45,7 +46,7 @@ public class KhatianController {
 
 
     @GetMapping
-    public ResponseEntity<List<Khatian>> getAllKhatianMasters(
+    public ResponseEntity<List<KhatianDTO>> getAllKhatianMasters(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token
     ) {
         Object[] authData = authService.verifyToken(token);
@@ -55,14 +56,14 @@ public class KhatianController {
     }
 
     @GetMapping("/{khatianId}")
-    public ResponseEntity<Khatian> getKhatianMasterById(
+    public ResponseEntity<KhatianDTO> getKhatianMasterById(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
             @PathVariable String khatianId
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        Khatian res = khatianMasterService.getKhatianMasterById(khatianId).orElse(null);
+        KhatianDTO res = khatianMasterService.getKhatianMasterById(khatianId).orElse(null);
         return res == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 new ResponseEntity<>(res, HttpStatus.OK);
@@ -70,15 +71,15 @@ public class KhatianController {
 
 
     @PatchMapping("/{khatianId}")
-    public ResponseEntity<Khatian> updateKhatianMaster(
+    public ResponseEntity<KhatianDTO> updateKhatianMaster(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
             @PathVariable String khatianId,
-            @RequestBody Khatian khatian
+            @RequestBody KhatianDTO khatian
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null || !((Boolean) authData[1]))
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        Khatian res = khatianMasterService.updateKhatianMaster(khatianId, khatian, (String) authData[0]);
+        KhatianDTO res = khatianMasterService.updateKhatianMaster(khatianId, khatian, (String) authData[0]);
         return res == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 new ResponseEntity<>(res, HttpStatus.OK);

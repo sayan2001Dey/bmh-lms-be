@@ -1,19 +1,19 @@
 package com.bmh.lms.service.khatian;
 
-import com.bmh.lms.model.Khatian;
+import com.bmh.lms.dto.khatian.KhatianDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface KhatianService {
 
-    Khatian createKhatianMaster(Khatian khatian, String username);
+    KhatianDTO createKhatianMaster(KhatianDTO khatian, String username);
 
-    List<Khatian> getAllKhatianMaster();
+    List<KhatianDTO> getAllKhatianMaster();
 
-    Optional<Khatian> getKhatianMasterById(String khatian_id);
+    Optional<KhatianDTO> getKhatianMasterById(String khatian_id);
 
-    Khatian updateKhatianMaster(String khatian_id, Khatian updatedKhatian, String username);
+    KhatianDTO updateKhatianMaster(String khatian_id, KhatianDTO updatedKhatian, String username);
 
     Boolean deleteKhatianMaster(String khatian_id, String username);
 }

@@ -37,6 +37,9 @@ public class Deed extends CommonProperties {
     private String website;
 
     @Column
+    private String khatianNoId;
+
+    @Column
     private String sellerType;
 
     @Column(length = 1000)

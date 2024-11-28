@@ -23,6 +23,7 @@ public class DeedCommon {
     private String companyId;
     private String khatianId;
     private String website;
+    private String khatianNoId;
     private String sellerType;
     private List<String> sellers;
     private String totalQty;

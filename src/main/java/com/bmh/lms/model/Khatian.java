@@ -1,9 +1,12 @@
 package com.bmh.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -11,14 +14,11 @@ import lombok.Setter;
 @Entity
 @Table( name = "khatian")
 public class Khatian extends CommonProperties{
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String khatianId;
-    private String khatianNo;
-    private String oldKhatianNo;
     private String remarks;
     private String website; // "Bihar" or "Banglar" to distinguish between the two
     private String jila; // Bihar - Jila | Banglar - District
