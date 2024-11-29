@@ -40,6 +40,7 @@ public class DeedCommon {
     private Float tax;
     private String lastUpDate;
     private String taxDueDate;
+    private Boolean legalRequired;
     private String legalMatters;
     private String ledueDate;
     private String lelastDate;

@@ -95,6 +95,9 @@ public class Deed extends CommonProperties {
     private String taxDueDate;
 
     @Column
+    private Boolean legalRequired;
+
+    @Column
     private String legalMatters;
 
     @Column(name = "le_due_date", length = 50)

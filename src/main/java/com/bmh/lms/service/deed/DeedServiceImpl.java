@@ -64,6 +64,14 @@ public class DeedServiceImpl implements DeedService{
         deed.setDeleted_by("NA");
         deed.setDeleted_on(null);
 
+        if(deedReq.getLegalRequired()==null || !deedReq.getLegalRequired()) {
+            deed.setLegalRequired(false);
+            deed.setLegalMatters("NA");
+            deed.setLedueDate("");
+            deed.setLelastDate("");
+            deed.setLeDescription("NA");
+        }
+
         DeedCollection newDeedCollection = new DeedCollection();
         newDeedCollection.setMouza(
                 deedReq.getMouza() == null ? new ArrayList<>() : deedReq.getMouza()
@@ -160,6 +168,14 @@ public class DeedServiceImpl implements DeedService{
         Deed deed = basicDataFromReqDTO(existingDeed,deedReq);
         deed.setUpdated_by(username);
         deed.setUpdated_on(ldt);
+
+        if(deedReq.getLegalRequired()==null || !deedReq.getLegalRequired()) {
+            deed.setLegalRequired(false);
+            deed.setLegalMatters("NA");
+            deed.setLedueDate("");
+            deed.setLelastDate("");
+            deed.setLeDescription("NA");
+        }
 
         DeedCollection newDeedCollection = new DeedCollection();
         newDeedCollection.setMouza(
@@ -434,12 +450,9 @@ public class DeedServiceImpl implements DeedService{
         res.setTaxDueDate(src.getTaxDueDate());
         res.setLastUpDate(src.getLastUpDate());
         res.setLegalMatters(src.getLegalMatters());
+        res.setLegalRequired(src.getLegalRequired());
         res.setLedueDate(src.getLedueDate());
         res.setLeDescription(src.getLeDescription());
-        // res.setRecId(src.getRecId());
-        // don't enable recId, it's just not meant to be.
-        // btw confirmed again so.
-        // this was only meant to set by record service in linkDeed fn so check there.
         res.setMortgaged(src.getMortgaged());
         res.setPartlySold(src.getPartlySold());
         res.setTax(src.getTax());
@@ -484,6 +497,7 @@ public class DeedServiceImpl implements DeedService{
         dest.setTaxDueDate(src.getTaxDueDate());
         dest.setLastUpDate(src.getLastUpDate());
         dest.setLegalMatters(src.getLegalMatters());
+        dest.setLegalRequired(src.getLegalRequired());
         dest.setLedueDate(src.getLedueDate());
         dest.setLeDescription(src.getLeDescription());
         dest.setMortgaged(src.getMortgaged());
