@@ -37,6 +37,12 @@ public class DeedServiceImpl implements DeedService{
     private DeedCollectionRepository dmcRepo;
 
     @Autowired
+    private KhatianRepository kRepo;
+
+    @Autowired
+    private KhatianNoRepository knRepo;
+
+    @Autowired
     private FileUploadRepository fileUploadRepository;
 
     @Autowired
@@ -512,6 +518,29 @@ public class DeedServiceImpl implements DeedService{
 
     private DeedRes deedResMaker(Deed deed, String deedId) {
         DeedRes res = basicDataToResDTO(deed);
+
+        // NOTE: This part ensures that no non-current khatian no is delivered as response. Instead, it finds the current one and updates the list before sending. (No data in db will be updated.)
+        List<String> finalKnList = new ArrayList<>();
+        kRepo.findByKhatianId(res.getKhatianId()).ifPresent(k -> res.getKhatianNoIds().forEach(knId -> {
+            knRepo.findKhatianNoByKNID(knId).ifPresent(knData -> {
+                // DEBUG lines below
+                // System.out.println(knData);
+                // System.out.println(k.getKhatianId());
+                if (knData.getCurrent())
+                    finalKnList.add(knId);
+                else {
+                    List<KhatianNo> knDataList = knRepo.findKhatianNoList(k.getId());
+                    for (KhatianNo d : knDataList) {
+                        if (Objects.equals(d.getNewKhatianNo(), knData.getNewKhatianNo()) && Objects.equals(d.getOldKhatianNo(), knData.getOldKhatianNo())) {
+                            finalKnList.add(d.getKhatianNoId());
+                            break;
+                        }
+                    }
+                }
+            });
+        }));
+        res.setKhatianNoIds(finalKnList);
+        // Khatian No, EOB
 
         Set<Mortgaged> mortSet = mortgagedRepository.findAllActive(deedId);
         Set<MortgagedRes> mortResSet = new HashSet<>();
