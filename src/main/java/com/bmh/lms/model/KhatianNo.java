@@ -20,6 +20,7 @@ public class KhatianNo {
     private String newKhatianNo;
     private String oldKhatianNo;
 
+
     @Column(columnDefinition="tinyint(1) default true")
     private Boolean current;
 

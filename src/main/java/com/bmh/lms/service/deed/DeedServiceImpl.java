@@ -445,8 +445,7 @@ public class DeedServiceImpl implements DeedService{
         res.setSellers(sellers);
         res.setTotalQty(src.getTotalQty());
         res.setPurQty(src.getPurQty());
-        res.setMutedQty(src.getMutedQty());
-        res.setUnMutedQty(src.getUnMutedQty());
+
         res.setLandStatus(src.getLandStatus());
         res.setConversionLandStatus(src.getConversionLandStatus());
         res.setDeedLoc(src.getDeedLoc());
@@ -492,8 +491,7 @@ public class DeedServiceImpl implements DeedService{
         dest.setSellers(src.getSellers());
         dest.setTotalQty(src.getTotalQty());
         dest.setPurQty(src.getPurQty());
-        dest.setMutedQty(src.getMutedQty());
-        dest.setUnMutedQty(src.getUnMutedQty());
+
         dest.setLandStatus(src.getLandStatus());
         dest.setConversionLandStatus(src.getConversionLandStatus());
         dest.setDeedLoc(src.getDeedLoc());

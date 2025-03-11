@@ -28,8 +28,8 @@ public class DeedCommon {
     private List<String> sellers;
     private String totalQty;
     private String purQty;
-    private String mutedQty;
-    private String unMutedQty;
+//    private String mutedQty;
+//    private String unMutedQty;
     private String landStatus;
     private String conversionLandStatus;
     private String deedLoc;

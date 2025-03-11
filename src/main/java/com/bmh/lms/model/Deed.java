@@ -56,11 +56,11 @@ public class Deed extends CommonProperties {
     @Column(length = 20)
     private String purQty;
 
-    @Column(length = 20)
-    private String mutedQty;
-
-    @Column(name = "unmuted_qty", length = 20)
-    private String unMutedQty;
+//    @Column(length = 20)
+//    private String mutedQty;
+//
+//    @Column(name = "unmuted_qty", length = 20)
+//    private String unMutedQty;
 
     @Column(length = 50)
     private String landType;
