@@ -13,4 +13,6 @@ public class DeedLandSpecifics extends MouzaLandSpecifics {
     private Double qty;
     private Double mutedQty;
     private Double unMutedQty;
+    private String newKhNoBefore;
+    private String oldKhNoBefore;
 }
