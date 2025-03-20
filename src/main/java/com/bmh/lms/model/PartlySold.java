@@ -25,7 +25,13 @@ public class PartlySold extends CommonProperties {
     
     @Column(name="date_of_sale")
 	private String date;
-	
+
+    @Column(name="pl_old_rs_dag")
+    private String plOldRsDag;
+
+    @Column(name="pl_new_lr_dag")
+    private String plNewLrDag;
+
     @Column(name="quantity")
 	private String qty;
 	

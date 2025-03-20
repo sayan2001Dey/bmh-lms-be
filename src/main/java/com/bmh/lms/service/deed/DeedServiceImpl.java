@@ -70,6 +70,7 @@ public class DeedServiceImpl implements DeedService{
         deed.setDeleted_by("NA");
         deed.setDeleted_on(null);
 
+
         if(deedReq.getLegalRequired()==null || !deedReq.getLegalRequired()) {
             deed.setLegalRequired(false);
             deed.setLegalMatters("NA");
