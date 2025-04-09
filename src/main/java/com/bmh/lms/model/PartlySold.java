@@ -20,6 +20,9 @@ public class PartlySold extends CommonProperties {
     @Column(name="deed_id")
     private String deedId;
 
+    @Column(name="deed_id")
+    private String mouzaId;
+
     @Column(name="sale_party")
     private String sale;
     
