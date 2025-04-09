@@ -15,7 +15,6 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/api/company")
 public class CompanyController {
-
     @Autowired
     private CompanyService companyMasterService;
 
@@ -42,7 +41,6 @@ public class CompanyController {
         }
     }
 
-
     @GetMapping
     public ResponseEntity<List<Company>> getAllCompanyMasters(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token
@@ -67,7 +65,6 @@ public class CompanyController {
                 new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-
     @PatchMapping("/{companyId}")
     public ResponseEntity<Company> updateCompanyMaster(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
@@ -82,7 +79,6 @@ public class CompanyController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 new ResponseEntity<>(res, HttpStatus.OK);
     }
-
 
     @DeleteMapping("/{companyId}")
     public ResponseEntity<Void> deleteCompanyMaster(

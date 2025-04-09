@@ -22,4 +22,18 @@ public class CommonUtils {
         uidRepository.save(uid);
         return res;
     }
+
+    public String generateUID(String modelName, String prefix, Boolean enableSave) {
+        if(enableSave) return generateUID(modelName, prefix);
+        else {
+            UID uid = uidRepository.findByModelName(modelName).orElse(null);
+            if (uid == null) {
+                uid = new UID();
+                uid.setModelName(modelName);
+                uid.setLastId(0);
+            }
+            uid.setLastId(uid.getLastId() + 1);
+            return prefix + '-' + uid.getLastId() + String.valueOf(Math.random()).substring(2, 5);
+        }
+    }
 }
