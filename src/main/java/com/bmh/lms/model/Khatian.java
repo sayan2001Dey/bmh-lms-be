@@ -29,4 +29,6 @@ public class Khatian extends CommonProperties{
     private String khatianType; // Banglar only
     private String nameWithKhatian; // common to both
     private String district; // Banglar only
+    private String assesseeNo; // KMC only
+    private String reKmc; // KMC only
 }

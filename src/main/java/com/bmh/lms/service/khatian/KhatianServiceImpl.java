@@ -179,6 +179,8 @@ public class KhatianServiceImpl implements  KhatianService{
         khatian.setKhatianType(khatianDTO.getKhatianType());
         khatian.setNameWithKhatian(khatianDTO.getNameWithKhatian());
         khatian.setDistrict(khatianDTO.getDistrict());
+        khatian.setAssesseeNo(khatianDTO.getAssesseeNo());
+        khatian.setReKmc(khatianDTO.getReKmc());
 
         List<KhatianNo> khatianNos;
         if(khatianDTO.getKhatianNos() == null)
@@ -206,6 +208,8 @@ public class KhatianServiceImpl implements  KhatianService{
         res.setKhatianType(khatian.getKhatianType());
         res.setNameWithKhatian(khatian.getNameWithKhatian());
         res.setDistrict(khatian.getDistrict());
+        res.setAssesseeNo(khatian.getAssesseeNo());
+        res.setReKmc(khatian.getReKmc());
 
         res.setKhatianNos(Objects.requireNonNullElseGet(khatianNos, ArrayList::new));
 
