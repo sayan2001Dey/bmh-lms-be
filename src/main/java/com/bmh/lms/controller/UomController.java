@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @CrossOrigin
@@ -45,12 +46,15 @@ public class UomController {
 
     @GetMapping
     public ResponseEntity<List<Uom>> getAllUomMasters(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token,
+            @RequestParam(required = false) String classification
     ) {
         Object[] authData = authService.verifyToken(token);
         if (authData == null)
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        return new ResponseEntity<>(uomMasterService.getAllUomMasters(), HttpStatus.OK);
+        if (classification == null || classification.isBlank())
+            return new ResponseEntity<>(uomMasterService.getAllUomMasters(), HttpStatus.OK);
+        return new ResponseEntity<>(uomMasterService.getAllUomMasters(classification.toLowerCase(Locale.ROOT)), HttpStatus.OK);
     }
 
     @GetMapping("/{uomId}")

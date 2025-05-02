@@ -11,4 +11,5 @@ public class MouzaLandSpecifics {
     private String newLrDag;
     private String landType;
     private Double maxQty;
+    private String uom;
 }

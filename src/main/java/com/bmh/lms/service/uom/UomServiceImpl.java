@@ -2,7 +2,6 @@ package com.bmh.lms.service.uom;
 
 import com.bmh.lms.model.Uom;
 import com.bmh.lms.repository.UomRepository;
-import com.bmh.lms.service.utils.CommonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +46,15 @@ public class UomServiceImpl implements UomService{
     @Override
     public List<Uom> getAllUomMasters() {
         return uomRepo.findAllActive();
+    }
+
+    @Override
+    public List<Uom> getAllUomMasters(String classification) {
+        return classification == null || classification.isBlank() ||
+                classification.equalsIgnoreCase("all") ||
+                classification.equalsIgnoreCase("*") ?
+                    getAllUomMasters() :
+                    uomRepo.findAllActiveByClassification(classification);
     }
 
     @Override

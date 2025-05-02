@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface UomService {
     Uom createUomMaster(Uom uom, String username);
 
+    List<Uom> getAllUomMasters(String classification);
+
     List<Uom> getAllUomMasters();
 
     Optional<Uom> getUomMasterById(String uom_id);
