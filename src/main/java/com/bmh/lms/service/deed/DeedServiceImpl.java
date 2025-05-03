@@ -317,7 +317,11 @@ public class DeedServiceImpl implements DeedService{
                     tempPartlySold.setSale(found.getSale());
                     tempPartlySold.setDate(found.getDate());
                     tempPartlySold.setQty(found.getQty());
+                    tempPartlySold.setUom(found.getUom());
                     tempPartlySold.setDeedLink(found.getDeedLink());
+                    tempPartlySold.setPlNewLrDag(found.getPlNewLrDag());
+                    tempPartlySold.setPlOldRsDag(found.getPlOldRsDag());
+                    tempPartlySold.setMouzaId(found.getMouzaId());
                     tempPartlySold.setDeedId(deed.getDeedId());
                     tempPartlySold.setModified_type("INSERTED");
                     tempPartlySold.setUpdated_on(ldt);
@@ -609,7 +613,11 @@ public class DeedServiceImpl implements DeedService{
         res.setDeedId(src.getDeedId());
         res.setSale(src.getSale());
         res.setDate(src.getDate());
+        res.setMouzaId(src.getMouzaId());
+        res.setPlNewLrDag(src.getPlNewLrDag());
+        res.setPlOldRsDag(src.getPlOldRsDag());
         res.setQty(src.getQty());
+        res.setUom(src.getUom());
         res.setDeedLink(src.getDeedLink());
 
         res.setModified_type(src.getModified_type());

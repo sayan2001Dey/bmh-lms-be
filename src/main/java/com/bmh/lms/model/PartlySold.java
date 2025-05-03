@@ -37,6 +37,9 @@ public class PartlySold extends CommonProperties {
 
     @Column(name="quantity")
 	private String qty;
+
+    @Column(name="uom")
+	private String uom;
 	
     @Column(name="deed_link")
 	private String deedLink;
