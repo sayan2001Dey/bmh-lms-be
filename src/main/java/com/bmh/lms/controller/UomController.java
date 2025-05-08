@@ -1,9 +1,7 @@
 package com.bmh.lms.controller;
 
-import com.bmh.lms.model.Company;
 import com.bmh.lms.model.Uom;
 import com.bmh.lms.service.auth.AuthService;
-import com.bmh.lms.service.company.CompanyService;
 import com.bmh.lms.service.uom.UomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

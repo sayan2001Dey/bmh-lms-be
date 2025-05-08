@@ -50,11 +50,15 @@ public class UomServiceImpl implements UomService{
 
     @Override
     public List<Uom> getAllUomMasters(String classification) {
-        return classification == null || classification.isBlank() ||
+        if(
+                classification == null || classification.isBlank() ||
                 classification.equalsIgnoreCase("all") ||
-                classification.equalsIgnoreCase("*") ?
-                    getAllUomMasters() :
-                    uomRepo.findAllActiveByClassification(classification);
+                classification.equalsIgnoreCase("*")
+        )
+            return getAllUomMasters();
+        if (classification.equalsIgnoreCase("base-units"))
+            return uomRepo.findAllActiveBaseUnits();
+        return uomRepo.findAllActiveByClassification(classification);
     }
 
     @Override
